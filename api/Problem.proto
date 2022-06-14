@@ -3,20 +3,20 @@ syntax = "proto3";
 package problemPackage;
 
 service problemManagement{
-    rpc getProblem(pid) returns (Problem);
+    rpc getProblem(pin) returns (Problem);
     rpc getProblems(empty) returns (Problems);
     rpc getProblemsByState(ProblemState) returns (Problems);
     rpc getProblemByReporter(string) returns (Problems);
-    rpc addProblem(Problem) returns (pid);
-    rpc updateProblem(pid, Problem) returns (Problem);
-    rpc deleteProblem(pid) returns (empty);
+    rpc addProblem(Problem) returns (pin);
+    rpc updateProblem(pin, Problem) returns (Problem);
+    rpc deleteProblem(pin) returns (empty);
 }
 
 message empty{}
 
-message pid {
+message pin {
     oneof identifier {
-    int32 pid = 1;
+    int32 pin = 1;
     }
 }
 
