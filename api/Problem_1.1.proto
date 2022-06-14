@@ -24,7 +24,7 @@ message Problem{
     int32 reference = 1;
     string title = 2;
     string description = 3;
-    ProblemState problemState = 4;
+    ProblemState state = 4;
     Date date = 5;
     string reporter = 6;
 }
@@ -34,7 +34,11 @@ message Problems {
 }
 
 message ProblemState {
-    Problem problemState = 1;
+    enum states {
+        OPEN = 1;
+        VERIFIED = 2;
+        CLOSED = 3;
+    }
 }
 
 message Date {
