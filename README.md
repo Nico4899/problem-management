@@ -12,7 +12,7 @@
 
 [Application Context Sharing View](pages/application_context_sharing_view.md)
 
-[API Specification](pages/api.md) 
+[API Specification](api/Problem.proto) 
 
 [Task Processes](pages/task_processes.md) 
 
