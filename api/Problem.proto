@@ -3,18 +3,32 @@ syntax = "proto3";
 package problemPackage;
 
 service problemManagement{
-    rpc getProblem(pin) returns (Problem);
+    rpc getProblem(Pin) returns (Problem);
     rpc getProblems(empty) returns (Problems);
-    rpc getProblemsByState(ProblemState) returns (Problems);
-    rpc getProblemByReporter(string) returns (Problems);
-    rpc addProblem(Problem) returns (pin);
-    rpc updateProblem(pin, Problem) returns (Problem);
-    rpc deleteProblem(pin) returns (empty);
+    rpc getProblemsByFilter(Categories) returns (Problems);
+
+    rpc addProblem(Problem) returns (Pin);
+    rpc updateProblem(Pin, Problem) returns (Problem);
+    rpc deleteProblem(Pin) returns (empty);
+
+    rpc accept(empty) returns (empty);
+    rpc decline(empty) returns (empty);
+    rpc close(empty) returns (empty);
+    rpc approach(empty) returns (empty);
+    rpc abort(empty) returns (empty);
+    rpc setState(ProblemState) returns (empty);
+    rpc getAcceptedState(empty) returns (ProblemState);
+    rpc getDeclinedState(empty) returns (ProblemState);
+    rpc getInProgressState(empty) returns (ProblemState);
+    rpc getClosedState(empty) returns (ProblemState);
+    rpc getOpenState(empty) returns (ProblemState);
+
+    rpc getDescription(empty) returns (string);
 }
 
 message empty{}
 
-message pin {
+message Pin {
     oneof identifier {
     int32 pin = 1;
     }
@@ -27,6 +41,8 @@ message Problem{
     ProblemState problemState = 4;
     Date date = 5;
     string reporter = 6;
+    Pin pin = 7;
+
 }
 
 message Problems {
@@ -35,6 +51,11 @@ message Problems {
 
 message ProblemState {
     Problem problemState = 1;
+}
+
+message Categories {
+    repeated ProblemState problemStates = 1;
+    string user = 2;
 }
 
 message Date {
