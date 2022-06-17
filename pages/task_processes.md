@@ -29,7 +29,7 @@
 
 ### Update a Problem
 
-<img src="../figures/task_process/UpdateAProblem_1.1.png" alt="update_problem" width="70%">
+<img src="../figures/task_process/UpdateAProblem_1.2.png" alt="update_problem" width="70%">
 
 
 ### Edit a Problem
