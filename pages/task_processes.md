@@ -16,28 +16,28 @@
 
 ### Report a Problem
 
-<img src="../figures/task_process/ReportAProblem_1.1.png" alt="report_problem" width="70%">
+![Report a Problem](../figures/task_process/report_a_problem_2.2.png)
 
 ### View a Problem
-<img src="../figures/task_process/..." alt="..." width="70%">
+
+![Report a Problem](../figures/task_process/view_a_problem_2.2.png)
 
 
 ### Validate/Cancel a Problem
 
-<img src="../figures/task_process/ValidateCancelAProblem_1.1.png" alt="validate_cancel_problem" width="70%">
+![Report a Problem](../figures/task_process/validate_cancel_a_problem_2.2.png)
 
 
 ### Update a Problem
 
-<img src="../figures/task_process/UpdateAProblem_1.2.png" alt="update_problem" width="70%">
+![Report a Problem](../figures/task_process/update_a_problem_2.2.png)
 
 
 ### Edit a Problem
 
-<img src="../figures/task_process/EditAProblem_1.1.png" alt="edit_problem" width="70%">
+![Report a Problem](../figures/task_process/edit_a_problem_2.2.png)
 
 
 ### Close a Problem
 
-<img src="../figures/task_process/CloseAProblem_1.1.png" alt="close_problem" width="70%">
-
+![Report a Problem](../figures/task_process/close_a_problem_2.2.png)
