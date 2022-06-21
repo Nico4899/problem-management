@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.0.0">
-  <zoom_level>8</zoom_level>
+  <zoom_level>7</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>736</x>
-      <y>504</y>
-      <w>88</w>
-      <h>72</h>
+      <x>574</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Accepted
 --
@@ -22,10 +22,10 @@ decline()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>216</x>
-      <y>304</y>
-      <w>160</w>
-      <h>56</h>
+      <x>119</x>
+      <y>238</y>
+      <w>140</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>ProblemController&lt;Problem&gt;
 --
@@ -37,14 +37,13 @@ decline()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>536</x>
-      <y>200</y>
-      <w>192</w>
-      <h>264</h>
+      <x>399</x>
+      <y>147</y>
+      <w>168</w>
+      <h>224</h>
     </coordinates>
     <panel_attributes>Problem
 --
--referenceObject: String
 -currentProblemState: ProblemState
 -title: String
 -description: String
@@ -68,10 +67,10 @@ getOpenState(): Open</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>640</x>
-      <y>504</y>
-      <w>88</w>
-      <h>72</h>
+      <x>490</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Open
 --
@@ -85,10 +84,10 @@ decline()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>792</x>
-      <y>288</y>
-      <w>168</w>
-      <h>136</h>
+      <x>623</x>
+      <y>224</y>
+      <w>147</w>
+      <h>119</h>
     </coordinates>
     <panel_attributes>/ProblemState/
 --
@@ -106,10 +105,10 @@ hold()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>928</x>
-      <y>504</y>
-      <w>88</w>
-      <h>72</h>
+      <x>742</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Declined
 --
@@ -122,10 +121,10 @@ accept()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1024</x>
-      <y>504</y>
-      <w>88</w>
-      <h>72</h>
+      <x>826</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Closed
 --
@@ -136,10 +135,10 @@ accept()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>832</x>
-      <y>504</y>
-      <w>88</w>
-      <h>72</h>
+      <x>658</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>InProgress
 --
@@ -152,10 +151,10 @@ hold()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>872</x>
-      <y>416</y>
-      <w>24</w>
-      <h>104</h>
+      <x>693</x>
+      <y>336</y>
+      <w>21</w>
+      <h>91</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
@@ -163,10 +162,10 @@ hold()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>680</x>
-      <y>456</y>
-      <w>216</w>
-      <h>64</h>
+      <x>525</x>
+      <y>371</y>
+      <w>189</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
@@ -175,10 +174,10 @@ hold()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>776</x>
-      <y>464</y>
-      <w>24</w>
-      <h>56</h>
+      <x>609</x>
+      <y>378</y>
+      <w>21</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
@@ -187,10 +186,10 @@ hold()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>968</x>
-      <y>464</y>
-      <w>24</w>
-      <h>56</h>
+      <x>777</x>
+      <y>378</y>
+      <w>21</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
@@ -199,10 +198,10 @@ hold()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>872</x>
-      <y>456</y>
-      <w>216</w>
-      <h>64</h>
+      <x>693</x>
+      <y>371</y>
+      <w>189</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
@@ -211,10 +210,10 @@ hold()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
-      <y>344</y>
-      <w>88</w>
-      <h>24</h>
+      <x>560</x>
+      <y>273</y>
+      <w>77</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
@@ -222,10 +221,10 @@ hold()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>368</x>
-      <y>320</y>
-      <w>184</w>
-      <h>32</h>
+      <x>252</x>
+      <y>252</y>
+      <w>161</w>
+      <h>28</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m2=1..n</panel_attributes>
@@ -234,10 +233,10 @@ m2=1..n</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>136</x>
-      <y>392</y>
-      <w>344</w>
-      <h>136</h>
+      <x>49</x>
+      <y>315</y>
+      <w>301</w>
+      <h>119</h>
     </coordinates>
     <panel_attributes>/APIController&lt;T&gt;/
 --
@@ -254,10 +253,10 @@ update(in: String, object: T) : T</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>536</x>
-      <y>600</y>
-      <w>320</w>
-      <h>64</h>
+      <x>399</x>
+      <y>497</y>
+      <w>280</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>ReporterFilter&lt;String, Problem&gt;
 --</panel_attributes>
@@ -266,10 +265,10 @@ update(in: String, object: T) : T</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>136</x>
-      <y>600</y>
-      <w>376</w>
-      <h>64</h>
+      <x>49</x>
+      <y>497</y>
+      <w>329</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>/Filter&lt;S, T&gt;/
 --
@@ -280,10 +279,10 @@ update(in: String, object: T) : T</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>864</x>
-      <y>600</y>
-      <w>320</w>
-      <h>64</h>
+      <x>686</x>
+      <y>497</y>
+      <w>280</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>ProblemStateFilter&lt;String, Problem&gt;
 --
@@ -293,10 +292,10 @@ update(in: String, object: T) : T</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>352</y>
-      <w>24</w>
-      <h>56</h>
+      <x>182</x>
+      <y>280</y>
+      <w>21</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
@@ -304,10 +303,10 @@ update(in: String, object: T) : T</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>520</y>
-      <w>40</w>
-      <h>96</h>
+      <x>182</x>
+      <y>427</y>
+      <w>35</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1..n</panel_attributes>
@@ -316,10 +315,10 @@ m1=1..n</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>656</y>
-      <w>352</w>
-      <h>40</h>
+      <x>182</x>
+      <y>546</y>
+      <w>308</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0;420.0;30.0;420.0;10.0</additional_attributes>
@@ -327,10 +326,10 @@ m1=1..n</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>616</x>
-      <y>656</y>
-      <w>360</w>
-      <h>40</h>
+      <x>469</x>
+      <y>546</y>
+      <w>315</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;30.0;430.0;30.0;430.0;10.0</additional_attributes>
@@ -338,10 +337,10 @@ m1=1..n</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>216</x>
-      <y>200</y>
-      <w>160</w>
-      <h>56</h>
+      <x>119</x>
+      <y>147</y>
+      <w>140</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>ProblemManager
 --
@@ -353,12 +352,95 @@ main(args: String[]):</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>288</x>
-      <y>248</y>
-      <w>24</w>
-      <h>72</h>
+      <x>182</x>
+      <y>189</y>
+      <w>21</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>154</y>
+      <w>182</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>/ReferenceObserver&lt;T&gt;/
+--
+
+--
+/update(object: T):/
+/add(object: T):/
+/remove():/
+/get(): T/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>259</y>
+      <w>182</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>NotificationObserver&lt;Notification&gt;
+--
+-referencedNotificatable
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>175</y>
+      <w>357</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;10.0;490.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>917</x>
+      <y>343</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Notification
+--
+-in: String
+-title: String
+-description: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>987</x>
+      <y>301</y>
+      <w>28</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>987</x>
+      <y>231</y>
+      <w>21</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
   </element>
 </diagram>
