@@ -30,7 +30,7 @@
 
 ### Update a Problem
 
-![Update a Problem](../figures/task_process/update_a_problem_2.2.png)
+![Update a Problem](../figures/task_process/update_a_problem_2.3.png)
 
 
 ### Edit a Problem
