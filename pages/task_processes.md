@@ -20,24 +20,24 @@
 
 ### View a Problem
 
-![Report a Problem](../figures/task_process/view_a_problem_2.2.png)
+![View a Problem](../figures/task_process/view_a_problem_2.2.png)
 
 
 ### Validate/Cancel a Problem
 
-![Report a Problem](../figures/task_process/validate_cancel_a_problem_2.2.png)
+![Validate/Cancel a Problem](../figures/task_process/validate_cancel_a_problem_2.2.png)
 
 
 ### Update a Problem
 
-![Report a Problem](../figures/task_process/update_a_problem_2.2.png)
+![Update a Problem](../figures/task_process/update_a_problem_2.2.png)
 
 
 ### Edit a Problem
 
-![Report a Problem](../figures/task_process/edit_a_problem_2.2.png)
+![Edit a Problem](../figures/task_process/edit_a_problem_2.2.png)
 
 
 ### Close a Problem
 
-![Report a Problem](../figures/task_process/close_a_problem_2.2.png)
+![Close a Problem](../figures/task_process/close_a_problem_2.2.png)
