@@ -12,7 +12,7 @@ This microservice handles the ticket system to report problems and handle notifi
 
 [Application Context Sharing View](pages/application_context_sharing_view.md)
 
-[API Specification](api/Problem.proto) 
+[API Specification](api/problem.proto) 
 
 [Task Processes](pages/task_processes.md) 
 
