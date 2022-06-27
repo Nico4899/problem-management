@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>40</x>
-      <y>70</y>
+      <x>240</x>
+      <y>50</y>
       <w>620</w>
       <h>50</h>
     </coordinates>
@@ -16,8 +16,8 @@ View a problem</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>90</x>
-      <y>110</y>
+      <x>290</x>
+      <y>90</y>
       <w>50</w>
       <h>150</h>
     </coordinates>
@@ -29,8 +29,8 @@ m2pos=1,1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>580</x>
-      <y>110</y>
+      <x>780</x>
+      <y>90</y>
       <w>40</w>
       <h>150</h>
     </coordinates>
@@ -42,8 +42,8 @@ m2pos=-5,3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>560</x>
-      <y>240</y>
+      <x>760</x>
+      <y>220</y>
       <w>60</w>
       <h>270</h>
     </coordinates>
@@ -53,8 +53,8 @@ m2pos=-5,3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>70</x>
-      <y>240</y>
+      <x>270</x>
+      <y>220</y>
       <w>60</w>
       <h>270</h>
     </coordinates>
@@ -64,8 +64,8 @@ m2pos=-5,3</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>90</x>
-      <y>500</y>
+      <x>290</x>
+      <y>480</y>
       <w>520</w>
       <h>70</h>
     </coordinates>
@@ -75,8 +75,8 @@ m2pos=-5,3</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>120</x>
-      <y>350</y>
+      <x>320</x>
+      <y>330</y>
       <w>190</w>
       <h>40</h>
     </coordinates>
@@ -87,8 +87,8 @@ m2pos=-5,3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>290</x>
-      <y>350</y>
+      <x>490</x>
+      <y>330</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
@@ -99,8 +99,8 @@ m2pos=-5,3</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>330</x>
-      <y>380</y>
+      <x>530</x>
+      <y>360</y>
       <w>60</w>
       <h>270</h>
     </coordinates>
@@ -123,8 +123,8 @@ m2pos=-5,3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>270</x>
-      <y>630</y>
+      <x>470</x>
+      <y>610</y>
       <w>150</w>
       <h>40</h>
     </coordinates>
@@ -135,8 +135,8 @@ Problem</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>380</x>
-      <y>360</y>
+      <x>580</x>
+      <y>340</y>
       <w>200</w>
       <h>30</h>
     </coordinates>
@@ -146,8 +146,8 @@ Problem</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>40</x>
-      <y>150</y>
+      <x>240</x>
+      <y>130</y>
       <w>620</w>
       <h>30</h>
     </coordinates>
@@ -157,8 +157,8 @@ Problem</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>40</x>
-      <y>580</y>
+      <x>240</x>
+      <y>560</y>
       <w>620</w>
       <h>30</h>
     </coordinates>
@@ -168,8 +168,8 @@ Problem</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>220</x>
-      <y>180</y>
+      <x>420</x>
+      <y>160</y>
       <w>240</w>
       <h>50</h>
     </coordinates>
@@ -180,8 +180,8 @@ viewAProblem</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
-      <y>200</y>
+      <x>650</x>
+      <y>180</y>
       <w>140</w>
       <h>60</h>
     </coordinates>
@@ -191,8 +191,8 @@ viewAProblem</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>110</x>
-      <y>200</y>
+      <x>310</x>
+      <y>180</y>
       <w>130</w>
       <h>60</h>
     </coordinates>
