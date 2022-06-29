@@ -5,7 +5,7 @@ package edu.kit.tm.cm.proto;
 option java_multiple_files = true;
 option java_package = "edu.kit.tm.cm.proto";
 
-service problemManagement {
+service ProblemManagement {
   rpc Get(IN) returns (Problem);
   rpc GetProblems(Empty) returns (Problems);
   rpc GetFilteredProblems(FilterValues) returns (Problems);
