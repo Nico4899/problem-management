@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>574</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Accepted
+--
+
+--
+approach()
+decline()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>119</x>
+      <y>238</y>
+      <w>140</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>ProblemController&lt;Problem&gt;
+--
+
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>399</x>
+      <y>147</y>
+      <w>168</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>Problem
+--
+-currentProblemState: ProblemState
+-title: String
+-description: String
+-date: Date
+-reporter: String
+-in: int
+--
+accept()
+decline()
+close()
+approach()
+hold()
+setState(newState: ProblemState)
+getAcceptedState(): Accepted
+getDeclinedtSate(): Declined
+getInProgressState(): InProgress
+getClosedState(): Closed
+getOpenState(): Open</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Open
+--
+
+--
+accept()
+decline()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>623</x>
+      <y>224</y>
+      <w>147</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>/ProblemState/
+--
++contextProblem: Problem
+--
+/ProblemState()/
+accept()
+dicline()
+close()
+approach()
+hold()
+/getDescription()/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>742</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Declined
+--
+
+--
+close()
+accept()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>826</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Closed
+--
+
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>658</x>
+      <y>413</y>
+      <w>77</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>InProgress
+--
+
+--
+close()
+hold()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>693</x>
+      <y>336</y>
+      <w>21</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>525</x>
+      <y>371</y>
+      <w>189</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;20.0;250.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>609</x>
+      <y>378</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>777</x>
+      <y>378</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>693</x>
+      <y>371</y>
+      <w>189</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>250.0;60.0;250.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>273</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>252</x>
+      <y>252</y>
+      <w>161</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1..n</panel_attributes>
+    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>49</x>
+      <y>315</y>
+      <w>301</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>/APIController&lt;T&gt;/
+--
+
+--
+get(): Collection&lt;T&gt;
+get(in: String): T
+add(in: String, T: object): int
+getFiltered(in: String, keywords: Collection&lt;String&gt;): Collection&lt;T&gt;
+remove(in: String, object: T)
+update(in: String, object: T) : T</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>399</x>
+      <y>497</y>
+      <w>280</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>ReporterFilter&lt;String, Problem&gt;
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>49</x>
+      <y>497</y>
+      <w>329</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>/Filter&lt;S, T&gt;/
+--
+/filter(filterValues: Collection&lt;S&gt;, collection: Collection&lt;S&gt;): Collection&lt;T&gt;/
+/getKeyword():/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>686</x>
+      <y>497</y>
+      <w>280</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>ProblemStateFilter&lt;String, Problem&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>182</x>
+      <y>280</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>182</x>
+      <y>427</y>
+      <w>35</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1..n</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>182</x>
+      <y>546</y>
+      <w>308</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;420.0;30.0;420.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>469</x>
+      <y>546</y>
+      <w>315</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;30.0;430.0;30.0;430.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>119</x>
+      <y>147</y>
+      <w>140</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>ProblemManager
+--
+
+--
+main(args: String[]):</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>182</x>
+      <y>189</y>
+      <w>21</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>154</y>
+      <w>182</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>/ReferenceObserver&lt;T&gt;/
+--
+
+--
+/update(object: T):/
+/add(object: T):/
+/remove():/
+/get(): T/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>259</y>
+      <w>182</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>NotificationObserver&lt;Notification&gt;
+--
+-referencedNotificatable
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>175</y>
+      <w>357</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;10.0;490.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>917</x>
+      <y>343</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Notification
+--
+-in: String
+-title: String
+-description: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>987</x>
+      <y>301</y>
+      <w>28</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>987</x>
+      <y>231</y>
+      <w>21</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+</diagram>
