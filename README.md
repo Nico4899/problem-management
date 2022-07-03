@@ -30,7 +30,7 @@ This microservice handles the ticket system to report problems and handle notifi
 
  [Integration Tests](pages/integration_tests.md)
 
- [End-to-End Tests](pages/end-to-end-tests.md) 
+ [End-to-End Tests](pages/end_to_end_tests.md) 
 
 
 ## Organization

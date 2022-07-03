@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package edu.kit.tm.cm.proto;
+
+option java_multiple_files = true;
+option java_package = "edu.kit.tm.cm.proto";
+
+import "google/protobuf/timestamp.proto";
+
+
+//TODO filter implementation
+
+service ProblemManagement {
+  rpc ListProblems(ListProblemsRequest) returns (ListProblemsResponse);
+  rpc GetProblem(GetProblemRequest) returns (GetProblemResponse);
+  rpc CreateProblem(CreateProblemRequest) returns (CreateProblemResponse);
+  rpc UpdateProblem(UpdateProblemRequest) returns (UpdateProblemResponse);
+  rpc RemoveProblem(RemoveProblemRequest) returns (RemoveProblemResponse);
+}
+
+// requests and responses
+
+message ListProblemsRequest{}
+
+message ListProblemsResponse{
+  Problems problems = 1;
+  ResponseMessage response_message = 2;
+}
+
+message GetProblemRequest{
+  string identification_number = 1;
+}
+
+message GetProblemResponse{
+  Problem problem = 1;
+  ResponseMessage response_message = 2;
+}
+
+message CreateProblemRequest{
+  Problem problem = 1;
+}
+
+message CreateProblemResponse{
+  Problem problem = 1;
+  ResponseMessage response_message = 2;
+}
+
+message UpdateProblemRequest{
+  Problem problem = 1;
+}
+
+message UpdateProblemResponse{
+  Problem problem = 1;
+  ResponseMessage response_message = 2;
+}
+
+message RemoveProblemRequest{
+  string identification_number = 1;
+}
+
+message RemoveProblemResponse{
+  ResponseMessage response_message = 2;
+}
+
+// api response piece
+
+message ResponseMessage {
+  bool successful = 1;
+  string message = 2;
+}
+
+// single message constructions
+
+message Notification{
+  google.protobuf.Timestamp creation_time = 1;
+  string identification_number = 2;
+  string parent_identification_number = 3;
+  string notification_title = 4;
+  string notification_description = 5;
+}
+
+message Problem{
+  ProblemState problem_state = 1;
+  string identification_number = 2;
+  string problem_title = 3;
+  string problem_description = 4;
+  string problem_reporter = 5;
+  google.protobuf.Timestamp creation_time = 6;
+  string notification_identification_number = 7;
+  string reference_identification_number = 8;
+}
+
+message ProblemState{
+  enum ProblemState{
+    accepted = 0;
+    declined = 1;
+    open = 2;
+    closed = 3;
+    in_progress = 4;
+  }
+}
+
+// multi message constructions
+
+message Problems{
+  repeated Problem problems = 1;
+}
