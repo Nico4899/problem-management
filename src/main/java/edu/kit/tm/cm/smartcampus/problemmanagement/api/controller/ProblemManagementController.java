@@ -163,7 +163,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   }
 
   private ProblemState readProblemState(GrpcProblemState grpcProblemState) {
-    return ProblemState.valueOf(grpcProblemState.name());
+    return ProblemState.forNumber(grpcProblemState.ordinal() + 1);
   }
 
   // write model object to grpc object

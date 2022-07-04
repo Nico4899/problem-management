@@ -25,4 +25,15 @@ public enum ProblemState {
   public State getState() {
     return this.state;
   }
+
+  public static ProblemState forNumber(int value) {
+    return switch (value) {
+      case 1 -> DECLINED;
+      case 2 -> OPEN;
+      case 3 -> CLOSED;
+      case 4 -> IN_PROGRESS;
+      case 5 -> ACCEPTED;
+      default -> null;
+    };
+  }
 }
