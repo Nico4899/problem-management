@@ -39,6 +39,9 @@ public class ProblemManagementManager {
   }
 
   public Problem updateProblem(Problem problem) {
+    if(problem.getNotificationIdentificationNumber() != null) {
+      this.buildingConnector.updateNotification(problem.extractNotification());
+    }
     return this.problemConnector.updateProblem(problem);
   }
 
