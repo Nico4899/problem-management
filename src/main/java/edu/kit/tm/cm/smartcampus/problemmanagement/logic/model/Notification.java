@@ -3,7 +3,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -11,6 +11,6 @@ public class Notification {
   private String identificationNumber;
   private String notificationTitle;
   private String notificationDescription;
-  private Date creationTime;
+  private Timestamp creationTime;
   private String parentIdentificationNumber;
 }
