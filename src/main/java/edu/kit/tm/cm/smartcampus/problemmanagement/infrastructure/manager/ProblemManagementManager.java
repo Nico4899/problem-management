@@ -82,4 +82,24 @@ public class ProblemManagementManager {
     // remove connected notification and then remove problem itself
   }
 
+  public void acceptProblem(String identificationNumber) {
+
+  }
+
+  public void declineProblem(String identificationNumber) {
+
+  }
+
+  public void closeProblem(String identificationNumber) {
+
+  }
+
+  public void approachProblem(String identificationNumber) {
+
+  }
+
+  public void holdProblem(String identificationNumber) {
+
+  }
+
 }
