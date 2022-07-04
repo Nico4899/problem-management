@@ -28,14 +28,20 @@ public class ProblemManagementManager {
 
   public Collection<Problem> listProblems() {
     return this.problemConnector.listProblems();
+
+    //list all problems from te Problem-Domain
   }
 
   public Problem getProblem(String identificationNumber) {
     return this.problemConnector.getProblem(identificationNumber);
+
+    // get one problem from the Problem-Domain
   }
 
   public Problem createProblem(Problem problem) {
     return this.problemConnector.createProblem(problem);
+
+    // create a new problem in the Problem-Domain
   }
 
   public Problem updateProblem(Problem problem) {
@@ -60,11 +66,20 @@ public class ProblemManagementManager {
       this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
     }
     return this.problemConnector.updateProblem(problem);
+
+    // change one problem, in case the state was changed from OPEN/DECLINED -> ACCEPTED then add a new Notification to Building-Domain
+    // if it was DECLINED/IN_PROGRESS and was changed to CLOSED remove it from Building-Domain
+    // if it was in ACCEPTED -> DECLINED then remove it from Building-Domain
+
+    // maybe state machine model implementation with boolean if statechange happened
+    // then Service could tell frontend possible actions
   }
 
   public void removeProblem(String identificationNumber) {
     this.buildingConnector.removeNotification(this.problemConnector.getProblem(identificationNumber).getNotificationIdentificationNumber());
     this.problemConnector.removeProblem(identificationNumber);
+
+    // remove connected notification and then remove problem itself
   }
 
 }
