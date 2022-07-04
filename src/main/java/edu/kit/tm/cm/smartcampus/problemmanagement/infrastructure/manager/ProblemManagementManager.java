@@ -4,7 +4,6 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.Buil
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,85 +20,82 @@ public class ProblemManagementManager {
   private final ProblemConnector problemConnector;
 
   @Autowired
-  public ProblemManagementManager(BuildingConnector buildingConnector, ProblemConnector problemConnector) {
+  public ProblemManagementManager(
+      BuildingConnector buildingConnector, ProblemConnector problemConnector) {
     this.buildingConnector = buildingConnector;
     this.problemConnector = problemConnector;
   }
 
   public Collection<Problem> listProblems() {
     return this.problemConnector.listProblems();
-
-    //list all problems from te Problem-Domain
   }
 
   public Problem getProblem(String identificationNumber) {
     return this.problemConnector.getProblem(identificationNumber);
-
-    // get one problem from the Problem-Domain
   }
 
   public Problem createProblem(Problem problem) {
     return this.problemConnector.createProblem(problem);
-
-    // create a new problem in the Problem-Domain
   }
 
   public Problem updateProblem(Problem problem) {
-    if (problem.getProblemState() == ProblemState.ACCEPTED) {
-      if (problem.getNotificationIdentificationNumber().isEmpty()) {
-        if (problem.getReferenceIdentificationNumber().matches(BIN_PATTERN)) {
-          Notification notification = this.buildingConnector.createBuildingNotification(problem.extractNotification());
-          problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-        }
-        if (problem.getReferenceIdentificationNumber().matches(RIN_PATTERN)) {
-          Notification notification = this.buildingConnector.createRoomNotification(problem.extractNotification());
-          problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-        }
-        if (problem.getReferenceIdentificationNumber().matches(CIN_PATTERN)) {
-          Notification notification = this.buildingConnector.createComponentNotification(problem.extractNotification());
-          problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-        }
-      }
-      this.buildingConnector.updateNotification(problem.extractNotification());
-    }
-    if (problem.getProblemState() == ProblemState.CLOSED) {
-      this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
-    }
     return this.problemConnector.updateProblem(problem);
-
-    // change one problem, in case the state was changed from OPEN/DECLINED -> ACCEPTED then add a new Notification to Building-Domain
-    // if it was DECLINED/IN_PROGRESS and was changed to CLOSED remove it from Building-Domain
-    // if it was in ACCEPTED -> DECLINED then remove it from Building-Domain
-
-    // maybe state machine model implementation with boolean if statechange happened
-    // then Service could tell frontend possible actions
   }
 
   public void removeProblem(String identificationNumber) {
-    this.buildingConnector.removeNotification(this.problemConnector.getProblem(identificationNumber).getNotificationIdentificationNumber());
+    removeNotification(identificationNumber);
     this.problemConnector.removeProblem(identificationNumber);
-
-    // remove connected notification and then remove problem itself
   }
 
   public void acceptProblem(String identificationNumber) {
-
+    this.problemConnector.getProblem(identificationNumber).accept();
+    postNotification(identificationNumber);
   }
 
   public void declineProblem(String identificationNumber) {
-
+    this.problemConnector.getProblem(identificationNumber).decline();
+    removeNotification(identificationNumber);
   }
 
   public void closeProblem(String identificationNumber) {
-
+    this.problemConnector.getProblem(identificationNumber).close();
+    removeNotification(identificationNumber);
   }
 
   public void approachProblem(String identificationNumber) {
-
+    this.problemConnector.getProblem(identificationNumber).approach();
   }
 
   public void holdProblem(String identificationNumber) {
-
+    this.problemConnector.getProblem(identificationNumber).hold();
   }
 
+  // private help methods
+
+  private void postNotification(String problemIdentificationNumber) {
+    Problem problem = problemConnector.getProblem(problemIdentificationNumber);
+    Notification notification = problem.extractNotification();
+    if (notification.getParentIdentificationNumber().matches(BIN_PATTERN)) {
+      notification = buildingConnector.createBuildingNotification(notification);
+      problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
+      updateProblem(problem);
+    }
+    if (notification.getParentIdentificationNumber().matches(RIN_PATTERN)) {
+      notification = buildingConnector.createRoomNotification(notification);
+      problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
+      updateProblem(problem);
+    }
+    if (notification.getParentIdentificationNumber().matches(CIN_PATTERN)) {
+      notification = buildingConnector.createComponentNotification(notification);
+      problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
+      updateProblem(problem);
+    }
+  }
+
+  private void removeNotification(String problemIdentificationNumber) {
+    Problem problem = this.problemConnector.getProblem(problemIdentificationNumber);
+    if (problem.getNotificationIdentificationNumber() != null) {
+      this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
+    }
+  }
 }

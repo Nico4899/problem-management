@@ -3,7 +3,8 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.api.controller;
 import edu.kit.tm.cm.proto.*;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.manager.ProblemManagementManager;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.StateOperation;
 import io.grpc.stub.StreamObserver;
 
 import java.sql.Timestamp;
@@ -104,9 +105,9 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
     this.problemManagementManager.holdProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
-      ChangeStateResponse.newBuilder()
-        .setResponseMessage(writeResponseMessage("hello", true))
-        .build();
+        ChangeStateResponse.newBuilder()
+            .setResponseMessage(writeResponseMessage("hello", true))
+            .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
   }
@@ -116,9 +117,9 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
     this.problemManagementManager.closeProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
-      ChangeStateResponse.newBuilder()
-        .setResponseMessage(writeResponseMessage("hello", true))
-        .build();
+        ChangeStateResponse.newBuilder()
+            .setResponseMessage(writeResponseMessage("hello", true))
+            .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
   }
@@ -128,9 +129,9 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
     this.problemManagementManager.approachProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
-      ChangeStateResponse.newBuilder()
-        .setResponseMessage(writeResponseMessage("hello", true))
-        .build();
+        ChangeStateResponse.newBuilder()
+            .setResponseMessage(writeResponseMessage("hello", true))
+            .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
   }
@@ -140,9 +141,9 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
     this.problemManagementManager.declineProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
-      ChangeStateResponse.newBuilder()
-        .setResponseMessage(writeResponseMessage("hello", true))
-        .build();
+        ChangeStateResponse.newBuilder()
+            .setResponseMessage(writeResponseMessage("hello", true))
+            .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
   }
@@ -180,7 +181,19 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
         .setProblemTitle(problem.getProblemTitle())
         .setReferenceIdentificationNumber(problem.getReferenceIdentificationNumber())
         .setProblemState(writeProblemState(problem.getProblemState()))
+        .setPossibleStateOperations(
+            writeStateOperations(problem.getProblemState().getPossibleOperations()))
         .build();
+  }
+
+  private GrpcStateOperations writeStateOperations(Collection<StateOperation> stateOperations) {
+    return GrpcStateOperations.newBuilder()
+        .addAllStateOperations(stateOperations.stream().map(this::writeStateOperation).toList())
+        .build();
+  }
+
+  private GrpcStateOperation writeStateOperation(StateOperation stateOperation) {
+    return GrpcStateOperation.forNumber(stateOperation.ordinal() + 1);
   }
 
   private GrpcProblemState writeProblemState(ProblemState problemState) {

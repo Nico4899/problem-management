@@ -1,5 +1,6 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,25 @@ public class Problem {
     extractedNotification.setParentIdentificationNumber(referenceIdentificationNumber);
     extractedNotification.setIdentificationNumber(notificationIdentificationNumber);
     return extractedNotification;
+  }
+
+  public void accept() {
+    this.problemState = this.problemState.getState().accept();
+  }
+
+  public void decline() {
+    this.problemState = this.problemState.getState().decline();
+  }
+
+  public void close() {
+    this.problemState = this.problemState.getState().close();
+  }
+
+  public void hold() {
+    this.problemState = this.problemState.getState().hold();
+  }
+
+  public void approach() {
+    this.problemState = this.problemState.getState().approach();
   }
 }

@@ -7,7 +7,6 @@ option java_package = "edu.kit.tm.cm.proto";
 
 import "google/protobuf/timestamp.proto";
 
-
 //TODO filter implementation
 
 service ProblemManagement {
@@ -76,7 +75,6 @@ message ChangeStateResponse{
   ResponseMessage response_message = 1;
 }
 
-
 // api response piece
 
 message ResponseMessage {
@@ -95,6 +93,7 @@ message GrpcProblem{
   google.protobuf.Timestamp creation_time = 6;
   string notification_identification_number = 7;
   string reference_identification_number = 8;
+  GrpcStateOperations possibleStateOperations = 9;
 }
 
 enum GrpcProblemState{
@@ -106,8 +105,21 @@ enum GrpcProblemState{
   ACCEPTED = 5;
 }
 
+enum GrpcStateOperation{
+  UNKNOWN_STATE_OPERATION = 0;
+  ACCEPT = 1;
+  CLOSE = 2;
+  DECLINE = 3;
+  APPROACH = 4;
+  HOLD = 5;
+}
+
 // multi message constructions
 
 message GrpcProblems{
   repeated GrpcProblem problems = 1;
+}
+
+message GrpcStateOperations{
+  repeated GrpcStateOperation state_operations = 1;
 }
