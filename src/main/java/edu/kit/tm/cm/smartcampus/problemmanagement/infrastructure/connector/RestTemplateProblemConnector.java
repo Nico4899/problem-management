@@ -3,22 +3,29 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Component
 public class RestTemplateProblemConnector implements ProblemConnector{
 
   @Value("problem.listProblemsUrl")
   private String listProblemsUrl;
+
   @Value("problem.createProblemUrl")
   private String createProblemUrl;
+
   @Value("problem.getProblemUrl")
   private String getProblemUrl;
+
   @Value("problem.updateProblemUrl")
   private String updateProblemUrl;
+
   @Value("problem.removeProblemUrl")
   private String removeProblemUrl;
 
@@ -32,26 +39,51 @@ public class RestTemplateProblemConnector implements ProblemConnector{
   }
   @Override
   public Collection<Problem> listProblems() {
-    return null;
+    ResponseEntity<Collection<Problem>> responseEntity;
+
+    responseEntity = restTemplate.exchange(baseUrl + listProblemsUrl, HttpMethod.GET, null, new ParameterizedTypeReference<Collection<Problem>>() {
+    });
+
+    if(responseEntity.getStatusCode() == HttpStatus.OK) {
+      return responseEntity.getBody();
+    }
+    return Collections.emptyList();
   }
 
   @Override
   public Problem createProblem(Problem problem) {
-    return null;
+    ResponseEntity<Problem> responseEntity;
+
+    responseEntity = restTemplate.postForEntity(baseUrl + createProblemUrl, problem, Problem.class);
+
+    return responseEntity.getBody();
   }
 
   @Override
   public Problem getProblem(String identificationNumber) {
-    return null;
+    ResponseEntity<Problem> responseEntity;
+
+    responseEntity = restTemplate.getForEntity(baseUrl + getProblemUrl, Problem.class, identificationNumber);
+
+    return responseEntity.getBody();
   }
 
   @Override
   public Problem updateProblem(Problem problem) {
-    return null;
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<Problem> entity = new HttpEntity<>(problem, headers);
+
+    restTemplate.exchange(baseUrl + updateProblemUrl, HttpMethod.PUT, entity, Void.class, problem.getIdentificationNumber());
+    return problem;
   }
 
   @Override
   public void removeProblem(String identificationNumber) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<String> entity = new HttpEntity<>(identificationNumber, headers);
 
+    restTemplate.exchange(baseUrl + removeProblemUrl, HttpMethod.DELETE, entity, Void.class, identificationNumber);
   }
 }
