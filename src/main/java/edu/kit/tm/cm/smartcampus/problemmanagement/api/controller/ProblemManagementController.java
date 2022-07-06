@@ -47,7 +47,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       ListProblemsResponse response =
               ListProblemsResponse.newBuilder()
                       .setProblems(writeProblems(this.problemManagementManager.listProblems()))
-                      .setResponseMessage(writeResponseMessage("hello", true))
+                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
                       .build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
@@ -73,7 +73,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
                       .setProblem(
                               writeProblem(
                                       this.problemManagementManager.getProblem(request.getIdentificationNumber())))
-                      .setResponseMessage(writeResponseMessage("hello", true))
+                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
                       .build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
@@ -104,7 +104,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
                       .setProblem(
                               writeProblem(
                                       this.problemManagementManager.createProblem(readProblem(request.getProblem()))))
-                      .setResponseMessage(writeResponseMessage("hello", true))
+                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
                       .build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
@@ -127,7 +127,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
                       .setProblem(
                               writeProblem(
                                       this.problemManagementManager.updateProblem(readProblem(request.getProblem()))))
-                      .setResponseMessage(writeResponseMessage("hello", true))
+                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
                       .build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
@@ -155,7 +155,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       this.problemManagementManager.removeProblem(request.getIdentificationNumber());
       RemoveProblemResponse response =
               RemoveProblemResponse.newBuilder()
-                      .setResponseMessage(writeResponseMessage("hello", true))
+                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
                       .build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
@@ -183,7 +183,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
     this.problemManagementManager.acceptProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
         ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage("hello", true))
+            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
             .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
@@ -211,7 +211,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
     this.problemManagementManager.holdProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
         ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage("hello", true))
+            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
             .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
@@ -239,7 +239,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
     this.problemManagementManager.closeProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
         ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage("hello", true))
+            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
             .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
@@ -267,7 +267,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
     this.problemManagementManager.approachProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
         ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage("hello", true))
+            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
             .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
@@ -295,7 +295,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
     this.problemManagementManager.declineProblem(request.getIdentificationNumber());
     ChangeStateResponse response =
         ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage("hello", true))
+            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
             .build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
