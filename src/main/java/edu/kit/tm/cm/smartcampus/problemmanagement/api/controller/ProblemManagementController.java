@@ -8,10 +8,12 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.StateOperation;
 import io.grpc.stub.StreamObserver;
+import org.springframework.stereotype.Controller;
 
 import java.sql.Timestamp;
 import java.util.Collection;
 
+@Controller
 public class ProblemManagementController extends ProblemManagementGrpc.ProblemManagementImplBase {
 
   private static final String SUCCESSFUL_MESSAGE = "Operation was successful!";
