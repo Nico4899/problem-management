@@ -3,7 +3,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class Declined implements State{
+public class Declined implements State {
 
   @Override
   public ProblemState accept() {
@@ -29,5 +29,4 @@ public class Declined implements State{
   public ProblemState decline() {
     return ProblemState.DECLINED;
   }
-
 }

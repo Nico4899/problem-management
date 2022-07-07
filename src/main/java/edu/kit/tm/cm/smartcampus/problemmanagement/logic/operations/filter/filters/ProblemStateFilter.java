@@ -1,12 +1,15 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations;
+package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
 import lombok.AllArgsConstructor;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
+/**
+ * This class represents an implementation of {@link Filter}, it filters a collection of problems by
+ * problem state.
+ */
 @AllArgsConstructor
 public class ProblemStateFilter implements Filter<Problem> {
 
@@ -14,13 +17,7 @@ public class ProblemStateFilter implements Filter<Problem> {
   private Collection<ProblemState> filterValues;
 
   @Override
-  public Collection<Problem> filter() {
-    Collection<Problem> filteredCollection = new LinkedList<>();
-    for (Problem problem: collectionToFilter) {
-      if (filterValues.contains(problem.getProblemState())) {
-        filteredCollection.add(problem);
-      }
-    }
-    return filteredCollection;
+  public void filter() {
+    collectionToFilter.removeIf(problem -> !filterValues.contains(problem.getProblemState()));
   }
 }

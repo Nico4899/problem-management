@@ -25,7 +25,9 @@ service ProblemManagement {
 
 // requests and responses
 
-message ListProblemsRequest{}
+message ListProblemsRequest{
+    ProblemFilterOptions problem_filter_options = 1;
+}
 
 message ListProblemsResponse{
   GrpcProblems problems = 1;
@@ -38,7 +40,8 @@ message GetProblemRequest{
 
 message GetProblemResponse{
   GrpcProblem problem = 1;
-  ResponseMessage response_message = 2;
+  GrpcStateOperations possibleStateOperations = 2;
+  ResponseMessage response_message = 4;
 }
 
 message CreateProblemRequest{
@@ -47,16 +50,17 @@ message CreateProblemRequest{
 
 message CreateProblemResponse{
   GrpcProblem problem = 1;
-  ResponseMessage response_message = 2;
+  ResponseMessage response_message = 3;
 }
 
 message UpdateProblemRequest{
   GrpcProblem problem = 1;
+  string identification_number = 2;
 }
 
 message UpdateProblemResponse{
   GrpcProblem problem = 1;
-  ResponseMessage response_message = 2;
+  ResponseMessage response_message = 3;
 }
 
 message RemoveProblemRequest{
@@ -91,9 +95,16 @@ message GrpcProblem{
   string problem_description = 4;
   string problem_reporter = 5;
   google.protobuf.Timestamp creation_time = 6;
-  string notification_identification_number = 7;
-  string reference_identification_number = 8;
-  GrpcStateOperations possibleStateOperations = 9;
+  string reference_identification_number = 7;
+}
+
+message ProblemFilterOptions{
+  ProblemStateFilterMapping problem_state_filter_mapping = 1;
+}
+
+message ProblemStateFilterMapping{
+  bool selected = 1;
+  repeated GrpcProblemState problem_state = 2;
 }
 
 enum GrpcProblemState{

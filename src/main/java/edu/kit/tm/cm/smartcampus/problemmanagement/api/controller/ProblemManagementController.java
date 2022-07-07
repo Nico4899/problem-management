@@ -7,6 +7,8 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.manager.Proble
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.StateOperation;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOption;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Controller;
 
@@ -16,13 +18,6 @@ import java.util.Collection;
 @Controller
 public class ProblemManagementController extends ProblemManagementGrpc.ProblemManagementImplBase {
 
-  private static final String SUCCESSFUL_MESSAGE = "Operation was successful!";
-
-  // response successful or not
-  private static final boolean SUCCESSFUL = true;
-  private static final boolean UNSUCCESSFUL = false;
-
-  // operations
   public static final String GET_PROBLEMS = "GetProblems";
   public static final String GET_PROBLEM = "GetProblem";
   public static final String CREATE_PROBLEM = "CreateProblem";
@@ -33,7 +28,10 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   public static final String CLOSE_PROBLEM = "CloseProblem";
   public static final String APPROACH_PROBLEM = "ApproachProblem";
   public static final String DECLINE_PROBLEM = "DeclineProblem";
+  private static final String SUCCESSFUL_MESSAGE = "Operation was successful!";
 
+  private static final boolean SUCCESSFUL = true;
+  private static final boolean UNSUCCESSFUL = false;
 
   private final ProblemManagementManager problemManagementManager;
 
@@ -46,19 +44,29 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       ListProblemsRequest request, StreamObserver<ListProblemsResponse> responseObserver) {
 
     try {
+
+      ProblemFilterOptions problemFilterOptions = request.getProblemFilterOptions();
+      FilterOptions filterOptions = this.readProblemFilterOptions(problemFilterOptions);
+      Collection<Problem> problems = this.problemManagementManager.listProblems(filterOptions);
+      GrpcProblems grpcProblems = this.writeProblems(problems);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
       ListProblemsResponse response =
-              ListProblemsResponse.newBuilder()
-                      .setProblems(writeProblems(this.problemManagementManager.listProblems()))
-                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-                      .build();
+          ListProblemsResponse.newBuilder()
+              .setProblems(grpcProblems)
+              .setResponseMessage(responseMessage)
+              .build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), GET_PROBLEMS);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
       ListProblemsResponse response =
-              ListProblemsResponse.newBuilder().setResponseMessage(responseMessage).build();
+          ListProblemsResponse.newBuilder().setResponseMessage(responseMessage).build();
 
       responseObserver.onNext(response);
       responseObserver.onCompleted();
@@ -69,28 +77,45 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   public void getProblem(
       GetProblemRequest request, StreamObserver<GetProblemResponse> responseObserver) {
 
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
+
+      Problem problem = this.problemManagementManager.getProblem(identificationNumber);
+      GrpcProblem grpcProblem = this.writeProblem(problem);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+      Collection<StateOperation> stateOperations =
+          problem.getProblemState().getPossibleOperations();
+      GrpcStateOperations grpcStateOperations = this.writeStateOperations(stateOperations);
+
       GetProblemResponse response =
-              GetProblemResponse.newBuilder()
-                      .setProblem(
-                              writeProblem(
-                                      this.problemManagementManager.getProblem(request.getIdentificationNumber())))
-                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-                      .build();
+          GetProblemResponse.newBuilder()
+              .setProblem(grpcProblem)
+              .setResponseMessage(responseMessage)
+              .setPossibleStateOperations(grpcStateOperations)
+              .build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), GET_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      GetProblemResponse response = GetProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+      GetProblemResponse response =
+          GetProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-      String message = String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
+
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message =
+          String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      GetProblemResponse response = GetProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+      GetProblemResponse response =
+          GetProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
@@ -101,20 +126,30 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       CreateProblemRequest request, StreamObserver<CreateProblemResponse> responseObserver) {
 
     try {
+
+      GrpcProblem grpcRequestProblem = request.getProblem();
+      Problem requestProblem = this.readProblem(grpcRequestProblem);
+      Problem responseProblem = this.problemManagementManager.createProblem(requestProblem);
+      GrpcProblem grpcResponseProblem = writeProblem(responseProblem);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
       CreateProblemResponse response =
-              CreateProblemResponse.newBuilder()
-                      .setProblem(
-                              writeProblem(
-                                      this.problemManagementManager.createProblem(readProblem(request.getProblem()))))
-                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-                      .build();
+          CreateProblemResponse.newBuilder()
+              .setProblem(grpcResponseProblem)
+              .setResponseMessage(responseMessage)
+              .build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), CREATE_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      CreateProblemResponse response = CreateProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+      CreateProblemResponse response =
+          CreateProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
@@ -123,56 +158,87 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   @Override
   public void updateProblem(
       UpdateProblemRequest request, StreamObserver<UpdateProblemResponse> responseObserver) {
+
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
+
+      GrpcProblem grpcRequestProblem = request.getProblem();
+      Problem requestProblem = this.readProblem(grpcRequestProblem);
+      requestProblem.setIdentificationNumber(identificationNumber);
+      Problem responseProblem = this.problemManagementManager.updateProblem(requestProblem);
+      GrpcProblem grpcResponseProblem = this.writeProblem(responseProblem);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
       UpdateProblemResponse response =
-              UpdateProblemResponse.newBuilder()
-                      .setProblem(
-                              writeProblem(
-                                      this.problemManagementManager.updateProblem(readProblem(request.getProblem()))))
-                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-                      .build();
+          UpdateProblemResponse.newBuilder()
+              .setProblem(grpcResponseProblem)
+              .setResponseMessage(responseMessage)
+              .build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), UPDATE_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      UpdateProblemResponse response = UpdateProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+      UpdateProblemResponse response =
+          UpdateProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-    String message = String.format(resourceNotFoundException.getMessage(), request.getProblem().getIdentificationNumber());
-    ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-    UpdateProblemResponse response = UpdateProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
-    responseObserver.onNext(response);
-    responseObserver.onCompleted();
-  }
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message = String.format(resourceNotFoundException.getMessage(), identificationNumber);
+      ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
+
+      UpdateProblemResponse response =
+          UpdateProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+
+      responseObserver.onNext(response);
+      responseObserver.onCompleted();
+    }
   }
 
   @Override
   public void removeProblem(
       RemoveProblemRequest request, StreamObserver<RemoveProblemResponse> responseObserver) {
+
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
-      this.problemManagementManager.removeProblem(request.getIdentificationNumber());
+
+      this.problemManagementManager.removeProblem(identificationNumber);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
       RemoveProblemResponse response =
-              RemoveProblemResponse.newBuilder()
-                      .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-                      .build();
+          RemoveProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), REMOVE_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      RemoveProblemResponse response = RemoveProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+      RemoveProblemResponse response =
+          RemoveProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-      String message = String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
+
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message = String.format(resourceNotFoundException.getMessage(), identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      RemoveProblemResponse response = RemoveProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+      RemoveProblemResponse response =
+          RemoveProblemResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
@@ -181,26 +247,39 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   @Override
   public void acceptProblem(
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
+
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
-    this.problemManagementManager.acceptProblem(request.getIdentificationNumber());
-    ChangeStateResponse response =
-        ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-            .build();
-    responseObserver.onNext(response);
-    responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+      this.problemManagementManager.acceptProblem(identificationNumber);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
+      responseObserver.onNext(response);
+      responseObserver.onCompleted();
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), ACCEPT_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-      String message = String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
+
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message = String.format(resourceNotFoundException.getMessage(), identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
@@ -209,26 +288,39 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   @Override
   public void holdProblem(
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
+
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
-    this.problemManagementManager.holdProblem(request.getIdentificationNumber());
-    ChangeStateResponse response =
-        ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-            .build();
-    responseObserver.onNext(response);
-    responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+      this.problemManagementManager.holdProblem(identificationNumber);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
+      responseObserver.onNext(response);
+      responseObserver.onCompleted();
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), HOLD_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-      String message = String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
+
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message = String.format(resourceNotFoundException.getMessage(), identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
@@ -237,26 +329,39 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   @Override
   public void closeProblem(
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
+
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
-    this.problemManagementManager.closeProblem(request.getIdentificationNumber());
-    ChangeStateResponse response =
-        ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-            .build();
-    responseObserver.onNext(response);
-    responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+      this.problemManagementManager.closeProblem(identificationNumber);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
+      responseObserver.onNext(response);
+      responseObserver.onCompleted();
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), CLOSE_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-      String message = String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
+
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message = String.format(resourceNotFoundException.getMessage(), identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
@@ -265,26 +370,39 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   @Override
   public void approachProblem(
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
+
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
-    this.problemManagementManager.approachProblem(request.getIdentificationNumber());
-    ChangeStateResponse response =
-        ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-            .build();
-    responseObserver.onNext(response);
-    responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+      this.problemManagementManager.approachProblem(identificationNumber);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
+      responseObserver.onNext(response);
+      responseObserver.onCompleted();
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), APPROACH_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-      String message = String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
+
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message = String.format(resourceNotFoundException.getMessage(), identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
@@ -293,66 +411,102 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   @Override
   public void declineProblem(
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
+
+    String identificationNumber = request.getIdentificationNumber();
+
     try {
-    this.problemManagementManager.declineProblem(request.getIdentificationNumber());
-    ChangeStateResponse response =
-        ChangeStateResponse.newBuilder()
-            .setResponseMessage(writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL))
-            .build();
-    responseObserver.onNext(response);
-    responseObserver.onCompleted();
-    } catch(InvalidArgumentsException invalidArgumentsException) {
+
+      this.problemManagementManager.declineProblem(identificationNumber);
+      ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
+
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
+      responseObserver.onNext(response);
+      responseObserver.onCompleted();
+
+    } catch (InvalidArgumentsException invalidArgumentsException) {
+
       String message = String.format(invalidArgumentsException.getMessage(), DECLINE_PROBLEM);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
-    } catch(ResourceNotFoundException resourceNotFoundException) {
-      String message = String.format(resourceNotFoundException.getMessage(), request.getIdentificationNumber());
+
+    } catch (ResourceNotFoundException resourceNotFoundException) {
+
+      String message = String.format(resourceNotFoundException.getMessage(), identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(message, UNSUCCESSFUL);
 
-      ChangeStateResponse response = ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+      ChangeStateResponse response =
+          ChangeStateResponse.newBuilder().setResponseMessage(responseMessage).build();
+
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
   }
 
-  // read grpc object to model object
-
   private Problem readProblem(GrpcProblem grpcProblem) {
-    Problem problem = new Problem();
-    problem.setProblemDescription(grpcProblem.getProblemDescription());
-    problem.setProblemReporter(grpcProblem.getProblemReporter());
-    problem.setProblemState(readProblemState(grpcProblem.getProblemState()));
-    problem.setProblemTitle(grpcProblem.getProblemTitle());
-    problem.setNotificationIdentificationNumber(grpcProblem.getNotificationIdentificationNumber());
-    problem.setCreationTime(new Timestamp(grpcProblem.getCreationTime().getNanos()));
-    problem.setReferenceIdentificationNumber(grpcProblem.getReferenceIdentificationNumber());
-    return problem;
+
+    String problemReporter = grpcProblem.getProblemReporter();
+    String problemDescription = grpcProblem.getProblemDescription();
+    String problemTitle = grpcProblem.getProblemTitle();
+    Timestamp creationTime = new Timestamp(grpcProblem.getCreationTime().getNanos());
+    String referenceIdentificationNumber = grpcProblem.getReferenceIdentificationNumber();
+    GrpcProblemState grpcProblemState = grpcProblem.getProblemState();
+    ProblemState problemState = readProblemState(grpcProblemState);
+
+    return Problem.builder()
+        .problemReporter(problemReporter)
+        .problemState(problemState)
+        .problemDescription(problemDescription)
+        .problemTitle(problemTitle)
+        .creationTime(creationTime)
+        .referenceIdentificationNumber(referenceIdentificationNumber)
+        .build();
+  }
+
+  private FilterOptions readProblemFilterOptions(ProblemFilterOptions problemFilterOptions) {
+    FilterOption<ProblemState> problemStateFilterOption =
+        readProblemStateFilterOption(problemFilterOptions.getProblemStateFilterMapping());
+
+    return FilterOptions.builder().problemStateFilterOption(problemStateFilterOption).build();
+  }
+
+  private FilterOption<ProblemState> readProblemStateFilterOption(
+      ProblemStateFilterMapping problemStateFilterMapping) {
+    boolean selected = problemStateFilterMapping.getSelected();
+    Collection<ProblemState> filterValues =
+        problemStateFilterMapping.getProblemStateList().stream()
+            .map(this::readProblemState)
+            .toList();
+
+    return FilterOption.<ProblemState>builder()
+        .selected(selected)
+        .filterValues(filterValues)
+        .build();
   }
 
   private ProblemState readProblemState(GrpcProblemState grpcProblemState) {
     return ProblemState.forNumber(grpcProblemState.ordinal() + 1);
   }
 
-  // write model object to grpc object
-
   private GrpcProblem writeProblem(Problem problem) {
+
     return GrpcProblem.newBuilder()
         .setCreationTime(
             com.google.protobuf.Timestamp.newBuilder()
                 .setNanos(problem.getCreationTime().getNanos())
                 .build())
         .setProblemDescription(problem.getProblemDescription())
-        .setIdentificationNumber(problem.getIdentificationNumber())
         .setProblemReporter(problem.getProblemReporter())
-        .setNotificationIdentificationNumber(problem.getNotificationIdentificationNumber())
         .setProblemTitle(problem.getProblemTitle())
         .setReferenceIdentificationNumber(problem.getReferenceIdentificationNumber())
         .setProblemState(writeProblemState(problem.getProblemState()))
-        .setPossibleStateOperations(
-            writeStateOperations(problem.getProblemState().getPossibleOperations()))
+        .setIdentificationNumber(problem.getIdentificationNumber())
         .build();
   }
 

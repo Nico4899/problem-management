@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Component
-public class RestTemplateProblemConnector implements ProblemConnector{
+public class RestTemplateProblemConnector implements ProblemConnector {
 
   @Value("problem.listProblemsUrl")
   private String listProblemsUrl;
@@ -33,18 +33,21 @@ public class RestTemplateProblemConnector implements ProblemConnector{
   private final RestTemplate restTemplate;
 
   @Autowired
-  public RestTemplateProblemConnector(RestTemplate restTemplate, @Value("${building.baseUrl}") String baseUrl) {
+  public RestTemplateProblemConnector(
+      RestTemplate restTemplate, @Value("${building.baseUrl}") String baseUrl) {
     this.restTemplate = restTemplate;
     this.baseUrl = baseUrl;
   }
+
   @Override
   public Collection<Problem> listProblems() {
     ResponseEntity<Collection<Problem>> responseEntity;
 
-    responseEntity = restTemplate.exchange(baseUrl + listProblemsUrl, HttpMethod.GET, null, new ParameterizedTypeReference<Collection<Problem>>() {
-    });
+    responseEntity =
+        restTemplate.exchange(
+            baseUrl + listProblemsUrl, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
 
-    if(responseEntity.getStatusCode() == HttpStatus.OK) {
+    if (responseEntity.getStatusCode() == HttpStatus.OK) {
       return responseEntity.getBody();
     }
     return Collections.emptyList();
@@ -63,7 +66,8 @@ public class RestTemplateProblemConnector implements ProblemConnector{
   public Problem getProblem(String identificationNumber) {
     ResponseEntity<Problem> responseEntity;
 
-    responseEntity = restTemplate.getForEntity(baseUrl + getProblemUrl, Problem.class, identificationNumber);
+    responseEntity =
+        restTemplate.getForEntity(baseUrl + getProblemUrl, Problem.class, identificationNumber);
 
     return responseEntity.getBody();
   }
@@ -74,7 +78,12 @@ public class RestTemplateProblemConnector implements ProblemConnector{
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<Problem> entity = new HttpEntity<>(problem, headers);
 
-    restTemplate.exchange(baseUrl + updateProblemUrl, HttpMethod.PUT, entity, Void.class, problem.getIdentificationNumber());
+    restTemplate.exchange(
+        baseUrl + updateProblemUrl,
+        HttpMethod.PUT,
+        entity,
+        Void.class,
+        problem.getIdentificationNumber());
     return problem;
   }
 
@@ -84,6 +93,7 @@ public class RestTemplateProblemConnector implements ProblemConnector{
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<String> entity = new HttpEntity<>(identificationNumber, headers);
 
-    restTemplate.exchange(baseUrl + removeProblemUrl, HttpMethod.DELETE, entity, Void.class, identificationNumber);
+    restTemplate.exchange(
+        baseUrl + removeProblemUrl, HttpMethod.DELETE, entity, Void.class, identificationNumber);
   }
 }

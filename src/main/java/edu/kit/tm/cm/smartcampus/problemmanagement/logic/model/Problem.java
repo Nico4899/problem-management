@@ -1,13 +1,17 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+@Builder
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Problem {
   private ProblemState problemState;
   private String problemTitle;
