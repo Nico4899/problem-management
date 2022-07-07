@@ -22,22 +22,22 @@ public class Problem {
   private String notificationIdentificationNumber;
 
   public void accept() {
-    this.problemState = this.problemState.getState().accept();
+    this.problemState = this.problemState.accept();
   }
 
   public void decline() {
-    this.problemState = this.problemState.getState().decline();
+    this.problemState = this.problemState.decline();
   }
 
   public void close() {
-    this.problemState = this.problemState.getState().close();
+    this.problemState = this.problemState.close();
   }
 
   public void hold() {
-    this.problemState = this.problemState.getState().hold();
+    this.problemState = this.problemState.hold();
   }
 
   public void approach() {
-    this.problemState = this.problemState.getState().approach();
+    this.problemState = this.problemState.approach();
   }
 }

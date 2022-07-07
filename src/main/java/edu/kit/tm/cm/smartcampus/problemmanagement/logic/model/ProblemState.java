@@ -1,32 +1,179 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.*;
-
 import java.util.Collection;
 import java.util.List;
 
 public enum ProblemState {
-  ACCEPTED(new Accepted(), List.of(StateOperation.APPROACH, StateOperation.DECLINE)),
-  DECLINED(new Declined(), List.of(StateOperation.DECLINE, StateOperation.ACCEPT)),
-  IN_PROGRESS(new InProgress(), List.of(StateOperation.CLOSE, StateOperation.HOLD)),
-  OPEN(new Open(), List.of(StateOperation.DECLINE, StateOperation.ACCEPT)),
-  CLOSED(new Closed(), List.of());
+  ACCEPTED{
+    @Override
+    public Collection<StateOperation> getPossibleOperations() {
+      return List.of(StateOperation.APPROACH, StateOperation.DECLINE);
+    }
 
-  private final State state;
-  private final Collection<StateOperation> possibleOperations;
+    @Override
+    public ProblemState accept() {
+      return ACCEPTED;
+    }
 
-  ProblemState(State state, Collection<StateOperation> possibleOperations) {
-    this.state = state;
-    this.possibleOperations = possibleOperations;
+    @Override
+    public ProblemState approach() {
+      return IN_PROGRESS;
+    }
+
+    @Override
+    public ProblemState close() {
+      return ACCEPTED;
+    }
+
+    @Override
+    public ProblemState hold() {
+      return ACCEPTED;
+    }
+
+    @Override
+    public ProblemState decline() {
+      return DECLINED;
+    }
+  },
+  DECLINED {
+    @Override
+    public Collection<StateOperation> getPossibleOperations() {
+      return List.of(StateOperation.DECLINE, StateOperation.ACCEPT);
+    }
+
+    @Override
+    public ProblemState accept() {
+      return ACCEPTED;
+    }
+
+    @Override
+    public ProblemState approach() {
+      return DECLINED;
+    }
+
+    @Override
+    public ProblemState close() {
+      return CLOSED;
+    }
+
+    @Override
+    public ProblemState hold() {
+      return DECLINED;
+    }
+
+    @Override
+    public ProblemState decline() {
+      return DECLINED;
+    }
+  },
+  IN_PROGRESS {
+    @Override
+    public Collection<StateOperation> getPossibleOperations() {
+      return List.of(StateOperation.CLOSE, StateOperation.HOLD);
+    }
+
+    @Override
+    public ProblemState accept() {
+      return IN_PROGRESS;
+    }
+
+    @Override
+    public ProblemState approach() {
+      return IN_PROGRESS;
+    }
+
+    @Override
+    public ProblemState close() {
+      return CLOSED;
+    }
+
+    @Override
+    public ProblemState hold() {
+      return ACCEPTED;
+    }
+
+    @Override
+    public ProblemState decline() {
+      return IN_PROGRESS;
+    }
+  },
+  OPEN {
+    @Override
+    public Collection<StateOperation> getPossibleOperations() {
+      return List.of(StateOperation.DECLINE, StateOperation.ACCEPT);
+    }
+
+    @Override
+    public ProblemState accept() {
+      return ACCEPTED;
+    }
+
+    @Override
+    public ProblemState approach() {
+      return OPEN;
+    }
+
+    @Override
+    public ProblemState close() {
+      return OPEN;
+    }
+
+    @Override
+    public ProblemState hold() {
+      return OPEN;
+    }
+
+    @Override
+    public ProblemState decline() {
+      return DECLINED;
+    }
+  },
+  CLOSED {
+    @Override
+    public Collection<StateOperation> getPossibleOperations() {
+      return List.of();
+    }
+
+    @Override
+    public ProblemState accept() {
+      return CLOSED;
+    }
+
+    @Override
+    public ProblemState approach() {
+      return CLOSED;
+    }
+
+    @Override
+    public ProblemState close() {
+      return CLOSED;
+    }
+
+    @Override
+    public ProblemState hold() {
+      return CLOSED;
+    }
+
+    @Override
+    public ProblemState decline() {
+      return CLOSED;
+    }
+  };
+
+  ProblemState() {
   }
 
-  public Collection<StateOperation> getPossibleOperations() {
-    return this.possibleOperations;
-  }
+  public abstract Collection<StateOperation> getPossibleOperations();
 
-  public State getState() {
-    return this.state;
-  }
+  public abstract ProblemState accept();
+
+  public abstract ProblemState approach();
+
+  public abstract ProblemState close();
+
+  public abstract ProblemState hold();
+
+  public abstract ProblemState decline();
 
   public static ProblemState forNumber(int value) {
     return switch (value) {
