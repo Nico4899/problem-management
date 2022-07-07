@@ -1,4 +1,6 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state;
+package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
+
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.*;
 
 import java.util.Collection;
 import java.util.List;

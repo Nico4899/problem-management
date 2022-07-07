@@ -1,6 +1,5 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,16 +20,6 @@ public class Problem {
   private String identificationNumber;
   private String referenceIdentificationNumber;
   private String notificationIdentificationNumber;
-
-  public Notification extractNotification() {
-    Notification extractedNotification = new Notification();
-    extractedNotification.setNotificationDescription(problemDescription);
-    extractedNotification.setNotificationTitle(problemTitle);
-    extractedNotification.setCreationTime(creationTime);
-    extractedNotification.setParentIdentificationNumber(referenceIdentificationNumber);
-    extractedNotification.setIdentificationNumber(notificationIdentificationNumber);
-    return extractedNotification;
-  }
 
   public void accept() {
     this.problemState = this.problemState.getState().accept();

@@ -1,5 +1,6 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state;
 
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor

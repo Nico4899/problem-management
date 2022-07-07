@@ -1,14 +1,9 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.ProblemStateFilter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Collection;
 
 /**
  * This class describes an object containing of filter options for the problem management service
@@ -19,12 +14,4 @@ import java.util.Collection;
 @Builder
 public class FilterOptions {
   private FilterOption<ProblemState> problemStateFilterOption;
-
-  public void executeProblemFilter(Collection<Problem> collection) {
-    if (problemStateFilterOption.isSelected()) {
-      Filter<Problem> filter =
-          new ProblemStateFilter(collection, problemStateFilterOption.getFilterValues());
-      filter.filter();
-    }
-  }
 }

@@ -3,10 +3,10 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.api.controller;
 import edu.kit.tm.cm.proto.*;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidArgumentsException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.ResourceNotFoundException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.manager.ProblemManagementManager;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.ProblemManagementService;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.StateOperation;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.StateOperation;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOption;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
 import io.grpc.stub.StreamObserver;
@@ -33,10 +33,10 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   private static final boolean SUCCESSFUL = true;
   private static final boolean UNSUCCESSFUL = false;
 
-  private final ProblemManagementManager problemManagementManager;
+  private final ProblemManagementService problemManagementService;
 
-  public ProblemManagementController(ProblemManagementManager problemManagementManager) {
-    this.problemManagementManager = problemManagementManager;
+  public ProblemManagementController(ProblemManagementService problemManagementService) {
+    this.problemManagementService = problemManagementService;
   }
 
   @Override
@@ -47,7 +47,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
       ProblemFilterOptions problemFilterOptions = request.getProblemFilterOptions();
       FilterOptions filterOptions = this.readProblemFilterOptions(problemFilterOptions);
-      Collection<Problem> problems = this.problemManagementManager.listProblems(filterOptions);
+      Collection<Problem> problems = this.problemManagementService.listProblems(filterOptions);
       GrpcProblems grpcProblems = this.writeProblems(problems);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
@@ -81,7 +81,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
     try {
 
-      Problem problem = this.problemManagementManager.getProblem(identificationNumber);
+      Problem problem = this.problemManagementService.getProblem(identificationNumber);
       GrpcProblem grpcProblem = this.writeProblem(problem);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
       Collection<StateOperation> stateOperations =
@@ -129,7 +129,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
       GrpcProblem grpcRequestProblem = request.getProblem();
       Problem requestProblem = this.readProblem(grpcRequestProblem);
-      Problem responseProblem = this.problemManagementManager.createProblem(requestProblem);
+      Problem responseProblem = this.problemManagementService.createProblem(requestProblem);
       GrpcProblem grpcResponseProblem = writeProblem(responseProblem);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
@@ -166,7 +166,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
       GrpcProblem grpcRequestProblem = request.getProblem();
       Problem requestProblem = this.readProblem(grpcRequestProblem);
       requestProblem.setIdentificationNumber(identificationNumber);
-      Problem responseProblem = this.problemManagementManager.updateProblem(requestProblem);
+      Problem responseProblem = this.problemManagementService.updateProblem(requestProblem);
       GrpcProblem grpcResponseProblem = this.writeProblem(responseProblem);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
@@ -211,7 +211,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
     try {
 
-      this.problemManagementManager.removeProblem(identificationNumber);
+      this.problemManagementService.removeProblem(identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
       RemoveProblemResponse response =
@@ -252,7 +252,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
     try {
 
-      this.problemManagementManager.acceptProblem(identificationNumber);
+      this.problemManagementService.acceptProblem(identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
       ChangeStateResponse response =
@@ -293,7 +293,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
     try {
 
-      this.problemManagementManager.holdProblem(identificationNumber);
+      this.problemManagementService.holdProblem(identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
       ChangeStateResponse response =
@@ -334,7 +334,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
     try {
 
-      this.problemManagementManager.closeProblem(identificationNumber);
+      this.problemManagementService.closeProblem(identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
       ChangeStateResponse response =
@@ -375,7 +375,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
     try {
 
-      this.problemManagementManager.approachProblem(identificationNumber);
+      this.problemManagementService.approachProblem(identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
       ChangeStateResponse response =
@@ -416,7 +416,7 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
 
     try {
 
-      this.problemManagementManager.declineProblem(identificationNumber);
+      this.problemManagementService.declineProblem(identificationNumber);
       ResponseMessage responseMessage = this.writeResponseMessage(SUCCESSFUL_MESSAGE, SUCCESSFUL);
 
       ChangeStateResponse response =

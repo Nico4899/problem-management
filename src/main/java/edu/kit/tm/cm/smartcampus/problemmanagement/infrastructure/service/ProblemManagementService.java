@@ -1,10 +1,12 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.manager;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.PSFilter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component
-public class ProblemManagementManager {
+public class ProblemManagementService {
 
   private static final String BIN_PATTERN = "b-\\d+";
   private static final String RIN_PATTERN = "r-\\d+";
@@ -22,7 +24,7 @@ public class ProblemManagementManager {
   private final ProblemConnector problemConnector;
 
   @Autowired
-  public ProblemManagementManager(
+  public ProblemManagementService(
       BuildingConnector buildingConnector, ProblemConnector problemConnector) {
     this.buildingConnector = buildingConnector;
     this.problemConnector = problemConnector;
@@ -30,7 +32,11 @@ public class ProblemManagementManager {
 
   public Collection<Problem> listProblems(FilterOptions filterOptions) {
     Collection<Problem> problems = this.problemConnector.listProblems();
-    filterOptions.executeProblemFilter(problems);
+    if (filterOptions.getProblemStateFilterOption().isSelected()) {
+      Filter<Problem, ProblemState> filter = new PSFilter();
+      filter.setFilterValues(filterOptions.getProblemStateFilterOption().getFilterValues());
+      problems = filter.filter(problems);
+    }
     return problems;
   }
 
@@ -45,7 +51,7 @@ public class ProblemManagementManager {
 
   public Problem updateProblem(Problem problem) {
     if (!problem.getNotificationIdentificationNumber().isBlank()) {
-      Notification notification = problem.extractNotification();
+      Notification notification = Notification.fromProblem(problem);
       this.buildingConnector.updateNotification(notification);
     }
     return this.problemConnector.updateProblem(problem);
@@ -81,7 +87,7 @@ public class ProblemManagementManager {
 
   private void postNotification(String problemIdentificationNumber) {
     Problem problem = problemConnector.getProblem(problemIdentificationNumber);
-    Notification notification = problem.extractNotification();
+    Notification notification = Notification.fromProblem(problem);
     if (notification.getParentIdentificationNumber().matches(BIN_PATTERN)) {
       notification = buildingConnector.createBuildingNotification(notification);
       problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
