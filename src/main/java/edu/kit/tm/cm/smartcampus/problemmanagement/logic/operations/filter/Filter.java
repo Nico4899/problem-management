@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters;
+package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter;
 
 
 /**

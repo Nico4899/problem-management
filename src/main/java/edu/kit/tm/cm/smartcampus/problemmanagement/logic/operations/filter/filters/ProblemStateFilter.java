@@ -2,6 +2,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filt
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.state.ProblemState;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
 import lombok.AllArgsConstructor;
 
 import java.util.Collection;
