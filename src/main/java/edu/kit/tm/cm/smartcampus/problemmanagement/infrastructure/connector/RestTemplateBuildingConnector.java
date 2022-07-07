@@ -3,6 +3,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,26 +32,49 @@ public class RestTemplateBuildingConnector implements BuildingConnector{
 
   @Override
   public Notification createBuildingNotification(Notification notification) {
-    return null;
+    ResponseEntity<Notification> responseEntity;
+
+    responseEntity = restTemplate.postForEntity(baseUrl + createBuildingNotificationUrl, notification, Notification.class);
+
+    return responseEntity.getBody();
   }
 
   @Override
   public Notification createRoomNotification(Notification notification) {
-    return null;
+    ResponseEntity<Notification> responseEntity;
+
+    responseEntity = restTemplate.postForEntity(baseUrl + createRoomNotificationUrl, notification, Notification.class);
+
+    return responseEntity.getBody();
   }
 
   @Override
   public Notification createComponentNotification(Notification notification) {
-    return null;
+    ResponseEntity<Notification> responseEntity;
+
+    responseEntity = restTemplate.postForEntity(baseUrl + createComponentNotificationUrl, notification, Notification.class);
+
+    return responseEntity.getBody();
   }
 
   @Override
   public Notification updateNotification(Notification notification) {
-    return null;
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<Notification> entity = new HttpEntity<>(notification, headers);
+
+    restTemplate.exchange(baseUrl + updateNotificationUrl, HttpMethod.PUT, entity, Void.class, notification.getIdentificationNumber());
+
+    return notification;
   }
 
   @Override
   public void removeNotification(String identificationNumber) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<String> entity = new HttpEntity<>(identificationNumber, headers);
 
+    restTemplate.exchange(
+            baseUrl + removeNotificationUrl, HttpMethod.DELETE, entity, Void.class, identificationNumber);
   }
 }

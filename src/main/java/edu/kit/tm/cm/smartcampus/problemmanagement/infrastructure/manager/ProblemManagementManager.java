@@ -31,52 +31,52 @@ public class ProblemManagementManager {
     return this.problemConnector.listProblems();
   }
 
-  public Problem getProblem(@NonNull String identificationNumber) {
+  public Problem getProblem(String identificationNumber) {
     return this.problemConnector.getProblem(identificationNumber);
   }
 
-  public Problem createProblem(@NonNull Problem problem) {
+  public Problem createProblem(Problem problem) {
     return this.problemConnector.createProblem(problem);
   }
 
-  public Problem updateProblem(@NonNull Problem problem) {
+  public Problem updateProblem(Problem problem) {
     if(problem.getNotificationIdentificationNumber() != null) {
       this.buildingConnector.updateNotification(problem.extractNotification());
     }
     return this.problemConnector.updateProblem(problem);
   }
 
-  public void removeProblem(@NonNull String identificationNumber) {
+  public void removeProblem(String identificationNumber) {
     removeNotification(identificationNumber);
     this.problemConnector.removeProblem(identificationNumber);
   }
 
-  public void acceptProblem(@NonNull String identificationNumber) {
+  public void acceptProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).accept();
     postNotification(identificationNumber);
   }
 
-  public void declineProblem(@NonNull String identificationNumber) {
+  public void declineProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).decline();
     removeNotification(identificationNumber);
   }
 
-  public void closeProblem(@NonNull String identificationNumber) {
+  public void closeProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).close();
     removeNotification(identificationNumber);
   }
 
-  public void approachProblem(@NonNull String identificationNumber) {
+  public void approachProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).approach();
   }
 
-  public void holdProblem(@NonNull String identificationNumber) {
+  public void holdProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).hold();
   }
 
   // private help methods
 
-  private void postNotification(@NonNull String problemIdentificationNumber) {
+  private void postNotification(String problemIdentificationNumber) {
     Problem problem = problemConnector.getProblem(problemIdentificationNumber);
     Notification notification = problem.extractNotification();
     if (notification.getParentIdentificationNumber().matches(BIN_PATTERN)) {
@@ -96,7 +96,7 @@ public class ProblemManagementManager {
     }
   }
 
-  private void removeNotification(@NonNull String problemIdentificationNumber) {
+  private void removeNotification(String problemIdentificationNumber) {
     Problem problem = this.problemConnector.getProblem(problemIdentificationNumber);
     if (problem.getNotificationIdentificationNumber() != null) {
       this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
