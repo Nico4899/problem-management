@@ -48,7 +48,7 @@ public class GrpcServerErrorHandler<S extends Message, T extends Message> implem
       Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
       trailers.put(errorInfoTrailerKey, errorInfo);
       this.grpcResponseObserver.onError(Status.NOT_FOUND.withCause(resourceNotFoundException).asRuntimeException(trailers));
-    } else if(throwable instanceof InvalidStateChangeRequestException invalidStateChangeRequestException) {
+    } else if (throwable instanceof InvalidStateChangeRequestException invalidStateChangeRequestException) {
       Metadata trailers = new Metadata();
       ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(invalidStateChangeRequestException.getMessage()).build();
       Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);

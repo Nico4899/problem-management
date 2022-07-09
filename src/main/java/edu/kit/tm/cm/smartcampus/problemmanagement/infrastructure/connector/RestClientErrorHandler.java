@@ -1,5 +1,7 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector;
 
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidArgumentsException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.ResourceNotFoundException;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
@@ -11,7 +13,7 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 public class RestClientErrorHandler implements ResponseErrorHandler {
 
   private static final int INVALID_ARGUMENTS = 400;
-  private static final int REQUESTED_DATA_DOESNT_EXIST = 404;
+  private static final int RESOURCE_NOT_FOUND = 404;
 
   @Override
   public boolean hasError(ClientHttpResponse response) throws IOException {
@@ -24,7 +26,7 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
   public void handleError(ClientHttpResponse response) throws IOException {
 
     if (response.getStatusCode().series() == CLIENT_ERROR) {
-      if (response.getRawStatusCode() == REQUESTED_DATA_DOESNT_EXIST) {
+      if (response.getRawStatusCode() == RESOURCE_NOT_FOUND) {
         throw new ResourceNotFoundException();
       }
       if (response.getRawStatusCode() == INVALID_ARGUMENTS) {

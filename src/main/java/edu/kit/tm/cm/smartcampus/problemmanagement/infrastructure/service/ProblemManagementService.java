@@ -10,11 +10,14 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filte
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 
 @Component
 public class ProblemManagementService {
+
+  public static final String BLANK_STRING = "";
 
   private final BuildingConnector buildingConnector;
   private final ProblemConnector problemConnector;
@@ -45,31 +48,33 @@ public class ProblemManagementService {
   }
 
   public Problem updateProblem(Problem problem) {
-    if (!problem.getNotificationIdentificationNumber().isBlank()) {
-      Notification notification = Notification.fromProblem(problem);
-      this.buildingConnector.updateNotification(notification);
-    }
-    return this.problemConnector.updateProblem(problem);
+    Problem updatedProblem =  this.problemConnector.updateProblem(problem);
+    updateNotification(updatedProblem);
+    return updatedProblem;
   }
 
   public void removeProblem(String identificationNumber) {
-    this.removeNotification(identificationNumber);
+    Problem problem = this.problemConnector.getProblem(identificationNumber);
     this.problemConnector.removeProblem(identificationNumber);
+    this.removeNotification(problem);
   }
 
   public void acceptProblem(String identificationNumber) {
-    this.problemConnector.getProblem(identificationNumber).accept();
-    this.postNotification(identificationNumber);
+    Problem problem = this.problemConnector.getProblem(identificationNumber);
+    problem.accept();
+    this.postNotification(problem);
   }
 
   public void declineProblem(String identificationNumber) {
-    this.problemConnector.getProblem(identificationNumber).decline();
-    this.removeNotification(identificationNumber);
+    Problem problem = this.problemConnector.getProblem(identificationNumber);
+    problem.decline();
+    this.removeNotification(problem);
   }
 
   public void closeProblem(String identificationNumber) {
-    this.problemConnector.getProblem(identificationNumber).close();
-    this.removeNotification(identificationNumber);
+    Problem problem = this.problemConnector.getProblem(identificationNumber);
+    problem.close();
+    this.removeNotification(problem);
   }
 
   public void approachProblem(String identificationNumber) {
@@ -80,19 +85,22 @@ public class ProblemManagementService {
     this.problemConnector.getProblem(identificationNumber).hold();
   }
 
-  private void postNotification(String problemIdentificationNumber) {
-    Problem problem = this.problemConnector.getProblem(problemIdentificationNumber);
-    Notification notification = Notification.fromProblem(problem);
-    notification = this.buildingConnector.createNotification(notification);
+  private void postNotification(Problem problem) {
+    Notification notification = this.buildingConnector.createNotification(Notification.fromProblem(problem));
     problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
     this.updateProblem(problem);
   }
 
-  private void removeNotification(String problemIdentificationNumber) {
-    Problem problem = this.problemConnector.getProblem(problemIdentificationNumber);
+  private void updateNotification(Problem problem) {
     if (!problem.getNotificationIdentificationNumber().isBlank()) {
-      String notificationIdentificationNumber = problem.getNotificationIdentificationNumber();
-      this.buildingConnector.removeNotification(notificationIdentificationNumber);
+      this.buildingConnector.updateNotification(Notification.fromProblem(problem));
+    }
+  }
+
+  private void removeNotification(Problem problem) {
+    if (!problem.getNotificationIdentificationNumber().isBlank()) {
+      this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
+      problem.setNotificationIdentificationNumber(BLANK_STRING);
     }
   }
 }
