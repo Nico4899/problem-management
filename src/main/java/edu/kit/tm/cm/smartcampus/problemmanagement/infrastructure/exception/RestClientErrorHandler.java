@@ -8,9 +8,9 @@ import java.io.IOException;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 
-public class ProblemManagementErrorHandler implements ResponseErrorHandler {
+public class RestClientErrorHandler implements ResponseErrorHandler {
 
-  private static final int INVALID_REQUEST_MESSAGE_FRAMING = 400;
+  private static final int INVALID_ARGUMENTS = 400;
   private static final int REQUESTED_DATA_DOESNT_EXIST = 404;
 
   @Override
@@ -27,7 +27,7 @@ public class ProblemManagementErrorHandler implements ResponseErrorHandler {
       if (response.getRawStatusCode() == REQUESTED_DATA_DOESNT_EXIST) {
         throw new ResourceNotFoundException();
       }
-      if (response.getRawStatusCode() == INVALID_REQUEST_MESSAGE_FRAMING) {
+      if (response.getRawStatusCode() == INVALID_ARGUMENTS) {
         throw new InvalidArgumentsException();
       }
     }

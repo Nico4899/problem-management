@@ -19,14 +19,14 @@ public class PSFilter implements Filter<Problem, ProblemState> {
   private Collection<ProblemState> filterValues = List.of(ProblemState.values());
 
   @Override
-  public Collection<Problem> filter(@NonNull Collection<Problem> collection) {
+  public Collection<Problem> filter(Collection<Problem> collection) {
     return collection.stream()
         .filter(problem -> filterValues.contains(problem.getProblemState()))
         .toList();
   }
 
   @Override
-  public void setFilterValues(@NonNull Collection<ProblemState> filterValues) {
+  public void setFilterValues(Collection<ProblemState> filterValues) {
     this.filterValues = filterValues;
   }
 }

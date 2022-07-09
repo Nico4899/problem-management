@@ -16,10 +16,6 @@ import java.util.Collection;
 @Component
 public class ProblemManagementService {
 
-  private static final String BIN_PATTERN = "b-\\d+";
-  private static final String RIN_PATTERN = "r-\\d+";
-  private static final String CIN_PATTERN = "c-\\d+";
-
   private final BuildingConnector buildingConnector;
   private final ProblemConnector problemConnector;
 
@@ -45,7 +41,6 @@ public class ProblemManagementService {
   }
 
   public Problem createProblem(Problem problem) {
-    problem.setProblemState(ProblemState.OPEN);
     return this.problemConnector.createProblem(problem);
   }
 
@@ -58,23 +53,23 @@ public class ProblemManagementService {
   }
 
   public void removeProblem(String identificationNumber) {
-    removeNotification(identificationNumber);
+    this.removeNotification(identificationNumber);
     this.problemConnector.removeProblem(identificationNumber);
   }
 
   public void acceptProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).accept();
-    postNotification(identificationNumber);
+    this.postNotification(identificationNumber);
   }
 
   public void declineProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).decline();
-    removeNotification(identificationNumber);
+    this.removeNotification(identificationNumber);
   }
 
   public void closeProblem(String identificationNumber) {
     this.problemConnector.getProblem(identificationNumber).close();
-    removeNotification(identificationNumber);
+    this.removeNotification(identificationNumber);
   }
 
   public void approachProblem(String identificationNumber) {
@@ -86,23 +81,11 @@ public class ProblemManagementService {
   }
 
   private void postNotification(String problemIdentificationNumber) {
-    Problem problem = problemConnector.getProblem(problemIdentificationNumber);
+    Problem problem = this.problemConnector.getProblem(problemIdentificationNumber);
     Notification notification = Notification.fromProblem(problem);
-    if (notification.getParentIdentificationNumber().matches(BIN_PATTERN)) {
-      notification = buildingConnector.createBuildingNotification(notification);
-      problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-      updateProblem(problem);
-    }
-    if (notification.getParentIdentificationNumber().matches(RIN_PATTERN)) {
-      notification = buildingConnector.createRoomNotification(notification);
-      problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-      updateProblem(problem);
-    }
-    if (notification.getParentIdentificationNumber().matches(CIN_PATTERN)) {
-      notification = buildingConnector.createComponentNotification(notification);
-      problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-      updateProblem(problem);
-    }
+    notification = this.buildingConnector.createNotification(notification);
+    problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
+    this.updateProblem(problem);
   }
 
   private void removeNotification(String problemIdentificationNumber) {

@@ -17,12 +17,12 @@ public interface Filter<T, S> {
    * @param collection collection to be filtered
    * @return filtered collection
    */
-  Collection<T> filter(@NonNull Collection<T> collection);
+  Collection<T> filter(Collection<T> collection);
 
   /**
    * Adds filter values to filter. If not used, filter values are all type constants.
    *
    * @param filterValues filter values to be filtered by
    */
-  void setFilterValues(@NonNull Collection<S> filterValues);
+  void setFilterValues(Collection<S> filterValues);
 }

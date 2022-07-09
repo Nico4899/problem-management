@@ -7,8 +7,6 @@ option java_package = "edu.kit.tm.cm.proto";
 
 import "google/protobuf/timestamp.proto";
 
-//TODO filter implementation
-
 service ProblemManagement {
   rpc ListProblems(ListProblemsRequest) returns (ListProblemsResponse);
   rpc GetProblem(GetProblemRequest) returns (GetProblemResponse);
@@ -30,8 +28,7 @@ message ListProblemsRequest{
 }
 
 message ListProblemsResponse{
-  GrpcProblems problems = 1;
-  ResponseMessage response_message = 2;
+  repeated GrpcProblem problems = 1;
 }
 
 message GetProblemRequest{
@@ -40,8 +37,7 @@ message GetProblemRequest{
 
 message GetProblemResponse{
   GrpcProblem problem = 1;
-  GrpcStateOperations possibleStateOperations = 2;
-  ResponseMessage response_message = 4;
+  repeated GrpcStateOperation possibleStateOperations = 2;
 }
 
 message CreateProblemRequest{
@@ -50,7 +46,6 @@ message CreateProblemRequest{
 
 message CreateProblemResponse{
   GrpcProblem problem = 1;
-  ResponseMessage response_message = 3;
 }
 
 message UpdateProblemRequest{
@@ -60,7 +55,6 @@ message UpdateProblemRequest{
 
 message UpdateProblemResponse{
   GrpcProblem problem = 1;
-  ResponseMessage response_message = 3;
 }
 
 message RemoveProblemRequest{
@@ -68,7 +62,6 @@ message RemoveProblemRequest{
 }
 
 message RemoveProblemResponse{
-  ResponseMessage response_message = 1;
 }
 
 message ChangeStateRequest{
@@ -76,14 +69,6 @@ message ChangeStateRequest{
 }
 
 message ChangeStateResponse{
-  ResponseMessage response_message = 1;
-}
-
-// api response piece
-
-message ResponseMessage {
-  bool successful = 1;
-  string message = 2;
 }
 
 // single message constructions
@@ -123,14 +108,4 @@ enum GrpcStateOperation{
   DECLINE = 3;
   APPROACH = 4;
   HOLD = 5;
-}
-
-// multi message constructions
-
-message GrpcProblems{
-  repeated GrpcProblem problems = 1;
-}
-
-message GrpcStateOperations{
-  repeated GrpcStateOperation state_operations = 1;
 }

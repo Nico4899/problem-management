@@ -14,27 +14,27 @@ import java.util.Collections;
 @Component
 public class RestTemplateProblemConnector implements ProblemConnector {
 
-  @Value("problem.listProblemsUrl")
-  private String listProblemsUrl;
-
-  @Value("problem.createProblemUrl")
-  private String createProblemUrl;
-
-  @Value("problem.getProblemUrl")
-  private String getProblemUrl;
-
-  @Value("problem.updateProblemUrl")
-  private String updateProblemUrl;
-
-  @Value("problem.removeProblemUrl")
-  private String removeProblemUrl;
-
   private final String baseUrl;
   private final RestTemplate restTemplate;
 
+  @Value("${problem.listProblemsUrl}")
+  private String listProblemsUrl;
+
+  @Value("${problem.createProblemUrl}")
+  private String createProblemUrl;
+
+  @Value("${problem.getProblemUrl}")
+  private String getProblemUrl;
+
+  @Value("${problem.updateProblemUrl}")
+  private String updateProblemUrl;
+
+  @Value("${problem.removeProblemUrl}")
+  private String removeProblemUrl;
+
   @Autowired
   public RestTemplateProblemConnector(
-      RestTemplate restTemplate, @Value("${building.baseUrl}") String baseUrl) {
+      RestTemplate restTemplate, @Value("${problem.baseUrl}") String baseUrl) {
     this.restTemplate = restTemplate;
     this.baseUrl = baseUrl;
   }

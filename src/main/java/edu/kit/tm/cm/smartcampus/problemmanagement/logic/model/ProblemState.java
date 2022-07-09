@@ -1,9 +1,43 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidStateChangeRequestException;
+
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public enum ProblemState {
+  UNKNOWN_PROBLEM_STATE {
+    @Override
+    public Collection<StateOperation> getPossibleOperations() {
+      return Collections.emptyList();
+    }
+
+    @Override
+    public ProblemState accept() {
+      return null;
+    }
+
+    @Override
+    public ProblemState approach() {
+      return null;
+    }
+
+    @Override
+    public ProblemState close() {
+      return null;
+    }
+
+    @Override
+    public ProblemState hold() {
+      return null;
+    }
+
+    @Override
+    public ProblemState decline() {
+      return null;
+    }
+  },
   ACCEPTED{
     @Override
     public Collection<StateOperation> getPossibleOperations() {
@@ -12,7 +46,7 @@ public enum ProblemState {
 
     @Override
     public ProblemState accept() {
-      return ACCEPTED;
+      throw new InvalidStateChangeRequestException(StateOperation.ACCEPT.name());
     }
 
     @Override
@@ -22,12 +56,12 @@ public enum ProblemState {
 
     @Override
     public ProblemState close() {
-      return ACCEPTED;
+      throw new InvalidStateChangeRequestException(StateOperation.CLOSE.name());
     }
 
     @Override
     public ProblemState hold() {
-      return ACCEPTED;
+      throw new InvalidStateChangeRequestException(StateOperation.HOLD.name());
     }
 
     @Override
@@ -48,7 +82,7 @@ public enum ProblemState {
 
     @Override
     public ProblemState approach() {
-      return DECLINED;
+      throw new InvalidStateChangeRequestException(StateOperation.APPROACH.name());
     }
 
     @Override
@@ -58,12 +92,12 @@ public enum ProblemState {
 
     @Override
     public ProblemState hold() {
-      return DECLINED;
+      throw new InvalidStateChangeRequestException(StateOperation.HOLD.name());
     }
 
     @Override
     public ProblemState decline() {
-      return DECLINED;
+      throw new InvalidStateChangeRequestException(StateOperation.DECLINE.name());
     }
   },
   IN_PROGRESS {
@@ -74,12 +108,12 @@ public enum ProblemState {
 
     @Override
     public ProblemState accept() {
-      return IN_PROGRESS;
+      throw new InvalidStateChangeRequestException(StateOperation.ACCEPT.name());
     }
 
     @Override
     public ProblemState approach() {
-      return IN_PROGRESS;
+      throw new InvalidStateChangeRequestException(StateOperation.APPROACH.name());
     }
 
     @Override
@@ -94,7 +128,7 @@ public enum ProblemState {
 
     @Override
     public ProblemState decline() {
-      return IN_PROGRESS;
+      throw new InvalidStateChangeRequestException(StateOperation.DECLINE.name());
     }
   },
   OPEN {
@@ -110,17 +144,17 @@ public enum ProblemState {
 
     @Override
     public ProblemState approach() {
-      return OPEN;
+      throw new InvalidStateChangeRequestException(StateOperation.APPROACH.name());
     }
 
     @Override
     public ProblemState close() {
-      return OPEN;
+      throw new InvalidStateChangeRequestException(StateOperation.CLOSE.name());
     }
 
     @Override
     public ProblemState hold() {
-      return OPEN;
+      throw new InvalidStateChangeRequestException(StateOperation.HOLD.name());
     }
 
     @Override
@@ -136,27 +170,27 @@ public enum ProblemState {
 
     @Override
     public ProblemState accept() {
-      return CLOSED;
+      throw new InvalidStateChangeRequestException(StateOperation.ACCEPT.name());
     }
 
     @Override
     public ProblemState approach() {
-      return CLOSED;
+      throw new InvalidStateChangeRequestException(StateOperation.APPROACH.name());
     }
 
     @Override
     public ProblemState close() {
-      return CLOSED;
+      throw new InvalidStateChangeRequestException(StateOperation.CLOSE.name());
     }
 
     @Override
     public ProblemState hold() {
-      return CLOSED;
+      throw new InvalidStateChangeRequestException(StateOperation.HOLD.name());
     }
 
     @Override
     public ProblemState decline() {
-      return CLOSED;
+      throw new InvalidStateChangeRequestException(StateOperation.DECLINE.name());
     }
   };
 
