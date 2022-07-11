@@ -41,20 +41,6 @@ public class RestTemplateBuildingConnector implements BuildingConnector {
   }
 
   @Override
-  public void updateNotification(Notification notification) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    HttpEntity<Notification> entity = new HttpEntity<>(notification, headers);
-
-    restTemplate.exchange(
-        baseUrl + updateNotificationUrl,
-        HttpMethod.PUT,
-        entity,
-        Void.class,
-        notification.getIdentificationNumber());
-  }
-
-  @Override
   public void removeNotification(String identificationNumber) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
