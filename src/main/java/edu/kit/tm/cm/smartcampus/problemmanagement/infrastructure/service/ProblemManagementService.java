@@ -4,13 +4,11 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.Buil
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.PSFilter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 
@@ -32,8 +30,7 @@ public class ProblemManagementService {
   public Collection<Problem> listProblems(FilterOptions filterOptions) {
     Collection<Problem> problems = this.problemConnector.listProblems();
     if (filterOptions.getProblemStateFilterOption().isSelected()) {
-      Filter<Problem, ProblemState> filter = new PSFilter();
-      filter.setFilterValues(filterOptions.getProblemStateFilterOption().getFilterValues());
+      Filter<Problem> filter = new PSFilter(filterOptions.getProblemStateFilterOption().getFilterValues());
       problems = filter.filter(problems);
     }
     return problems;

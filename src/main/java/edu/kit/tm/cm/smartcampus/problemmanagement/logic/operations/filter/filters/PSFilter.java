@@ -3,6 +3,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filt
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -13,10 +14,10 @@ import java.util.List;
  * This class represents an implementation of {@link Filter}, it filters a collection of {@link
  * Problem} by {@link ProblemState}.
  */
-@NoArgsConstructor
-public class PSFilter implements Filter<Problem, ProblemState> {
+@AllArgsConstructor
+public class PSFilter implements Filter<Problem> {
 
-  private Collection<ProblemState> filterValues = List.of(ProblemState.values());
+  private Collection<ProblemState> filterValues;
 
   @Override
   public Collection<Problem> filter(Collection<Problem> collection) {
@@ -25,8 +26,4 @@ public class PSFilter implements Filter<Problem, ProblemState> {
         .toList();
   }
 
-  @Override
-  public void setFilterValues(Collection<ProblemState> filterValues) {
-    this.filterValues = filterValues;
-  }
 }
