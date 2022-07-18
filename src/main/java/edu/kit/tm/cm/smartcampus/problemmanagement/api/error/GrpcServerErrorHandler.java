@@ -2,9 +2,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.api.error;
 
 import com.google.protobuf.Message;
 import com.google.rpc.ErrorInfo;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidArgumentsException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidStateChangeRequestException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.ResourceNotFoundException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.*;
 import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.protobuf.ProtoUtils;
@@ -51,11 +49,23 @@ public class GrpcServerErrorHandler<S extends Message, T extends Message> implem
       Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
       trailers.put(errorInfoTrailerKey, errorInfo);
       this.grpcResponseObserver.onError(Status.PERMISSION_DENIED.withCause(invalidStateChangeRequestException).asRuntimeException(trailers));
-    } else {
-      this.grpcResponseObserver.onError(Status.UNKNOWN
-        .withDescription(throwable.getMessage())
-        .withCause(throwable)
-        .asRuntimeException());
+    } else if (throwable instanceof InternalServerErrorException internalServerErrorException){
+      Metadata trailers = new Metadata();
+      ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(internalServerErrorException.getMessage()).build();
+      Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
+      trailers.put(errorInfoTrailerKey, errorInfo);
+      this.grpcResponseObserver.onError(Status.INTERNAL.withCause(internalServerErrorException).asRuntimeException(trailers));
+    } else if (throwable instanceof UnauthorizedAccessException unauthorizedAccessException) {
+      Metadata trailers = new Metadata();
+      ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(unauthorizedAccessException.getMessage()).build();
+      Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
+      trailers.put(errorInfoTrailerKey, errorInfo);
+      this.grpcResponseObserver.onError(Status.UNAUTHENTICATED.withCause(unauthorizedAccessException).asRuntimeException(trailers));
+      } else {
+        this.grpcResponseObserver.onError(Status.UNKNOWN
+          .withDescription(throwable.getMessage())
+          .withCause(throwable)
+          .asRuntimeException());
     }
   }
 

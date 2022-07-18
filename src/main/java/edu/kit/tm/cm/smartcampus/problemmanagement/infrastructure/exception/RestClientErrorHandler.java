@@ -1,8 +1,9 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InternalServerErrorException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidArgumentsException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.ResourceNotFoundException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.UnauthorizedAccessException;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
@@ -18,9 +19,6 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
  */
 public class RestClientErrorHandler implements ResponseErrorHandler {
 
-  private static final int INVALID_ARGUMENTS = 400;
-  private static final int RESOURCE_NOT_FOUND = 404;
-
   @Override
   public boolean hasError(ClientHttpResponse response) throws IOException {
 
@@ -34,6 +32,7 @@ public class RestClientErrorHandler implements ResponseErrorHandler {
       case NOT_FOUND -> throw new ResourceNotFoundException();
       case BAD_REQUEST -> throw new InvalidArgumentsException(response.getStatusText());
       case INTERNAL_SERVER_ERROR -> throw new InternalServerErrorException(response.getStatusText());
+      case UNAUTHORIZED -> throw new UnauthorizedAccessException(response.getStatusText());
       default -> throw new IOException(response.getStatusText());
     }
   }

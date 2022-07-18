@@ -1,6 +1,6 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.RestClientErrorHandler;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.RestClientErrorHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
