@@ -8,14 +8,24 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOption;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
-public final class GrpcObjectReader {
+/** This class provides a collection of logic methods to translate grpc objects to model objects. */
+@Component
+public class GrpcObjectReader {
 
-  private GrpcObjectReader() {}
+  /** Construct a new grpc object reader. */
+  public GrpcObjectReader() {}
 
-  public static Problem read(GrpcProblem grpcProblem) {
+  /**
+   * Read a grpc object and return a model object.
+   *
+   * @param grpcProblem grpc problem object.
+   * @return model problem object
+   */
+  public Problem read(GrpcProblem grpcProblem) {
     return Problem.builder()
         .problemReporter(grpcProblem.getProblemReporter())
         .problemState(read(grpcProblem.getProblemState()))
@@ -26,24 +36,39 @@ public final class GrpcObjectReader {
         .build();
   }
 
-  public static FilterOptions read(ProblemFilterOptions problemFilterOptions) {
+  /**
+   * Read a grpc object and return a model object.
+   *
+   * @param problemFilterOptions grpc problem filter options object.
+   * @return model filter options object
+   */
+  public FilterOptions read(ProblemFilterOptions problemFilterOptions) {
     return FilterOptions.builder()
         .problemStateFilterOption(read(problemFilterOptions.getProblemStateFilterMapping()))
         .build();
   }
 
-  public static FilterOption<ProblemState> read(
-      ProblemStateFilterMapping problemStateFilterMapping) {
+  /**
+   * Read a grpc object and return a model object.
+   *
+   * @param problemStateFilterMapping grpc problem state filter mapping object.
+   * @return model filter option object
+   */
+  public FilterOption<ProblemState> read(ProblemStateFilterMapping problemStateFilterMapping) {
     return FilterOption.<ProblemState>builder()
         .selected(problemStateFilterMapping.getSelected())
         .filterValues(
-            problemStateFilterMapping.getProblemStateList().stream()
-                .map(GrpcObjectReader::read)
-                .toList())
+            problemStateFilterMapping.getProblemStateList().stream().map(this::read).toList())
         .build();
   }
 
-  public static ProblemState read(GrpcProblemState grpcProblemState) {
+  /**
+   * Read a grpc object and return a model object.
+   *
+   * @param grpcProblemState grpc problem state object.
+   * @return model problem state object
+   */
+  public ProblemState read(GrpcProblemState grpcProblemState) {
     return ProblemState.forNumber(grpcProblemState.ordinal() + 1);
   }
 }

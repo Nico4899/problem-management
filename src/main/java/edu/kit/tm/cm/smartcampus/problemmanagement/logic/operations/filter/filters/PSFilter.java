@@ -12,7 +12,8 @@ import java.util.List;
 
 /**
  * This class represents an implementation of {@link Filter}, it filters a collection of {@link
- * Problem} by {@link ProblemState}.
+ * Problem} by {@link ProblemState}. The short form "PSFilter" stands for
+ * "ProblemStateFilter".
  */
 @AllArgsConstructor
 public class PSFilter implements Filter<Problem> {

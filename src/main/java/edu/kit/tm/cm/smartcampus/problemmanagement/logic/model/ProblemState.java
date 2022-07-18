@@ -5,8 +5,14 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.Inva
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * The enum problem state.
+ */
 public enum ProblemState {
-  ACCEPTED {
+  /**
+   * Accepted state.
+   */
+ACCEPTED {
     @Override
     public Collection<StateOperation> getPossibleOperations() {
       return List.of(StateOperation.APPROACH, StateOperation.DECLINE);
@@ -37,7 +43,10 @@ public enum ProblemState {
       return DECLINED;
     }
   },
-  DECLINED {
+  /**
+   * Declined state.
+   */
+DECLINED {
     @Override
     public Collection<StateOperation> getPossibleOperations() {
       return List.of(StateOperation.CLOSE, StateOperation.ACCEPT);
@@ -68,7 +77,10 @@ public enum ProblemState {
       throw new InvalidStateChangeRequestException(StateOperation.DECLINE.name());
     }
   },
-  IN_PROGRESS {
+  /**
+   * In progress state.
+   */
+IN_PROGRESS {
     @Override
     public Collection<StateOperation> getPossibleOperations() {
       return List.of(StateOperation.CLOSE, StateOperation.HOLD);
@@ -99,7 +111,10 @@ public enum ProblemState {
       throw new InvalidStateChangeRequestException(StateOperation.DECLINE.name());
     }
   },
-  OPEN {
+  /**
+   * Open state.
+   */
+OPEN {
     @Override
     public Collection<StateOperation> getPossibleOperations() {
       return List.of(StateOperation.DECLINE, StateOperation.ACCEPT);
@@ -130,7 +145,10 @@ public enum ProblemState {
       return DECLINED;
     }
   },
-  CLOSED {
+  /**
+   * Closed state.
+   */
+CLOSED {
     @Override
     public Collection<StateOperation> getPossibleOperations() {
       return List.of();
@@ -162,10 +180,13 @@ public enum ProblemState {
     }
   };
 
-  ProblemState() {
-  }
-
-  public static ProblemState forNumber(int value) {
+  /**
+   * Parses problem state for a given ordinal number.
+   *
+   * @param value the value to parse a problem state from
+   * @return the problem state parsed
+   */
+public static ProblemState forNumber(int value) {
     return switch (value) {
       case 1 -> DECLINED;
       case 2 -> OPEN;
@@ -176,15 +197,45 @@ public enum ProblemState {
     };
   }
 
-  public abstract Collection<StateOperation> getPossibleOperations();
+  /**
+   * Gets possible operations.
+   *
+   * @return the possible operations
+   */
+public abstract Collection<StateOperation> getPossibleOperations();
 
-  public abstract ProblemState accept();
+  /**
+   * Accept problem state.
+   *
+   * @return the problem state
+   */
+public abstract ProblemState accept();
 
-  public abstract ProblemState approach();
+  /**
+   * Approach problem state.
+   *
+   * @return the problem state
+   */
+public abstract ProblemState approach();
 
-  public abstract ProblemState close();
+  /**
+   * Close problem state.
+   *
+   * @return the problem state
+   */
+public abstract ProblemState close();
 
-  public abstract ProblemState hold();
+  /**
+   * Hold problem state.
+   *
+   * @return the problem state
+   */
+public abstract ProblemState hold();
 
-  public abstract ProblemState decline();
+  /**
+   * Decline problem state.
+   *
+   * @return the problem state
+   */
+public abstract ProblemState decline();
 }

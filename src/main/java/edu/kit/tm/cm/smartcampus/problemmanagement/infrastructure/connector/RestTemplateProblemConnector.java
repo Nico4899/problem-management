@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collection;
 import java.util.Collections;
 
+/** This class represents an implementation of the {@link ProblemConnector} interface. */
 @Component
 public class RestTemplateProblemConnector implements ProblemConnector {
 
@@ -32,6 +33,12 @@ public class RestTemplateProblemConnector implements ProblemConnector {
   @Value("${problem.removeProblemUrl}")
   private String removeProblemUrl;
 
+  /**
+   * Constructs a rest template problem connector.
+   *
+   * @param restTemplate rest template
+   * @param baseUrl base url
+   */
   @Autowired
   public RestTemplateProblemConnector(
       RestTemplate restTemplate, @Value("${problem.baseUrl}") String baseUrl) {

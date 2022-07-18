@@ -9,25 +9,22 @@ import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.protobuf.ProtoUtils;
 import io.grpc.stub.StreamObserver;
+import lombok.AllArgsConstructor;
 
 import java.util.function.Function;
 
 /**
  * This class is being used as wrapper class for the {@link StreamObserver} of the building management service.
- * It reduces redundant try catch procedures. As many stream observers it is thread unsafe.
+ * It reduces redundant try catch procedures and ensures error handling in the application. Just as many stream
+ * observers are, this is a thread unsafe implementation.
  *
  * @param <S> request generic
  * @param <T> response generic
  */
+@AllArgsConstructor
 public class GrpcServerErrorHandler<S extends Message, T extends Message> implements StreamObserver<T> {
 
-  // Error logs? util.Logger?
-
   private final StreamObserver<T> grpcResponseObserver;
-
-  public GrpcServerErrorHandler(StreamObserver<T> grpcResponseObserver) {
-    this.grpcResponseObserver = grpcResponseObserver;
-  }
 
   @Override
   public void onNext(T response) {
@@ -54,13 +51,13 @@ public class GrpcServerErrorHandler<S extends Message, T extends Message> implem
       Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
       trailers.put(errorInfoTrailerKey, errorInfo);
       this.grpcResponseObserver.onError(Status.PERMISSION_DENIED.withCause(invalidStateChangeRequestException).asRuntimeException(trailers));
-      } else {
+    } else {
       this.grpcResponseObserver.onError(Status.UNKNOWN
         .withDescription(throwable.getMessage())
         .withCause(throwable)
         .asRuntimeException());
-      }
     }
+  }
 
   @Override
   public void onCompleted() {
@@ -69,6 +66,14 @@ public class GrpcServerErrorHandler<S extends Message, T extends Message> implem
     }
   }
 
+  /**
+   * This is the wrapper method to run a function and catch all exceptions thrown and send them to handling.
+   * If an error occurred, it calls the overridden {@link GrpcServerErrorHandler#onError(Throwable)} method.
+   *
+   * @param function function to be applied
+   * @param request  request from client
+   * @return response message
+   */
   public T execute(Function<S, T> function, S request) {
     T response = null;
     try {

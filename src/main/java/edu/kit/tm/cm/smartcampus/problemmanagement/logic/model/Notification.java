@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+/** This class represents a notification. */
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,6 +19,12 @@ public class Notification {
   private Timestamp creationTime;
   private String parentIdentificationNumber;
 
+  /**
+   * Parse {@link Notification} from {@link Problem}.
+   *
+   * @param problem the problem to be parsed from
+   * @return the notification parsed
+   */
   public static Notification fromProblem(Problem problem) {
     return Notification.builder()
         .notificationDescription(problem.getProblemDescription())

@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+/** This class represents an implementation of the {@link BuildingConnector} interface. */
 @Component
 public class RestTemplateBuildingConnector implements BuildingConnector {
 
@@ -22,6 +23,12 @@ public class RestTemplateBuildingConnector implements BuildingConnector {
   @Value("${notification.removeNotificationUrl}")
   private String removeNotificationUrl;
 
+  /**
+   * Constructs a rest template building connector.
+   *
+   * @param restTemplate rest template used to parse server responses and send requests
+   * @param baseUrl base url of the server to which requests are sent
+   */
   @Autowired
   public RestTemplateBuildingConnector(
       RestTemplate restTemplate, @Value("${building.baseUrl}") String baseUrl) {
@@ -47,11 +54,11 @@ public class RestTemplateBuildingConnector implements BuildingConnector {
     HttpEntity<Notification> entity = new HttpEntity<>(notification, headers);
 
     restTemplate.exchange(
-            baseUrl + updateNotificationUrl,
-            HttpMethod.PUT,
-            entity,
-            Void.class,
-            notification.getIdentificationNumber());
+        baseUrl + updateNotificationUrl,
+        HttpMethod.PUT,
+        entity,
+        Void.class,
+        notification.getIdentificationNumber());
     return notification;
   }
 

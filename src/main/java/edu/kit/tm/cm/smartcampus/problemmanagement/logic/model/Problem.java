@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+/** The type Problem. */
 @Builder
 @Data
 @NoArgsConstructor
@@ -21,22 +22,27 @@ public class Problem {
   private String referenceIdentificationNumber;
   private String notificationIdentificationNumber;
 
+  /** Accept. */
   public void accept() {
     this.problemState = this.problemState.accept();
   }
 
+  /** Decline. */
   public void decline() {
     this.problemState = this.problemState.decline();
   }
 
+  /** Close. */
   public void close() {
     this.problemState = this.problemState.close();
   }
 
+  /** Hold. */
   public void hold() {
     this.problemState = this.problemState.hold();
   }
 
+  /** Approach. */
   public void approach() {
     this.problemState = this.problemState.approach();
   }
