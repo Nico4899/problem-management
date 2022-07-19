@@ -6,16 +6,15 @@ import edu.kit.tm.cm.proto.GrpcStateOperation;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.StateOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 /** This class provides a collection of logic methods to translate model objects to grpc objects. */
 @Component
+@AllArgsConstructor
 public class GrpcObjectWriter {
-
-  /** Construct a new grpc object writer. */
-  public GrpcObjectWriter() {}
 
   /**
    * Write a model object to a grpc object.

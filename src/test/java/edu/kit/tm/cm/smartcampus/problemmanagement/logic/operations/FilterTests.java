@@ -3,7 +3,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.PSFilter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.ProblemStateFilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -69,15 +69,15 @@ class FilterTests {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
       return Stream.of(
-          Arguments.of(testProblems, new PSFilter(ALL_PROBLEM_STATES), testProblems),
+          Arguments.of(testProblems, new ProblemStateFilter(ALL_PROBLEM_STATES), testProblems),
           Arguments.of(
               List.of(
                   testProblemsMap.get(ACCEPTED),
                   testProblemsMap.get(DECLINED),
                   testProblemsMap.get(IN_PROGRESS)),
-              new PSFilter(SOME_PROBLEM_STATES),
+              new ProblemStateFilter(SOME_PROBLEM_STATES),
               testProblems),
-          Arguments.of(List.of(), new PSFilter(NO_PROBLEM_STATES), testProblems));
+          Arguments.of(List.of(), new ProblemStateFilter(NO_PROBLEM_STATES), testProblems));
     }
   }
 }

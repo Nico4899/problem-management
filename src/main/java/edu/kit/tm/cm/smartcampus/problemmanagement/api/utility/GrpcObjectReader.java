@@ -2,22 +2,30 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.api.utility;
 
 import edu.kit.tm.cm.proto.GrpcProblem;
 import edu.kit.tm.cm.proto.GrpcProblemState;
-import edu.kit.tm.cm.proto.ProblemFilterOptions;
-import edu.kit.tm.cm.proto.ProblemStateFilterMapping;
+import edu.kit.tm.cm.proto.GrpcSortOption;
+import edu.kit.tm.cm.proto.ListProblemConfiguration;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOption;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Configuration;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.ListConfiguration;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.ProblemReporterFilter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.ProblemStateFilter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.AscendingTimeStampProblemSorter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DefaultProblemSorter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DescendingTimeStampProblemSorter;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /** This class provides a collection of logic methods to translate grpc objects to model objects. */
 @Component
+@AllArgsConstructor
 public class GrpcObjectReader {
-
-  /** Construct a new grpc object reader. */
-  public GrpcObjectReader() {}
 
   /**
    * Read a grpc object and return a model object.
@@ -39,27 +47,32 @@ public class GrpcObjectReader {
   /**
    * Read a grpc object and return a model object.
    *
-   * @param problemFilterOptions grpc problem filter options object.
-   * @return model filter options object
+   * @param listProblemConfiguration grpc problem list configuration object.
+   * @return model configuration object
    */
-  public FilterOptions read(ProblemFilterOptions problemFilterOptions) {
-    return FilterOptions.builder()
-        .problemStateFilterOption(read(problemFilterOptions.getProblemStateFilterMapping()))
-        .build();
+  public Configuration<Problem> read(ListProblemConfiguration listProblemConfiguration) {
+    Collection<Filter<Problem>> filters = new ArrayList<>();
+    if (listProblemConfiguration.getProblemStateFilterMapping().getSelected()) {
+      filters.add(new ProblemStateFilter(listProblemConfiguration.getProblemStateFilterMapping().getProblemStateList().stream().map(this::read).toList()));
+    }
+    if (listProblemConfiguration.getProblemReporterFilterMapping().getSelected()) {
+      filters.add(new ProblemReporterFilter(listProblemConfiguration.getProblemReporterFilterMapping().getProblemReporter()));
+    }
+    return new ListConfiguration<>(read(listProblemConfiguration.getGrpcSortOption()), filters);
   }
 
   /**
    * Read a grpc object and return a model object.
    *
-   * @param problemStateFilterMapping grpc problem state filter mapping object.
-   * @return model filter option object
+   * @param grpcSortOption grpc problem sort option.
+   * @return model problem sorter object
    */
-  public FilterOption<ProblemState> read(ProblemStateFilterMapping problemStateFilterMapping) {
-    return FilterOption.<ProblemState>builder()
-        .selected(problemStateFilterMapping.getSelected())
-        .filterValues(
-            problemStateFilterMapping.getProblemStateList().stream().map(this::read).toList())
-        .build();
+  public Sorter<Problem> read(GrpcSortOption grpcSortOption) {
+    return switch (grpcSortOption) {
+      case ASCENDING_TIME_STAMP -> new AscendingTimeStampProblemSorter();
+      case DESCENDING_TIME_STAMP -> new DescendingTimeStampProblemSorter();
+      default -> new DefaultProblemSorter();
+    };
   }
 
   /**

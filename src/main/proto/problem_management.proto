@@ -24,7 +24,7 @@ service ProblemManagement {
 // requests and responses
 
 message ListProblemsRequest{
-    ProblemFilterOptions problem_filter_options = 1;
+    ListProblemConfiguration list_problem_configuration = 1;
 }
 
 message ListProblemsResponse{
@@ -37,7 +37,7 @@ message GetProblemRequest{
 
 message GetProblemResponse{
   GrpcProblem problem = 1;
-  repeated GrpcStateOperation possibleStateOperations = 2;
+  repeated GrpcStateOperation possible_state_operations = 2;
 }
 
 message CreateProblemRequest{
@@ -83,13 +83,20 @@ message GrpcProblem{
   string reference_identification_number = 7;
 }
 
-message ProblemFilterOptions{
-  ProblemStateFilterMapping problem_state_filter_mapping = 1;
+message ListProblemConfiguration{
+  GrpcSortOption grpc_sort_option = 1;
+  ProblemStateFilterMapping problem_state_filter_mapping = 2;
+  ProblemReporterFilterMapping problem_reporter_filter_mapping = 3;
 }
 
 message ProblemStateFilterMapping{
   bool selected = 1;
   repeated GrpcProblemState problem_state = 2;
+}
+
+message ProblemReporterFilterMapping{
+  bool selected = 1;
+  string problem_reporter = 2;
 }
 
 enum GrpcProblemState{
@@ -108,4 +115,10 @@ enum GrpcStateOperation{
   DECLINE = 3;
   APPROACH = 4;
   HOLD = 5;
+}
+
+enum GrpcSortOption{
+  UNKNOWN_SORT_OPTION = 0;
+  DESCENDING_TIME_STAMP = 1;
+  ASCENDING_TIME_STAMP = 2;
 }

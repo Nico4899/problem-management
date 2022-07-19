@@ -4,9 +4,7 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.Buil
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.PSFilter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,17 +39,11 @@ public class ProblemManagementService {
   /**
    * List all problems and filter them by provided filter options.
    *
-   * @param filterOptions filter options used to filter the results
-   * @return filtered problems
+   * @param configuration configuration for listing
+   * @return filtered/ sorted problems
    */
-  public Collection<Problem> listProblems(FilterOptions filterOptions) {
-    Collection<Problem> problems = this.problemConnector.listProblems();
-    if (filterOptions.getProblemStateFilterOption().isSelected()) {
-      Filter<Problem> filter =
-          new PSFilter(filterOptions.getProblemStateFilterOption().getFilterValues());
-      problems = filter.filter(problems);
-    }
-    return problems;
+  public Collection<Problem> listProblems(Configuration<Problem> configuration) {
+    return configuration.apply(this.problemConnector.listProblems());
   }
 
   /**

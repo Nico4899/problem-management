@@ -7,13 +7,20 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.api.utility.GrpcObjectWriter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.ProblemManagementService;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.StateOperation;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.options.FilterOptions;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Configuration;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.Collection;
 
+/**
+ * This class represents the gRPC controller from server side. It provides clients with the problem
+ * management application microservice api. In order to ensure the input and error control flow, a
+ * custom wrapper for {@link StreamObserver} is used. {@link GrpcServerErrorHandler} allows the
+ * application to catch and handle all thrown exceptions and ensures to provide a client with proper
+ * information.
+ */
 @Controller
 public class ProblemManagementController extends ProblemManagementGrpc.ProblemManagementImplBase {
 
@@ -21,6 +28,13 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
   private final GrpcObjectReader grpcObjectReader;
   private final GrpcObjectWriter grpcObjectWriter;
 
+  /**
+   * Constructs a new building management controller.
+   *
+   * @param grpcObjectWriter grpc object writer
+   * @param grpcObjectReader grpc object reader
+   * @param problemManagementService problem management service
+   */
   @Autowired
   public ProblemManagementController(
       ProblemManagementService problemManagementService,
@@ -39,10 +53,12 @@ public class ProblemManagementController extends ProblemManagementGrpc.ProblemMa
     ListProblemsResponse response =
         grpcServerErrorHandler.execute(
             x -> {
-              ProblemFilterOptions problemFilterOptions = request.getProblemFilterOptions();
-              FilterOptions filterOptions = this.grpcObjectReader.read(problemFilterOptions);
+              ListProblemConfiguration listProblemConfiguration =
+                  request.getListProblemConfiguration();
+              Configuration<Problem> configuration =
+                  this.grpcObjectReader.read(listProblemConfiguration);
               Collection<Problem> problems =
-                  this.problemManagementService.listProblems(filterOptions);
+                  this.problemManagementService.listProblems(configuration);
               Collection<GrpcProblem> grpcProblems = this.grpcObjectWriter.writeProblems(problems);
 
               return ListProblemsResponse.newBuilder().addAllProblems(grpcProblems).build();
