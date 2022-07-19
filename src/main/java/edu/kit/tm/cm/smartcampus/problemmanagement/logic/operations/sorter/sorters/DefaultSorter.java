@@ -7,14 +7,14 @@ import lombok.AllArgsConstructor;
 import java.util.Collection;
 
 /**
- * This class represents an implementation of {@link Sorter} for {@link Problem}, it doesn't sort
+ * This class represents an implementation of {@link Sorter} for type <T> it doesn't sort
  * anything.
  */
 @AllArgsConstructor
-public class DefaultProblemSorter implements Sorter<Problem> {
+public class DefaultSorter<T> implements Sorter<T> {
 
   @Override
-  public Collection<Problem> sort(Collection<Problem> collection) {
+  public Collection<T> sort(Collection<T> collection) {
     return collection;
   }
 }

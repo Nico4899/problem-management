@@ -13,7 +13,7 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filte
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.ProblemStateFilter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.AscendingTimeStampProblemSorter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DefaultProblemSorter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DefaultSorter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DescendingTimeStampProblemSorter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -71,7 +71,7 @@ public class GrpcObjectReader {
     return switch (grpcSortOption) {
       case ASCENDING_TIME_STAMP -> new AscendingTimeStampProblemSorter();
       case DESCENDING_TIME_STAMP -> new DescendingTimeStampProblemSorter();
-      default -> new DefaultProblemSorter();
+      default -> new DefaultSorter();
     };
   }
 
