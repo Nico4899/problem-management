@@ -1,96 +1,124 @@
 syntax = "proto3";
 
-package problemPackage;
+package edu.kit.tm.cm.proto;
 
-service problemManagement {
-    rpc Get(IN) returns (Problem);
-    rpc GetProblems(Empty) returns (Problems);
-    rpc GetFilteredProblems(FilterValues) returns (Problems);
+option java_multiple_files = true;
+option java_package = "edu.kit.tm.cm.proto";
 
-    rpc Add(Problem) returns (Empty);
-    rpc Update(Problem) returns (Problem);
-    rpc Delete(IN) returns (Empty);
+import "google/protobuf/timestamp.proto";
 
-    rpc Accept(Problem) returns (Empty);
-    rpc Decline(Problem) returns (Empty);
-    rpc Close(Problem) returns (Empty);
-    rpc Approach(Problem) returns (Empty);
-    rpc Hold(Problem) returns (Empty);
+service ProblemManagement {
+  rpc ListProblems(ListProblemsRequest) returns (ListProblemsResponse);
+  rpc GetProblem(GetProblemRequest) returns (GetProblemResponse);
+  rpc CreateProblem(CreateProblemRequest) returns (CreateProblemResponse);
+  rpc UpdateProblem(UpdateProblemRequest) returns (UpdateProblemResponse);
+  rpc RemoveProblem(RemoveProblemRequest) returns (RemoveProblemResponse);
+
+  rpc AcceptProblem(ChangeStateRequest) returns (ChangeStateResponse);
+  rpc HoldProblem(ChangeStateRequest) returns (ChangeStateResponse);
+  rpc ApproachProblem(ChangeStateRequest) returns (ChangeStateResponse);
+  rpc DeclineProblem(ChangeStateRequest) returns (ChangeStateResponse);
+  rpc CloseProblem(ChangeStateRequest) returns (ChangeStateResponse);
 }
 
-message Empty{}
+// requests and responses
 
-message IN {
-    string in = 1;
+message ListProblemsRequest{
+    ListProblemConfiguration list_problem_configuration = 1;
 }
 
-message Problem{
-    IN reference = 1;
-    string title = 2;
-    string description = 3;
-    ProblemState problemState = 4;
-    Date date = 5;
-    Reporter reporter = 6;
-    IN pin = 7;
+message ListProblemsResponse{
+  repeated GrpcProblem problems = 1;
 }
 
-message Problems {
-    repeated Problem problems = 1;
+message GetProblemRequest{
+  string identification_number = 1;
 }
 
-message ProblemState {
-    oneof problemState {
-        Open open = 1;
-        Accepted accepted = 2;
-        InProgress inProgress = 3;
-        Declined declined = 4;
-        Closed closed = 5;
-    }
+message GetProblemResponse{
+  GrpcProblem problem = 1;
+  repeated GrpcStateOperation possible_state_operations = 2;
 }
 
-message FilterValues {
-    oneof filterValues{
-        ProblemStates problemStates = 1;
-        Reporters reporters = 2;
-        string title = 3;
-        Date date = 4;
-    }
+message CreateProblemRequest{
+  GrpcProblem problem = 1;
 }
 
-message ProblemStates {
-    repeated ProblemState problemStates = 1;
+message CreateProblemResponse{
+  GrpcProblem problem = 1;
 }
 
-message Open{
-    Problem context = 1;
+message UpdateProblemRequest{
+  GrpcProblem problem = 1;
+  string identification_number = 2;
 }
 
-message Accepted{
-    Problem context = 1;
+message UpdateProblemResponse{
+  GrpcProblem problem = 1;
 }
 
-message InProgress {
-    Problem context = 1;
+message RemoveProblemRequest{
+  string identification_number = 1;
 }
 
-message Declined {
-    Problem context = 1;
+message RemoveProblemResponse{
 }
 
-message Closed {
-    Problem context = 1;
+message ChangeStateRequest{
+  string identification_number = 1;
 }
 
-message Date {
-    int32 year = 1;
-    int32 month = 2;
-    int32 day = 3;
+message ChangeStateResponse{
 }
 
-message Reporter {
-    string reporter = 1;
+// single message constructions
+
+message GrpcProblem{
+  GrpcProblemState problem_state = 1;
+  string identification_number = 2;
+  string problem_title = 3;
+  string problem_description = 4;
+  string problem_reporter = 5;
+  google.protobuf.Timestamp creation_time = 6;
+  string reference_identification_number = 7;
 }
 
-message Reporters {
-    repeated Reporter reporters = 1;
+message ListProblemConfiguration{
+  GrpcSortOption grpc_sort_option = 1;
+  ProblemStateFilterMapping problem_state_filter_mapping = 2;
+  ProblemReporterFilterMapping problem_reporter_filter_mapping = 3;
+}
+
+message ProblemStateFilterMapping{
+  bool selected = 1;
+  repeated GrpcProblemState problem_state = 2;
+}
+
+message ProblemReporterFilterMapping{
+  bool selected = 1;
+  string problem_reporter = 2;
+}
+
+enum GrpcProblemState{
+  UNKNOWN_PROBLEM_STATE = 0;
+  DECLINED = 1;
+  OPEN = 2;
+  CLOSED = 3;
+  IN_PROGRESS = 4;
+  ACCEPTED = 5;
+}
+
+enum GrpcStateOperation{
+  UNKNOWN_STATE_OPERATION = 0;
+  ACCEPT = 1;
+  CLOSE = 2;
+  DECLINE = 3;
+  APPROACH = 4;
+  HOLD = 5;
+}
+
+enum GrpcSortOption{
+  UNKNOWN_SORT_OPTION = 0;
+  DESCENDING_TIME_STAMP = 1;
+  ASCENDING_TIME_STAMP = 2;
 }
