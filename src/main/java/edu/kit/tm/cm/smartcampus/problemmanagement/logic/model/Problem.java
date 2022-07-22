@@ -51,7 +51,7 @@ public class Problem {
 
       @Override
       public State accept() {
-        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name());
+        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name(), this.name());
       }
 
       @Override
@@ -61,12 +61,12 @@ public class Problem {
 
       @Override
       public State close() {
-        throw new InvalidStateChangeRequestException(Operation.CLOSE.name());
+        throw new InvalidStateChangeRequestException(Operation.CLOSE.name(), this.name());
       }
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name());
+        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
       }
 
       @Override
@@ -88,7 +88,7 @@ public class Problem {
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name());
+        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
       }
 
       @Override
@@ -98,12 +98,12 @@ public class Problem {
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name());
+        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
       }
 
       @Override
       public State decline() {
-        throw new InvalidStateChangeRequestException(Operation.DECLINE.name());
+        throw new InvalidStateChangeRequestException(Operation.DECLINE.name(), this.name());
       }
     },
     /** In progress state. */
@@ -115,12 +115,12 @@ public class Problem {
 
       @Override
       public State accept() {
-        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name());
+        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name(), this.name());
       }
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name());
+        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
       }
 
       @Override
@@ -135,7 +135,7 @@ public class Problem {
 
       @Override
       public State decline() {
-        throw new InvalidStateChangeRequestException(Operation.DECLINE.name());
+        throw new InvalidStateChangeRequestException(Operation.DECLINE.name(), this.name());
       }
     },
     /** Open state. */
@@ -152,17 +152,17 @@ public class Problem {
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name());
+        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
       }
 
       @Override
       public State close() {
-        throw new InvalidStateChangeRequestException(Operation.CLOSE.name());
+        throw new InvalidStateChangeRequestException(Operation.CLOSE.name(), this.name());
       }
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name());
+        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
       }
 
       @Override
@@ -179,27 +179,27 @@ public class Problem {
 
       @Override
       public State accept() {
-        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name());
+        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name(), this.name());
       }
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name());
+        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
       }
 
       @Override
       public State close() {
-        throw new InvalidStateChangeRequestException(Operation.CLOSE.name());
+        throw new InvalidStateChangeRequestException(Operation.CLOSE.name(), this.name());
       }
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name());
+        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
       }
 
       @Override
       public State decline() {
-        throw new InvalidStateChangeRequestException(Operation.DECLINE.name());
+        throw new InvalidStateChangeRequestException(Operation.DECLINE.name(), this.name());
       }
     };
 
