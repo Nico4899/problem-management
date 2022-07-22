@@ -3,6 +3,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sort
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorter;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -11,7 +12,7 @@ import java.util.Comparator;
  * This class represents an implementation of {@link Sorter}, it sorts a collection of {@link
  * Problem} by newest time stamp.
  */
-@AllArgsConstructor
+@NoArgsConstructor
 public class DescendingTimeStampProblemSorter implements Sorter<Problem> {
 
   @Override

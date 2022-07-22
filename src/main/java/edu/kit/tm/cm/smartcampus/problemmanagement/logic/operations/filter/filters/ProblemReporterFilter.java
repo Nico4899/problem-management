@@ -18,7 +18,7 @@ public class ProblemReporterFilter implements Filter<Problem> {
   @Override
   public Collection<Problem> filter(final Collection<Problem> collection) {
     return collection.stream()
-        .filter(problem -> problem.getProblemReporter().equals(this.problemReporter))
+        .filter(problem -> problem.getReporter().equals(this.problemReporter))
         .toList();
   }
 }

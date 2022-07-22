@@ -24,7 +24,7 @@ service ProblemManagement {
 // requests and responses
 
 message ListProblemsRequest{
-    ListProblemConfiguration list_problem_configuration = 1;
+  ListProblemConfiguration list_problem_configuration = 1;
 }
 
 message ListProblemsResponse{

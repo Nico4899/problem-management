@@ -13,7 +13,7 @@ import java.util.Collections;
 
 /** This class represents an implementation of the {@link ProblemConnector} interface. */
 @Component
-public class RestTemplateProblemConnector implements ProblemConnector {
+public class ClientProblemConnector implements ProblemConnector {
 
   private final String baseUrl;
   private final RestTemplate restTemplate;
@@ -40,7 +40,7 @@ public class RestTemplateProblemConnector implements ProblemConnector {
    * @param baseUrl base url
    */
   @Autowired
-  public RestTemplateProblemConnector(
+  public ClientProblemConnector(
       RestTemplate restTemplate, @Value("${problem.baseUrl}") String baseUrl) {
     this.restTemplate = restTemplate;
     this.baseUrl = baseUrl;

@@ -2,11 +2,10 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
@@ -14,8 +13,8 @@ import java.util.Collection;
  * This class represents the core of this microservice. It contains of all logic, operations and
  * model.
  */
-@Service
-public class ProblemManagementService {
+@Component
+public class Service {
 
   /** The constant BLANK_STRING. */
   public static final String BLANK_STRING = "";
@@ -30,8 +29,7 @@ public class ProblemManagementService {
    * @param problemConnector problem connector (constructor injection)
    */
   @Autowired
-  public ProblemManagementService(
-      BuildingConnector buildingConnector, ProblemConnector problemConnector) {
+  public Service(BuildingConnector buildingConnector, ProblemConnector problemConnector) {
     this.buildingConnector = buildingConnector;
     this.problemConnector = problemConnector;
   }
@@ -86,7 +84,10 @@ public class ProblemManagementService {
   public void removeProblem(String identificationNumber) {
     Problem problem = this.problemConnector.getProblem(identificationNumber);
     this.problemConnector.removeProblem(identificationNumber);
-    this.removeNotification(problem);
+    if (!problem.getNotificationIdentificationNumber().isBlank()) {
+      this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
+      problem.setNotificationIdentificationNumber(BLANK_STRING);
+    }
   }
 
   /**
@@ -94,69 +95,16 @@ public class ProblemManagementService {
    *
    * @param identificationNumber problem identification number
    */
-  public void acceptProblem(String identificationNumber) {
-    Problem problem = this.problemConnector.getProblem(identificationNumber);
-    problem.accept();
-    this.postNotification(problem);
-  }
-
-  /**
-   * Decline problem.
-   *
-   * @param identificationNumber problem identification number
-   */
-  public void declineProblem(String identificationNumber) {
-    Problem problem = this.problemConnector.getProblem(identificationNumber);
-    problem.decline();
-    this.removeNotification(problem);
-  }
-
-  /**
-   * Close problem.
-   *
-   * @param identificationNumber problem identification number
-   */
-  public void closeProblem(String identificationNumber) {
-    Problem problem = this.problemConnector.getProblem(identificationNumber);
-    problem.close();
-    this.removeNotification(problem);
-  }
-
-  /**
-   * Approach problem.
-   *
-   * @param identificationNumber problem identification number
-   */
-  public void approachProblem(String identificationNumber) {
-    this.problemConnector.getProblem(identificationNumber).approach();
-  }
-
-  /**
-   * Hold problem.
-   *
-   * @param identificationNumber problem identification number
-   */
-  public void holdProblem(String identificationNumber) {
-    this.problemConnector.getProblem(identificationNumber).hold();
-  }
-
-  private void postNotification(Problem problem) {
-    Notification notification =
-        this.buildingConnector.createNotification(Notification.fromProblem(problem));
-    problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-    this.updateProblem(problem);
+  public void changeState(String identificationNumber, Problem.State.Operation operation) {
+    operation.apply(
+        this.problemConnector.getProblem(identificationNumber),
+        this.buildingConnector,
+        this.problemConnector);
   }
 
   private void updateNotification(Problem problem) {
     if (!problem.getNotificationIdentificationNumber().isBlank()) {
-      this.buildingConnector.updateNotification(Notification.fromProblem(problem));
-    }
-  }
-
-  private void removeNotification(Problem problem) {
-    if (!problem.getNotificationIdentificationNumber().isBlank()) {
-      this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
-      problem.setNotificationIdentificationNumber(BLANK_STRING);
+      this.buildingConnector.updateNotification(problem.extractNotification());
     }
   }
 }

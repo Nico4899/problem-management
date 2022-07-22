@@ -1,9 +1,5 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InternalServerErrorException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidArgumentsException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.ResourceNotFoundException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.UnauthorizedAccessException;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
@@ -17,7 +13,7 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
  * org.springframework.web.client.RestTemplate} and overrides its error detection and throws service
  * internal exceptions. Which are being handled by the service later.
  */
-public class RestClientErrorHandler implements ResponseErrorHandler {
+public class ClientExceptionInterceptor implements ResponseErrorHandler {
 
   @Override
   public boolean hasError(ClientHttpResponse response) throws IOException {

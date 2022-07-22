@@ -4,17 +4,16 @@ import edu.kit.tm.cm.proto.GrpcProblem;
 import edu.kit.tm.cm.proto.GrpcProblemState;
 import edu.kit.tm.cm.proto.GrpcStateOperation;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.StateOperation;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 /** This class provides a collection of logic methods to translate model objects to grpc objects. */
 @Component
-@AllArgsConstructor
-public class GrpcObjectWriter {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class GrpcObjectWriter {
 
   /**
    * Write a model object to a grpc object.
@@ -22,17 +21,17 @@ public class GrpcObjectWriter {
    * @param problem problem model object
    * @return grpc problem object
    */
-  public GrpcProblem write(Problem problem) {
+  public static GrpcProblem write(Problem problem) {
     return GrpcProblem.newBuilder()
         .setCreationTime(
             com.google.protobuf.Timestamp.newBuilder()
                 .setNanos(problem.getCreationTime().getNanos())
                 .build())
-        .setProblemDescription(problem.getProblemDescription())
-        .setProblemReporter(problem.getProblemReporter())
-        .setProblemTitle(problem.getProblemTitle())
+        .setProblemDescription(problem.getDescription())
+        .setProblemReporter(problem.getReporter())
+        .setProblemTitle(problem.getTitle())
         .setReferenceIdentificationNumber(problem.getReferenceIdentificationNumber())
-        .setProblemState(write(problem.getProblemState()))
+        .setProblemState(write(problem.getState()))
         .setIdentificationNumber(problem.getIdentificationNumber())
         .build();
   }
@@ -43,9 +42,9 @@ public class GrpcObjectWriter {
    * @param stateOperations problem state operations model object
    * @return grpc problem state operations object
    */
-  public Collection<GrpcStateOperation> writeStateOperations(
-      Collection<StateOperation> stateOperations) {
-    return stateOperations.stream().map(this::write).toList();
+  public static Collection<GrpcStateOperation> writeStateOperations(
+      Collection<Problem.State.Operation> stateOperations) {
+    return stateOperations.stream().map(GrpcObjectWriter::write).toList();
   }
 
   /**
@@ -54,7 +53,7 @@ public class GrpcObjectWriter {
    * @param stateOperation problem state operation model object
    * @return grpc problem state operation object
    */
-  public GrpcStateOperation write(StateOperation stateOperation) {
+  public static GrpcStateOperation write(Problem.State.Operation stateOperation) {
     return GrpcStateOperation.forNumber(stateOperation.ordinal() + 1);
   }
 
@@ -64,7 +63,7 @@ public class GrpcObjectWriter {
    * @param problemState problem state model object
    * @return grpc problem state object
    */
-  public GrpcProblemState write(ProblemState problemState) {
+  public static GrpcProblemState write(Problem.State problemState) {
     return GrpcProblemState.forNumber(problemState.ordinal() + 1);
   }
 
@@ -74,7 +73,7 @@ public class GrpcObjectWriter {
    * @param problems problems model object
    * @return grpc problems object
    */
-  public Collection<GrpcProblem> writeProblems(Collection<Problem> problems) {
-    return problems.stream().map(this::write).toList();
+  public static Collection<GrpcProblem> writeProblems(Collection<Problem> problems) {
+    return problems.stream().map(GrpcObjectWriter::write).toList();
   }
 }

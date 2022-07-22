@@ -14,11 +14,7 @@ service ProblemManagement {
   rpc UpdateProblem(UpdateProblemRequest) returns (UpdateProblemResponse);
   rpc RemoveProblem(RemoveProblemRequest) returns (RemoveProblemResponse);
 
-  rpc AcceptProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc HoldProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc ApproachProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc DeclineProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc CloseProblem(ChangeStateRequest) returns (ChangeStateResponse);
+  rpc ChangeState(ChangeStateRequest) returns (ChangeStateResponse);
 }
 
 // requests and responses
@@ -65,7 +61,8 @@ message RemoveProblemResponse{
 }
 
 message ChangeStateRequest{
-  string identification_number = 1;
+  GrpcStateOperation grpc_state_operation = 1;
+  string identification_number = 2;
 }
 
 message ChangeStateResponse{

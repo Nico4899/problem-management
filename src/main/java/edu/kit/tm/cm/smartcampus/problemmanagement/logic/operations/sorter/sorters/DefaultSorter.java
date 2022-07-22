@@ -1,6 +1,5 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorter;
 import lombok.AllArgsConstructor;
 

@@ -1,11 +1,7 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.api.utility;
 
-import edu.kit.tm.cm.proto.GrpcProblem;
-import edu.kit.tm.cm.proto.GrpcProblemState;
-import edu.kit.tm.cm.proto.GrpcSortOption;
-import edu.kit.tm.cm.proto.ListProblemConfiguration;
+import edu.kit.tm.cm.proto.*;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Configuration;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.ListConfiguration;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
@@ -15,17 +11,16 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorte
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.AscendingTimeStampProblemSorter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DefaultSorter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DescendingTimeStampProblemSorter;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /** This class provides a collection of logic methods to translate grpc objects to model objects. */
-@Component
-@AllArgsConstructor
-public class GrpcObjectReader {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class GrpcObjectReader {
 
   /**
    * Read a grpc object and return a model object.
@@ -33,15 +28,15 @@ public class GrpcObjectReader {
    * @param grpcProblem grpc problem object.
    * @return model problem object
    */
-  public Problem read(GrpcProblem grpcProblem) {
-    return Problem.builder()
-        .problemReporter(grpcProblem.getProblemReporter())
-        .problemState(read(grpcProblem.getProblemState()))
-        .problemDescription(grpcProblem.getProblemDescription())
-        .problemTitle(grpcProblem.getProblemTitle())
-        .creationTime(new Timestamp(grpcProblem.getCreationTime().getNanos()))
-        .referenceIdentificationNumber(grpcProblem.getReferenceIdentificationNumber())
-        .build();
+  public static Problem read(GrpcProblem grpcProblem) {
+    Problem problem = new Problem();
+    problem.setTitle(grpcProblem.getProblemTitle());
+    problem.setReporter(grpcProblem.getProblemReporter());
+    problem.setDescription(grpcProblem.getProblemDescription());
+    problem.setCreationTime(new Timestamp(grpcProblem.getCreationTime().getNanos()));
+    problem.setReferenceIdentificationNumber(grpcProblem.getReferenceIdentificationNumber());
+    problem.setState(read(grpcProblem.getProblemState()));
+    return problem;
   }
 
   /**
@@ -50,10 +45,10 @@ public class GrpcObjectReader {
    * @param listProblemConfiguration grpc problem list configuration object.
    * @return model configuration object
    */
-  public Configuration<Problem> read(ListProblemConfiguration listProblemConfiguration) {
+  public static Configuration<Problem> read(ListProblemConfiguration listProblemConfiguration) {
     Collection<Filter<Problem>> filters = new ArrayList<>();
     if (listProblemConfiguration.getProblemStateFilterMapping().getSelected()) {
-      filters.add(new ProblemStateFilter(listProblemConfiguration.getProblemStateFilterMapping().getProblemStateList().stream().map(this::read).toList()));
+      filters.add(new ProblemStateFilter(listProblemConfiguration.getProblemStateFilterMapping().getProblemStateList().stream().map(GrpcObjectReader::read).toList()));
     }
     if (listProblemConfiguration.getProblemReporterFilterMapping().getSelected()) {
       filters.add(new ProblemReporterFilter(listProblemConfiguration.getProblemReporterFilterMapping().getProblemReporter()));
@@ -67,11 +62,11 @@ public class GrpcObjectReader {
    * @param grpcSortOption grpc problem sort option.
    * @return model problem sorter object
    */
-  public Sorter<Problem> read(GrpcSortOption grpcSortOption) {
+  public static Sorter<Problem> read(GrpcSortOption grpcSortOption) {
     return switch (grpcSortOption) {
       case ASCENDING_TIME_STAMP -> new AscendingTimeStampProblemSorter();
       case DESCENDING_TIME_STAMP -> new DescendingTimeStampProblemSorter();
-      default -> new DefaultSorter();
+      default -> new DefaultSorter<>();
     };
   }
 
@@ -81,7 +76,19 @@ public class GrpcObjectReader {
    * @param grpcProblemState grpc problem state object.
    * @return model problem state object
    */
-  public ProblemState read(GrpcProblemState grpcProblemState) {
-    return ProblemState.forNumber(grpcProblemState.ordinal() + 1);
+  public static Problem.State read(GrpcProblemState grpcProblemState) {
+    return Problem.State.forOrdinal(grpcProblemState.ordinal() + 1);
   }
+
+  /**
+   * Read a grpc object and return a model object.
+   *
+   * @param grpcStateOperation grpc problem state oepration object.
+   * @return model problem state operation object
+   */
+  public static Problem.State.Operation read(GrpcStateOperation grpcStateOperation) {
+    return Problem.State.Operation.forOrdinal(grpcStateOperation.ordinal() + 1);
+  }
+
+
 }

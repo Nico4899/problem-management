@@ -1,7 +1,6 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.ProblemState;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.ProblemStateFilter;
 import org.junit.jupiter.api.Assertions;
@@ -26,10 +25,11 @@ class FilterTests {
   public static final String IN_PROGRESS = "inProgress";
   public static final String ACCEPTED = "accepted";
 
-  private static final Collection<ProblemState> ALL_PROBLEM_STATES = List.of(ProblemState.values());
-  private static final Collection<ProblemState> SOME_PROBLEM_STATES =
-      List.of(ProblemState.ACCEPTED, ProblemState.DECLINED, ProblemState.IN_PROGRESS);
-  private static final Collection<ProblemState> NO_PROBLEM_STATES = List.of();
+  private static final Collection<Problem.State> ALL_PROBLEM_STATES =
+      List.of(Problem.State.values());
+  private static final Collection<Problem.State> SOME_PROBLEM_STATES =
+      List.of(Problem.State.ACCEPTED, Problem.State.DECLINED, Problem.State.IN_PROGRESS);
+  private static final Collection<Problem.State> NO_PROBLEM_STATES = List.of();
 
   private static final Map<String, Problem> testProblemsMap = new HashMap<>();
 
@@ -42,17 +42,23 @@ class FilterTests {
   }
 
   private static void buildTestCollections() {
-    testProblemsMap.put(
-        OPEN, new Problem(ProblemState.OPEN, null, null, null, null, null, null, null));
-    testProblemsMap.put(
-        CLOSED, new Problem(ProblemState.CLOSED, null, null, null, null, null, null, null));
-    testProblemsMap.put(
-        DECLINED, new Problem(ProblemState.DECLINED, null, null, null, null, null, null, null));
-    testProblemsMap.put(
-        IN_PROGRESS,
-        new Problem(ProblemState.IN_PROGRESS, null, null, null, null, null, null, null));
-    testProblemsMap.put(
-        ACCEPTED, new Problem(ProblemState.ACCEPTED, null, null, null, null, null, null, null));
+
+    Problem problem1 = new Problem();
+    problem1.setState(Problem.State.OPEN);
+    Problem problem2 = new Problem();
+    problem2.setState(Problem.State.CLOSED);
+    Problem problem3 = new Problem();
+    problem3.setState(Problem.State.DECLINED);
+    Problem problem4 = new Problem();
+    problem4.setState(Problem.State.IN_PROGRESS);
+    Problem problem5 = new Problem();
+    problem5.setState(Problem.State.ACCEPTED);
+
+    testProblemsMap.put(OPEN, problem1);
+    testProblemsMap.put(CLOSED, problem2);
+    testProblemsMap.put(DECLINED, problem3);
+    testProblemsMap.put(IN_PROGRESS, problem4);
+    testProblemsMap.put(ACCEPTED, problem5);
 
     testProblems = testProblemsMap.values();
   }

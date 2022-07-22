@@ -1,6 +1,6 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.RestClientErrorHandler;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.ClientExceptionInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -16,6 +16,6 @@ public class ProblemManagementApplication {
 
   @Bean
   public RestTemplate getRestTemplate(RestTemplateBuilder restTemplateBuilder) {
-    return restTemplateBuilder.errorHandler(new RestClientErrorHandler()).build();
+    return restTemplateBuilder.errorHandler(new ClientExceptionInterceptor()).build();
   }
 }

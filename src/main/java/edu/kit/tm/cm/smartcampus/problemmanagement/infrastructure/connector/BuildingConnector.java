@@ -20,7 +20,7 @@ public interface BuildingConnector {
    *
    * @param notification notification to be updated.
    */
-  Notification updateNotification(Notification notification);
+  void updateNotification(Notification notification);
 
   /**
    * Remove a notification.

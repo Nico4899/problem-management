@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 /** This class represents an implementation of the {@link BuildingConnector} interface. */
 @Component
-public class RestTemplateBuildingConnector implements BuildingConnector {
+public class ClientBuildingConnector implements BuildingConnector {
 
   private final String baseUrl;
   private final RestTemplate restTemplate;
@@ -30,7 +30,7 @@ public class RestTemplateBuildingConnector implements BuildingConnector {
    * @param baseUrl base url of the server to which requests are sent
    */
   @Autowired
-  public RestTemplateBuildingConnector(
+  public ClientBuildingConnector(
       RestTemplate restTemplate, @Value("${building.baseUrl}") String baseUrl) {
     this.restTemplate = restTemplate;
     this.baseUrl = baseUrl;
@@ -48,7 +48,7 @@ public class RestTemplateBuildingConnector implements BuildingConnector {
   }
 
   @Override
-  public Notification updateNotification(Notification notification) {
+  public void updateNotification(Notification notification) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<Notification> entity = new HttpEntity<>(notification, headers);
@@ -59,7 +59,6 @@ public class RestTemplateBuildingConnector implements BuildingConnector {
         entity,
         Void.class,
         notification.getIdentificationNumber());
-    return notification;
   }
 
   @Override
