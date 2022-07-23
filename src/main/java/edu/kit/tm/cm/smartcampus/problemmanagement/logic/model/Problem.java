@@ -12,7 +12,10 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
-/** The type Problem. */
+/**
+ * This class represents a problem, connected to {@link Notification} and a reference, from the
+ * building domain.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -330,11 +333,18 @@ public class Problem {
        * @return the campus location with the ordinal number
        */
       public static State.Operation forOrdinal(int ordinal) {
-        if (ordinal >= values().length  || ordinal < 0)
+        if (ordinal >= values().length || ordinal < 0)
           throw new InternalServerErrorException("value with ordinal does not exist");
         return values()[ordinal];
       }
 
+      /**
+       * Apply a state operation on a problem.
+       *
+       * @param problem the problem
+       * @param buildingConnector the building connector
+       * @param problemConnector the problem connector
+       */
       public abstract void apply(
           Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector);
     }

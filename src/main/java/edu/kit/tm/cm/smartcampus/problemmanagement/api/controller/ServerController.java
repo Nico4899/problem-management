@@ -50,8 +50,7 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
     String identificationNumber = request.getIdentificationNumber();
     Problem problem = this.service.getProblem(identificationNumber);
     GrpcProblem grpcProblem = GrpcObjectWriter.write(problem);
-    Collection<Problem.State.Operation> stateOperations =
-        problem.getState().possibleOperations();
+    Collection<Problem.State.Operation> stateOperations = problem.getState().possibleOperations();
     Collection<GrpcStateOperation> grpcStateOperations =
         GrpcObjectWriter.writeStateOperations(stateOperations);
     GetProblemResponse response =
