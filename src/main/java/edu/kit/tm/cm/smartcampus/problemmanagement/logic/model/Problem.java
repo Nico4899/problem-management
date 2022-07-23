@@ -214,7 +214,7 @@ public class Problem {
      */
     public static State forOrdinal(int ordinal) {
       if (ordinal >= values().length || ordinal < 0)
-        throw new InternalServerErrorException("value with ordinal does not exist");
+        throw new InternalServerErrorException();
       return values()[ordinal];
     }
 
@@ -334,7 +334,7 @@ public class Problem {
        */
       public static State.Operation forOrdinal(int ordinal) {
         if (ordinal >= values().length || ordinal < 0)
-          throw new InternalServerErrorException("value with ordinal does not exist");
+          throw new InternalServerErrorException();
         return values()[ordinal];
       }
 

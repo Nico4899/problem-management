@@ -65,7 +65,7 @@ class FilterTests {
 
   @ParameterizedTest
   @ArgumentsSource(ProblemFilterArgumentsProvider.class)
-  void filterRoomCollectionAndValuesResultTest(
+  void whenFilter_thenFilter(
       Collection<Problem> expected, Filter<Problem> filter, Collection<Problem> collection) {
     Assertions.assertTrue(expected.containsAll(filter.filter(collection)));
   }
