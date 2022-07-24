@@ -20,7 +20,7 @@ public class Application {
   }
 
   /**
-   * The {@link RestTemplate} {@link Bean} used for the connectors
+   * The {@link RestTemplate} {@link Bean} used for the connectors.
    *
    * @return the rest template
    */

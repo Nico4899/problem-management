@@ -108,36 +108,9 @@ class ProblemTests {
 
   @ParameterizedTest
   @ArgumentsSource(ProblemStateArgumentsProvider.class)
-  void filterRoomCollectionAndValuesResultTest(
+  void whenFilterRoomsByFilterValues_thenFilterRooms(
       Collection<Problem.State.Operation> expected, Problem.State problemState) {
     Assertions.assertTrue(problemState.possibleOperations().containsAll(expected));
-  }
-
-  @ParameterizedTest
-  @ArgumentsSource(ProblemStateValidOrdinalArgumentsProvider.class)
-  void whenProblemStateOrdinalValid_thenReturnProblemState(Problem.State expected, int ordinal) {
-    Assertions.assertEquals(expected, Problem.State.forOrdinal(ordinal));
-  }
-
-  @ParameterizedTest
-  @ArgumentsSource(ProblemStateInvalidOrdinalArgumentsProvider.class)
-  void whenProblemStateOrdinalInvalid_thenThrowInternalServerException(
-      Class<Exception> expected, int ordinal) {
-    Assertions.assertThrows(expected, () -> Problem.State.forOrdinal(ordinal));
-  }
-
-  @ParameterizedTest
-  @ArgumentsSource(ProblemStateOperationValidOrdinalArgumentsProvider.class)
-  void whenProblemStateOperationOrdinalValid_thenReturnProblemStateOperation(
-      Problem.State.Operation expected, int ordinal) {
-    Assertions.assertEquals(expected, Problem.State.Operation.forOrdinal(ordinal));
-  }
-
-  @ParameterizedTest
-  @ArgumentsSource(ProblemStateOperationInvalidOrdinalArgumentsProvider.class)
-  void whenProblemStateOperationOrdinalInvalid_thenThrowInternalServerException(
-      Class<Exception> expected, int ordinal) {
-    Assertions.assertThrows(expected, () -> Problem.State.Operation.forOrdinal(ordinal));
   }
 
   private static class ProblemStateChangeInvalidArgumentProvider implements ArgumentsProvider {
@@ -199,8 +172,6 @@ class ProblemTests {
     }
   }
 
-  // build method
-
   private static class ProblemStateArgumentsProvider implements ArgumentsProvider {
 
     @Override
@@ -219,54 +190,6 @@ class ProblemTests {
               List.of(Problem.State.Operation.CLOSE, Problem.State.Operation.HOLD),
               Problem.State.IN_PROGRESS),
           Arguments.of(List.of(), Problem.State.CLOSED));
-    }
-  }
-
-  private static class ProblemStateValidOrdinalArgumentsProvider implements ArgumentsProvider {
-
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
-      return Stream.of(
-          Arguments.of(Problem.State.CLOSED, 4),
-          Arguments.of(Problem.State.OPEN, 3),
-          Arguments.of(Problem.State.IN_PROGRESS, 2),
-          Arguments.of(Problem.State.DECLINED, 1),
-          Arguments.of(Problem.State.ACCEPTED, 0));
-    }
-  }
-
-  private static class ProblemStateInvalidOrdinalArgumentsProvider implements ArgumentsProvider {
-
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
-      return Stream.of(
-          Arguments.of(InternalServerErrorException.class, Problem.State.values().length),
-          Arguments.of(InternalServerErrorException.class, -1));
-    }
-  }
-
-  private static class ProblemStateOperationValidOrdinalArgumentsProvider
-      implements ArgumentsProvider {
-
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
-      return Stream.of(
-          Arguments.of(Problem.State.Operation.HOLD, 4),
-          Arguments.of(Problem.State.Operation.CLOSE, 3),
-          Arguments.of(Problem.State.Operation.APPROACH, 2),
-          Arguments.of(Problem.State.Operation.DECLINE, 1),
-          Arguments.of(Problem.State.Operation.ACCEPT, 0));
-    }
-  }
-
-  private static class ProblemStateOperationInvalidOrdinalArgumentsProvider
-      implements ArgumentsProvider {
-
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
-      return Stream.of(
-          Arguments.of(InternalServerErrorException.class, Problem.State.Operation.values().length),
-          Arguments.of(InternalServerErrorException.class, -1));
     }
   }
 }

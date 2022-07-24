@@ -29,7 +29,7 @@ public class ServerExceptionInterceptor {
    * @return a proper {@link StatusRuntimeException}
    */
   @GrpcExceptionHandler(InvalidArgumentsException.class)
-  public StatusRuntimeException onError(IllegalArgumentException exception) {
+  public StatusRuntimeException onError(InvalidArgumentsException exception) {
     Metadata trailers = new Metadata();
     ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(exception.getMessage()).build();
     Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);

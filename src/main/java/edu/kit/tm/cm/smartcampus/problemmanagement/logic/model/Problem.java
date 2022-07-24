@@ -2,7 +2,6 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InternalServerErrorException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidStateChangeRequestException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -207,18 +206,6 @@ public class Problem {
     };
 
     /**
-     * This static method provides a {@link State} for its ordinal.
-     *
-     * @param ordinal the ordinal number of the enum constant
-     * @return the campus location with the ordinal number
-     */
-    public static State forOrdinal(int ordinal) {
-      if (ordinal >= values().length || ordinal < 0)
-        throw new InternalServerErrorException();
-      return values()[ordinal];
-    }
-
-    /**
      * Gets possible operations.
      *
      * @return the possible operations
@@ -325,18 +312,6 @@ public class Problem {
       };
 
       private static final String BLANK_STRING = "";
-
-      /**
-       * This static method provides a {@link Operation} for its ordinal.
-       *
-       * @param ordinal the ordinal number of the enum constant
-       * @return the campus location with the ordinal number
-       */
-      public static State.Operation forOrdinal(int ordinal) {
-        if (ordinal >= values().length || ordinal < 0)
-          throw new InternalServerErrorException();
-        return values()[ordinal];
-      }
 
       /**
        * Apply a state operation on a problem.

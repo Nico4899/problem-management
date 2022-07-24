@@ -77,18 +77,16 @@ public final class GrpcObjectReader {
    * @return model problem state object
    */
   public static Problem.State read(GrpcProblemState grpcProblemState) {
-    return Problem.State.forOrdinal(grpcProblemState.ordinal() + 1);
+    return Enum.valueOf(Problem.State.class, grpcProblemState.name());
   }
 
   /**
    * Read a grpc object and return a model object.
    *
-   * @param grpcStateOperation grpc problem state oepration object.
+   * @param grpcStateOperation grpc problem state operation object.
    * @return model problem state operation object
    */
   public static Problem.State.Operation read(GrpcStateOperation grpcStateOperation) {
-    return Problem.State.Operation.forOrdinal(grpcStateOperation.ordinal() + 1);
+    return Enum.valueOf(Problem.State.Operation.class, grpcStateOperation.name());
   }
-
-
 }
