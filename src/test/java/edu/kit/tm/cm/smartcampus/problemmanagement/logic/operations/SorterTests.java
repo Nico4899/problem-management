@@ -1,10 +1,8 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.ProblemSorter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.AscendingTimeStampProblemSorter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DefaultSorter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.sorters.DescendingTimeStampProblemSorter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -14,7 +12,10 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 class SorterTests {
@@ -54,7 +55,7 @@ class SorterTests {
   void whenSortByProvidedSorter_thenSort(List<Problem> expected, Sorter<Problem> sorter) {
     List<Problem> result = new ArrayList<>(sorter.sort(testProblemsMap.values()));
     for (int i = 1; i < expected.size(); i++) {
-        Assertions.assertEquals(expected.get(i), result.get(i));
+      Assertions.assertEquals(expected.get(i), result.get(i));
     }
   }
 
@@ -69,15 +70,15 @@ class SorterTests {
                   testProblemsMap.get(OLDEST_PROBLEM_2),
                   testProblemsMap.get(OLDEST_PROBLEM_3),
                   testProblemsMap.get(OLDEST_PROBLEM_4)),
-              new DescendingTimeStampProblemSorter()),
+              ProblemSorter.DESCENDING_TIME_STAMP_SORTER),
           Arguments.of(
               List.of(
                   testProblemsMap.get(OLDEST_PROBLEM_4),
                   testProblemsMap.get(OLDEST_PROBLEM_3),
                   testProblemsMap.get(OLDEST_PROBLEM_2),
                   testProblemsMap.get(OLDEST_PROBLEM_1)),
-              new AscendingTimeStampProblemSorter()),
-          Arguments.of(new ArrayList<>(testProblemsMap.values()), new DefaultSorter<>()));
+              ProblemSorter.ASCENDING_TIME_STAMP_SORTER),
+          Arguments.of(new ArrayList<>(testProblemsMap.values()), ProblemSorter.DEFAULT_SORTER));
     }
   }
 }

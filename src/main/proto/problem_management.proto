@@ -13,14 +13,13 @@ service ProblemManagement {
   rpc CreateProblem(CreateProblemRequest) returns (CreateProblemResponse);
   rpc UpdateProblem(UpdateProblemRequest) returns (UpdateProblemResponse);
   rpc RemoveProblem(RemoveProblemRequest) returns (RemoveProblemResponse);
-
   rpc ChangeState(ChangeStateRequest) returns (ChangeStateResponse);
 }
 
 // requests and responses
 
 message ListProblemsRequest{
-    ListProblemConfiguration list_problem_configuration = 1;
+    GrpcListSettings list_settings = 1;
 }
 
 message ListProblemsResponse{
@@ -80,20 +79,20 @@ message GrpcProblem{
   string reference_identification_number = 7;
 }
 
-message ListProblemConfiguration{
+message GrpcListSettings{
+  Values values = 2;
+  Selection selection = 3;
+}
+
+message Selection{
   GrpcSortOption grpc_sort_option = 1;
-  ProblemStateFilterMapping problem_state_filter_mapping = 2;
-  ProblemReporterFilterMapping problem_reporter_filter_mapping = 3;
+  bool reporter_filter_selected = 2;
+  bool state_filter_selected = 3;
 }
 
-message ProblemStateFilterMapping{
-  bool selected = 1;
-  repeated GrpcProblemState problem_state = 2;
-}
-
-message ProblemReporterFilterMapping{
-  bool selected = 1;
-  string problem_reporter = 2;
+message Values{
+  repeated string reporters = 1;
+  repeated GrpcProblemState states = 2;
 }
 
 enum GrpcProblemState{
@@ -116,6 +115,7 @@ enum GrpcStateOperation{
 
 enum GrpcSortOption{
   UNKNOWN_SORT_OPTION = 0;
-  DESCENDING_TIME_STAMP = 1;
-  ASCENDING_TIME_STAMP = 2;
+  DEFAULT_SORT_OPTION = 1;
+  DESCENDING_TIME_STAMP = 2;
+  ASCENDING_TIME_STAMP = 3;
 }

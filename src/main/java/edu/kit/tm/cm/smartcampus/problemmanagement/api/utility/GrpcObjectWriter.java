@@ -3,11 +3,9 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.api.utility;
 import edu.kit.tm.cm.proto.GrpcProblem;
 import edu.kit.tm.cm.proto.GrpcProblemState;
 import edu.kit.tm.cm.proto.GrpcStateOperation;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InternalServerErrorException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -56,7 +54,8 @@ public final class GrpcObjectWriter {
    * @return grpc problem state operation object
    */
   public static GrpcStateOperation write(Problem.State.Operation stateOperation) {
-    return Enum.valueOf(GrpcStateOperation.class, stateOperation.name());  }
+    return Enum.valueOf(GrpcStateOperation.class, stateOperation.name());
+  }
 
   /**
    * Write a model object to a grpc object.

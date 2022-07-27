@@ -2,28 +2,31 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configurati
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorter;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
- * This class represents a list request configuration, implemented from {@link Configuration}. It is
+ * This class represents a list request configuration, implemented from {@link Settings}. It is
  * being parsed from a provided grpc object and can apply {@link Filter} and {@link Sorter} selected
  * in the settings to a given collection.
  *
  * @param <T> the type of the collection to be operated on
  */
-@AllArgsConstructor
-public class ListConfiguration<T> implements Configuration<T> {
-  private final Sorter<T> sorter;
-  private final Collection<Filter<T>> filters;
+@Setter
+@NoArgsConstructor
+public class ListSettings<T> implements Settings<T> {
+  private Sorter<T> sorter;
+  private Map<Filter<T>, Collection<?>> filters;
 
   @Override
   public Collection<T> apply(Collection<T> collection) {
     Collection<T> applied = new ArrayList<>(collection);
-    for (Filter<T> filter : filters) {
-      applied = filter.filter(applied);
+    for (Map.Entry<Filter<T>, Collection<?>> entry : filters.entrySet()) {
+      applied = entry.getKey().filter(applied, entry.getValue());
     }
     applied = sorter.sort(applied);
     return applied;

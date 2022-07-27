@@ -3,9 +3,10 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.api.controller;
 import edu.kit.tm.cm.proto.*;
 import edu.kit.tm.cm.smartcampus.problemmanagement.api.utility.GrpcObjectReader;
 import edu.kit.tm.cm.smartcampus.problemmanagement.api.utility.GrpcObjectWriter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.Service;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Configuration;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.ListSettings;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Settings;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.service.Service;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
   @Override
   public void listProblems(
       ListProblemsRequest request, StreamObserver<ListProblemsResponse> responseObserver) {
-    ListProblemConfiguration listProblemConfiguration = request.getListProblemConfiguration();
-    Configuration<Problem> configuration = GrpcObjectReader.read(listProblemConfiguration);
-    Collection<Problem> problems = this.service.listProblems(configuration);
+    GrpcListSettings grpcListSettings = request.getListSettings();
+    Settings<Problem> settings = GrpcObjectReader.read(grpcListSettings);
+    Collection<Problem> problems = this.service.listProblems(settings);
     Collection<GrpcProblem> grpcProblems = GrpcObjectWriter.writeProblems(problems);
     ListProblemsResponse response =
         ListProblemsResponse.newBuilder().addAllProblems(grpcProblems).build();

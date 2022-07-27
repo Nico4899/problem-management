@@ -1,12 +1,9 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception;
 
-import lombok.NoArgsConstructor;
-
 /**
  * This exception is thrown whenever a requested resource doesn't exist, it provides a proper error
  * message.
  */
-@NoArgsConstructor
 public class ResourceNotFoundException extends RuntimeException {
 
   private static final String RESOURCE_NOT_FOUND_MESSAGE = "Resource [%s: %s] does not exist.";
@@ -19,5 +16,14 @@ public class ResourceNotFoundException extends RuntimeException {
    */
   public ResourceNotFoundException(String name, String value) {
     super(String.format(RESOURCE_NOT_FOUND_MESSAGE, name, value));
+  }
+
+  /**
+   * Constructs a {@link ResourceNotFoundException}.
+   *
+   * @param message error message
+   */
+  public ResourceNotFoundException(String message) {
+    super(message);
   }
 }

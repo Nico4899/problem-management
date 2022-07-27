@@ -2,7 +2,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.filters.ProblemStateFilter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.ProblemFilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -17,13 +17,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-class FilterTests {
+class ProblemFilterTests {
 
   public static final String OPEN = "open";
   public static final String CLOSED = "closed";
   public static final String DECLINED = "declined";
   public static final String IN_PROGRESS = "inProgress";
   public static final String ACCEPTED = "accepted";
+
+  public static final String REPORTER_1 = "reporter1";
+  public static final String REPORTER_2 = "reporter2";
+  public static final String REPORTER_3 = "reporter3";
+  public static final String REPORTER_4 = "reporter4";
+  public static final String REPORTER_5 = "reporter5";
 
   private static final Collection<Problem.State> ALL_PROBLEM_STATES =
       List.of(Problem.State.values());
@@ -45,14 +51,19 @@ class FilterTests {
 
     Problem problem1 = new Problem();
     problem1.setState(Problem.State.OPEN);
+    problem1.setReporter(REPORTER_1);
     Problem problem2 = new Problem();
     problem2.setState(Problem.State.CLOSED);
+    problem2.setReporter(REPORTER_2);
     Problem problem3 = new Problem();
     problem3.setState(Problem.State.DECLINED);
+    problem3.setReporter(REPORTER_3);
     Problem problem4 = new Problem();
     problem4.setState(Problem.State.IN_PROGRESS);
+    problem4.setReporter(REPORTER_4);
     Problem problem5 = new Problem();
     problem5.setState(Problem.State.ACCEPTED);
+    problem5.setReporter(REPORTER_5);
 
     testProblemsMap.put(OPEN, problem1);
     testProblemsMap.put(CLOSED, problem2);
@@ -66,8 +77,11 @@ class FilterTests {
   @ParameterizedTest
   @ArgumentsSource(ProblemFilterArgumentsProvider.class)
   void whenFilter_thenFilter(
-      Collection<Problem> expected, Filter<Problem> filter, Collection<Problem> collection) {
-    Assertions.assertTrue(expected.containsAll(filter.filter(collection)));
+      Collection<Problem> expected,
+      Filter<Problem> filter,
+      Collection<Problem> collection,
+      Collection<?> filterValues) {
+    Assertions.assertTrue(expected.containsAll(filter.filter(collection, filterValues)));
   }
 
   private static class ProblemFilterArgumentsProvider implements ArgumentsProvider {
@@ -75,15 +89,29 @@ class FilterTests {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
       return Stream.of(
-          Arguments.of(testProblems, new ProblemStateFilter(ALL_PROBLEM_STATES), testProblems),
+          Arguments.of(testProblems, ProblemFilter.STATE_FILTER, testProblems, ALL_PROBLEM_STATES),
           Arguments.of(
               List.of(
                   testProblemsMap.get(ACCEPTED),
                   testProblemsMap.get(DECLINED),
                   testProblemsMap.get(IN_PROGRESS)),
-              new ProblemStateFilter(SOME_PROBLEM_STATES),
-              testProblems),
-          Arguments.of(List.of(), new ProblemStateFilter(NO_PROBLEM_STATES), testProblems));
+              ProblemFilter.STATE_FILTER,
+              testProblems,
+              SOME_PROBLEM_STATES),
+          Arguments.of(List.of(), ProblemFilter.STATE_FILTER, testProblems, NO_PROBLEM_STATES),
+          Arguments.of(List.of(), ProblemFilter.REPORTER_FILTER, testProblems, List.of()),
+          Arguments.of(
+              List.of(testProblemsMap.get(OPEN),
+                testProblemsMap.get(CLOSED),
+                testProblemsMap.get(ACCEPTED)),
+              ProblemFilter.REPORTER_FILTER,
+              testProblems,
+              List.of(REPORTER_1, REPORTER_2, REPORTER_5)),
+          Arguments.of(
+              testProblems,
+              ProblemFilter.REPORTER_FILTER,
+              testProblems,
+              List.of(REPORTER_1, REPORTER_2, REPORTER_3, REPORTER_4, REPORTER_5)));
     }
   }
 }

@@ -7,7 +7,7 @@ import java.util.Collection;
  *
  * @param <T> the type the collection contains
  */
-public interface Configuration<T> {
+public interface Settings<T> {
   /**
    * Apply configurations to collection.
    *

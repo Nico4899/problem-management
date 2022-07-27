@@ -1,9 +1,9 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service;
+package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.service;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Configuration;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +40,7 @@ public class Service {
    * @param configuration configuration for listing
    * @return filtered/ sorted problems
    */
-  public Collection<Problem> listProblems(Configuration<Problem> configuration) {
+  public Collection<Problem> listProblems(Settings<Problem> configuration) {
     return configuration.apply(this.problemConnector.listProblems());
   }
 
