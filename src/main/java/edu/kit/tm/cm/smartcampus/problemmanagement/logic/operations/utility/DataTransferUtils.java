@@ -29,7 +29,7 @@ import java.util.Map;
  * @author Bastian Bacher, Dennis Fadeev
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Utils {
+public final class DataTransferUtils {
 
   /**
    * This class represents a writing class which translates model objects to gRPC or REST data
