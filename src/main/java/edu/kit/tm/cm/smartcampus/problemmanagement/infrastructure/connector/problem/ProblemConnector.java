@@ -1,5 +1,7 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem;
 
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.dto.ClientCreateProblemRequest;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.dto.ClientUpdateProblemRequest;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 
 import java.util.Collection;
@@ -20,10 +22,10 @@ public interface ProblemConnector {
   /**
    * Create a new problem.
    *
-   * @param problem problem to be crated
+   * @param clientCreateProblemRequest problem to be crated
    * @return created problem
    */
-  Problem createProblem(Problem problem);
+  Problem createProblem(ClientCreateProblemRequest clientCreateProblemRequest);
 
   /**
    * Get a specific problem by its identification number.
@@ -36,10 +38,10 @@ public interface ProblemConnector {
   /**
    * Update a problem.
    *
-   * @param problem problem to be updated
+   * @param clientUpdateProblemRequest problem to be updated
    * @return updated problem
    */
-  Problem updateProblem(Problem problem);
+  Problem updateProblem(ClientUpdateProblemRequest clientUpdateProblemRequest);
 
   /**
    * Remove a problem.

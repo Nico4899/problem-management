@@ -1,7 +1,7 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.BuildingConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidStateChangeRequestException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.Utils;
 import lombok.Getter;
@@ -245,9 +245,11 @@ public class Problem {
             ProblemConnector problemConnector) {
           problem.state = problem.state.accept();
           Notification notification =
-              buildingConnector.createNotification(Utils.Extractor.extract(problem));
+              buildingConnector.createNotification(
+                  Utils.ClientRequestWriter.writeCreateNotificationRequest(problem));
           problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-          problemConnector.updateProblem(problem);
+          problemConnector.updateProblem(
+              Utils.ClientRequestWriter.writeUpdateProblemRequest(problem));
         }
       },
       /** Decline state operation. */
@@ -259,7 +261,8 @@ public class Problem {
             ProblemConnector problemConnector) {
           problem.state = problem.state.decline();
           buildingConnector.removeNotification((problem.getNotificationIdentificationNumber()));
-          problemConnector.updateProblem(problem);
+          problemConnector.updateProblem(
+              Utils.ClientRequestWriter.writeUpdateProblemRequest(problem));
         }
       },
       /** Approach state operation. */
@@ -270,7 +273,8 @@ public class Problem {
             BuildingConnector buildingConnector,
             ProblemConnector problemConnector) {
           problem.state = problem.state.approach();
-          problemConnector.updateProblem(problem);
+          problemConnector.updateProblem(
+              Utils.ClientRequestWriter.writeUpdateProblemRequest(problem));
         }
       },
       /** Close state operation. */
@@ -283,7 +287,8 @@ public class Problem {
           problem.state = problem.state.close();
           buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
           problem.setNotificationIdentificationNumber(BLANK_STRING);
-          problemConnector.updateProblem(problem);
+          problemConnector.updateProblem(
+              Utils.ClientRequestWriter.writeUpdateProblemRequest(problem));
         }
       },
       /** Hold state operation. */
@@ -294,7 +299,8 @@ public class Problem {
             BuildingConnector buildingConnector,
             ProblemConnector problemConnector) {
           problem.state = problem.state.hold();
-          problemConnector.updateProblem(problem);
+          problemConnector.updateProblem(
+              Utils.ClientRequestWriter.writeUpdateProblemRequest(problem));
         }
       };
 

@@ -1,9 +1,9 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ClientBuildingConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ClientProblemConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.BuildingConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.ClientBuildingConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ClientProblemConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidStateChangeRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

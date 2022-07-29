@@ -1,9 +1,10 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.BuildingConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.settings.Settings;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +62,7 @@ public class Service {
    * @return created problem
    */
   public Problem createProblem(Problem problem) {
-    return this.problemConnector.createProblem(problem);
+    return this.problemConnector.createProblem(Utils.ClientRequestWriter.writeCreateProblemRequest(problem));
   }
 
   /**
@@ -71,7 +72,7 @@ public class Service {
    * @return updated problem
    */
   public Problem updateProblem(Problem problem) {
-    Problem updatedProblem = this.problemConnector.updateProblem(problem);
+    Problem updatedProblem = this.problemConnector.updateProblem(Utils.ClientRequestWriter.writeUpdateProblemRequest(problem));
     updateNotification(updatedProblem);
     return updatedProblem;
   }
@@ -104,7 +105,7 @@ public class Service {
 
   private void updateNotification(Problem problem) {
     if (!problem.getNotificationIdentificationNumber().isBlank()) {
-      this.buildingConnector.updateNotification(problem.extractNotification());
+      this.buildingConnector.updateNotification(Utils.ClientRequestWriter.writeUpdateNotificationRequest(problem));
     }
   }
 }

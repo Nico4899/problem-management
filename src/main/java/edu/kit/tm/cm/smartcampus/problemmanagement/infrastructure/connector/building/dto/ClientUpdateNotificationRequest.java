@@ -1,19 +1,15 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-
-/** This class represents a notification. */
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
-public class Notification {
+public class ClientUpdateNotificationRequest {
   private String identificationNumber;
   private String title;
   private String description;
-  private Timestamp creationTime;
   private String parentIdentificationNumber;
 }

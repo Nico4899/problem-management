@@ -1,7 +1,11 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility;
 
 import edu.kit.tm.cm.proto.*;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.dto.ClientCreateNotificationRequest;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.dto.ClientUpdateNotificationRequest;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.dto.ClientCreateProblemRequest;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.dto.ClientUpdateProblemRequest;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.Service;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.ProblemFilter;
@@ -12,15 +16,14 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorte
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * This class represents a utility class for this service, it contains of nested utilities, such as
- * {@link Writer}, {@link Reader} or {@link Extractor}. These utilities use static methods to
- * provide global service utility logic.
+ * {@link ServerResponseWriter}, {@link ServerRequestReader} or {@link ClientRequestWriter}. These
+ * utilities use static methods to provide global service utility logic.
  *
  * @version 1.0
  * @author Bastian Bacher, Dennis Fadeev
@@ -36,68 +39,62 @@ public final class Utils {
    * @author Bastian Bacher, Dennis Fadeev
    */
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class Writer {
+  public static class ServerResponseWriter {
 
-    /**
-     * Write a model object to a grpc object.
-     *
-     * @param problem problem model object
-     * @return grpc problem object
-     */
-    public static GrpcProblem write(Problem problem) {
+    public static ListProblemsResponse writeListProblemsResponse(Collection<Problem> problems) {
+      return ListProblemsResponse.newBuilder()
+          .addAllProblems(problems.stream().map(ServerResponseWriter::writeGrpcProblem).toList())
+          .build();
+    }
+
+    public static GetProblemResponse writeGetProblemResponse(Problem problem) {
+      return GetProblemResponse.newBuilder()
+          .setProblem(writeGrpcProblem(problem))
+          .addAllPossibleStateOperations(
+              problem.getState().possibleOperations().stream()
+                  .map(ServerResponseWriter::writeGrpcStateOperation)
+                  .toList())
+          .build();
+    }
+
+    public static CreateProblemResponse writeCreateProblemResponse(Problem problem) {
+      return CreateProblemResponse.newBuilder().setProblem(writeGrpcProblem(problem)).build();
+    }
+
+    public static UpdateProblemResponse writeUpdateProblemResponse(Problem problem) {
+      return UpdateProblemResponse.newBuilder().setProblem(writeGrpcProblem(problem)).build();
+    }
+
+    public static RemoveProblemResponse writeRemoveProblemResponse() {
+      return RemoveProblemResponse.newBuilder().build();
+    }
+
+    public static ChangeStateResponse writeChangeStateResponse() {
+      return ChangeStateResponse.newBuilder().build();
+    }
+
+    private static GrpcProblem writeGrpcProblem(Problem problem) {
       return GrpcProblem.newBuilder()
-        .setCreationTime(
-          com.google.protobuf.Timestamp.newBuilder()
-            .setNanos(problem.getCreationTime().getNanos())
-            .build())
-        .setProblemDescription(problem.getDescription())
-        .setProblemReporter(problem.getReporter())
-        .setProblemTitle(problem.getTitle())
-        .setReferenceIdentificationNumber(problem.getReferenceIdentificationNumber())
-        .setProblemState(write(problem.getState()))
-        .setIdentificationNumber(problem.getIdentificationNumber())
-        .build();
+          .setCreationTime(
+              com.google.protobuf.Timestamp.newBuilder()
+                  .setNanos(problem.getCreationTime().getNanos())
+                  .build())
+          .setProblemDescription(problem.getDescription())
+          .setProblemReporter(problem.getReporter())
+          .setProblemTitle(problem.getTitle())
+          .setReferenceIdentificationNumber(problem.getReferenceIdentificationNumber())
+          .setProblemState(writeGrpcProblemState(problem.getState()))
+          .setIdentificationNumber(problem.getIdentificationNumber())
+          .build();
     }
 
-    /**
-     * Write a model object to a grpc object.
-     *
-     * @param stateOperations problem state operations model object
-     * @return grpc problem state operations object
-     */
-    public static Collection<GrpcStateOperation> writeStateOperations(
-      Collection<Problem.State.Operation> stateOperations) {
-      return stateOperations.stream().map(Utils.Writer::write).toList();
-    }
-
-    /**
-     * Write a model object to a grpc object.
-     *
-     * @param stateOperation problem state operation model object
-     * @return grpc problem state operation object
-     */
-    public static GrpcStateOperation write(Problem.State.Operation stateOperation) {
+    private static GrpcStateOperation writeGrpcStateOperation(
+        Problem.State.Operation stateOperation) {
       return Enum.valueOf(GrpcStateOperation.class, stateOperation.name());
     }
 
-    /**
-     * Write a model object to a grpc object.
-     *
-     * @param problemState problem state model object
-     * @return grpc problem state object
-     */
-    public static GrpcProblemState write(Problem.State problemState) {
+    private static GrpcProblemState writeGrpcProblemState(Problem.State problemState) {
       return Enum.valueOf(GrpcProblemState.class, problemState.name());
-    }
-
-    /**
-     * Write a model object to a grpc object.
-     *
-     * @param problems problems model object
-     * @return grpc problems object
-     */
-    public static Collection<GrpcProblem> writeProblems(Collection<Problem> problems) {
-      return problems.stream().map(Utils.Writer::write).toList();
     }
   }
 
@@ -109,74 +106,84 @@ public final class Utils {
    * @author Bastian Bacher, Dennis Fadeev
    */
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class Reader {
+  public static class ServerRequestReader {
 
-    /**
-     * This method reads a {@link GrpcProblem} object and parses it into a {@link Problem} object.
-     *
-     * @param grpcProblem grpc problem object.
-     * @return model problem object
-     */
-    public static Problem read(GrpcProblem grpcProblem) {
-      Problem problem = new Problem();
-      problem.setTitle(grpcProblem.getProblemTitle());
-      problem.setReporter(grpcProblem.getProblemReporter());
-      problem.setDescription(grpcProblem.getProblemDescription());
-      problem.setCreationTime(new Timestamp(grpcProblem.getCreationTime().getNanos()));
-      problem.setReferenceIdentificationNumber(grpcProblem.getReferenceIdentificationNumber());
-      problem.setState(read(grpcProblem.getProblemState()));
-      return problem;
+    public static Collection<Problem> readListProblemsRequest(
+        ListProblemsRequest listProblemsRequest, Service service) {
+      return service.listProblems(
+          readGrpcListProblemsSettings(listProblemsRequest.getListSettings()));
     }
 
-    /**
-     * Read a grpc object and return a model object.
-     *
-     * @param grpcListSettings grpc problem list settings object.
-     * @return model configuration object
-     */
-    public static Settings<Problem> read(GrpcListSettings grpcListSettings) {
+    public static Problem readGetProblemRequest(
+        GetProblemRequest getProblemRequest, Service service) {
+      return service.getProblem(getProblemRequest.getIdentificationNumber());
+    }
+
+    public static Problem readCreateProblemRequest(
+        CreateProblemRequest createProblemRequest, Service service) {
+      Problem problem = new Problem();
+      problem.setReporter(createProblemRequest.getProblemReporter());
+      problem.setDescription(createProblemRequest.getProblemDescription());
+      problem.setTitle(createProblemRequest.getProblemTitle());
+      problem.setReferenceIdentificationNumber(
+          createProblemRequest.getReferenceIdentificationNumber());
+      return service.createProblem(problem);
+    }
+
+    public static Problem readUpdateProblemRequest(
+        UpdateProblemRequest clientUpdateProblemRequest, Service service) {
+      Problem problem = new Problem();
+      problem.setTitle(clientUpdateProblemRequest.getProblemTitle());
+      problem.setReporter(clientUpdateProblemRequest.getProblemReporter());
+      problem.setDescription(clientUpdateProblemRequest.getProblemDescription());
+      problem.setReferenceIdentificationNumber(
+          clientUpdateProblemRequest.getReferenceIdentificationNumber());
+      problem.setIdentificationNumber(clientUpdateProblemRequest.getIdentificationNumber());
+      return service.createProblem(problem);
+    }
+
+    public static void readRemoveProblemRequest(
+        RemoveProblemRequest removeProblemRequest, Service service) {
+      service.removeProblem(removeProblemRequest.getIdentificationNumber());
+    }
+
+    public static void readChangeStateRequest(
+        ChangeStateRequest changeStateRequest, Service service) {
+      service.changeState(
+          changeStateRequest.getIdentificationNumber(),
+          readGrpcProblemStateOperation(changeStateRequest.getGrpcStateOperation()));
+    }
+
+    private static Settings<Problem> readGrpcListProblemsSettings(
+        GrpcListSettings grpcListSettings) {
       Map<Filter<Problem>, Collection<?>> filters = new HashMap<>();
       if (grpcListSettings.getSelection().getStateFilterSelected()) {
         filters.put(
             ProblemFilter.STATE_FILTER,
-            grpcListSettings.getValues().getStatesList().stream().map(Utils.Reader::read).toList());
+            grpcListSettings.getValues().getStatesList().stream()
+                .map(ServerRequestReader::readGrpcProblemState)
+                .toList());
       }
       if (grpcListSettings.getSelection().getStateFilterSelected()) {
         filters.put(ProblemFilter.REPORTER_FILTER, grpcListSettings.getValues().getReportersList());
       }
       ListSettings<Problem> settings = new ListSettings<>();
       settings.setFilters(filters);
-      settings.setSorter(read(grpcListSettings.getSelection().getGrpcSortOption()));
+      settings.setSorter(
+          readGrpcProblemSortOption(grpcListSettings.getSelection().getGrpcSortOption()));
       return settings;
     }
 
-    /**
-     * Read a grpc object and return a model object.
-     *
-     * @param grpcSortOption grpc problem sort option.
-     * @return model problem sorter object
-     */
-    public static Sorter<Problem> read(GrpcSortOption grpcSortOption) {
+    private static Sorter<Problem> readGrpcProblemSortOption(GrpcSortOption grpcSortOption) {
       return Enum.valueOf(ProblemSorter.class, grpcSortOption.name());
     }
 
-    /**
-     * Read a grpc object and return a model object.
-     *
-     * @param grpcProblemState grpc problem state object.
-     * @return model problem state object
-     */
-    public static Problem.State read(GrpcProblemState grpcProblemState) {
+    private static Problem.State readGrpcProblemState(GrpcProblemState grpcProblemState) {
       return Enum.valueOf(Problem.State.class, grpcProblemState.name());
     }
 
-    /**
-     * Read a grpc object and return a model object.
-     *
-     * @param grpcStateOperation grpc problem state operation object.
-     * @return model problem state operation object
-     */
-    public static Problem.State.Operation read(GrpcStateOperation grpcStateOperation) {
+    private static Problem.State.Operation readGrpcProblemStateOperation(
+        GrpcStateOperation grpcStateOperation) {
       return Enum.valueOf(Problem.State.Operation.class, grpcStateOperation.name());
     }
   }
@@ -189,23 +196,51 @@ public final class Utils {
    * @author Bastian Bacher, Dennis Fadeev
    */
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class Extractor {
+  public static class ClientRequestWriter {
 
-    /**
-     * Extract {@link Notification} from a {@link Problem}, it extracts all fields except the
-     * identification number, which has to be set later on by the building domain service.
-     *
-     * @param problem the problem to extract a notification from.
-     * @return the extracted notification
-     */
-    public static Notification extract(Problem problem) {
-      Notification notification = new Notification();
-      notification.setTitle(problem.getTitle());
-      notification.setParentIdentificationNumber(problem.getReferenceIdentificationNumber());
-      notification.setCreationTime(problem.getCreationTime());
-      notification.setDescription(problem.getDescription());
-      return notification;
+    public static ClientCreateNotificationRequest writeCreateNotificationRequest(Problem problem) {
+      ClientCreateNotificationRequest clientCreateNotificationRequest =
+          new ClientCreateNotificationRequest();
+      clientCreateNotificationRequest.setTitle(problem.getTitle());
+      clientCreateNotificationRequest.setParentIdentificationNumber(
+          problem.getReferenceIdentificationNumber());
+      clientCreateNotificationRequest.setDescription(problem.getDescription());
+      return clientCreateNotificationRequest;
+    }
+
+    public static ClientCreateProblemRequest writeCreateProblemRequest(Problem problem) {
+      ClientCreateProblemRequest clientCreateProblemRequest = new ClientCreateProblemRequest();
+      clientCreateProblemRequest.setTitle(problem.getTitle());
+      clientCreateProblemRequest.setReporter(problem.getReporter());
+      clientCreateProblemRequest.setDescription(problem.getDescription());
+      clientCreateProblemRequest.setReferenceIdentificationNumber(
+          problem.getReferenceIdentificationNumber());
+      return clientCreateProblemRequest;
+    }
+
+    public static ClientUpdateProblemRequest writeUpdateProblemRequest(Problem problem) {
+      ClientUpdateProblemRequest clientUpdateProblemRequest = new ClientUpdateProblemRequest();
+      clientUpdateProblemRequest.setTitle(problem.getTitle());
+      clientUpdateProblemRequest.setDescription(problem.getDescription());
+      clientUpdateProblemRequest.setReporter(problem.getReporter());
+      clientUpdateProblemRequest.setReferenceIdentificationNumber(
+          problem.getReferenceIdentificationNumber());
+      clientUpdateProblemRequest.setNotificationIdentificationNumber(
+          problem.getNotificationIdentificationNumber());
+      clientUpdateProblemRequest.setState(problem.getState());
+      return clientUpdateProblemRequest;
+    }
+
+    public static ClientUpdateNotificationRequest writeUpdateNotificationRequest(Problem problem) {
+      ClientUpdateNotificationRequest clientUpdateNotificationRequest =
+          new ClientUpdateNotificationRequest();
+      clientUpdateNotificationRequest.setTitle(problem.getTitle());
+      clientUpdateNotificationRequest.setDescription(problem.getDescription());
+      clientUpdateNotificationRequest.setParentIdentificationNumber(
+          problem.getReferenceIdentificationNumber());
+      clientUpdateNotificationRequest.setIdentificationNumber(
+          problem.getNotificationIdentificationNumber());
+      return clientUpdateNotificationRequest;
     }
   }
 }
-
