@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration;
+package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.settings;
 
 import java.util.Collection;
 

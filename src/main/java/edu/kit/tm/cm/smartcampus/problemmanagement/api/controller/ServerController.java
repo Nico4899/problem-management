@@ -1,12 +1,10 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.api.controller;
 
 import edu.kit.tm.cm.proto.*;
-import edu.kit.tm.cm.smartcampus.problemmanagement.api.utility.GrpcObjectReader;
-import edu.kit.tm.cm.smartcampus.problemmanagement.api.utility.GrpcObjectWriter;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.Service;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.ListSettings;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Settings;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.service.Service;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.settings.Settings;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.Utils;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +34,9 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
   public void listProblems(
       ListProblemsRequest request, StreamObserver<ListProblemsResponse> responseObserver) {
     GrpcListSettings grpcListSettings = request.getListSettings();
-    Settings<Problem> settings = GrpcObjectReader.read(grpcListSettings);
+    Settings<Problem> settings = Utils.Reader.read(grpcListSettings);
     Collection<Problem> problems = this.service.listProblems(settings);
-    Collection<GrpcProblem> grpcProblems = GrpcObjectWriter.writeProblems(problems);
+    Collection<GrpcProblem> grpcProblems = Utils.Writer.writeProblems(problems);
     ListProblemsResponse response =
         ListProblemsResponse.newBuilder().addAllProblems(grpcProblems).build();
     responseObserver.onNext(response);
@@ -50,10 +48,10 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
       GetProblemRequest request, StreamObserver<GetProblemResponse> responseObserver) {
     String identificationNumber = request.getIdentificationNumber();
     Problem problem = this.service.getProblem(identificationNumber);
-    GrpcProblem grpcProblem = GrpcObjectWriter.write(problem);
+    GrpcProblem grpcProblem = Utils.Writer.write(problem);
     Collection<Problem.State.Operation> stateOperations = problem.getState().possibleOperations();
     Collection<GrpcStateOperation> grpcStateOperations =
-        GrpcObjectWriter.writeStateOperations(stateOperations);
+        Utils.Writer.writeStateOperations(stateOperations);
     GetProblemResponse response =
         GetProblemResponse.newBuilder()
             .setProblem(grpcProblem)
@@ -67,9 +65,9 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
   public void createProblem(
       CreateProblemRequest request, StreamObserver<CreateProblemResponse> responseObserver) {
     GrpcProblem grpcRequestProblem = request.getProblem();
-    Problem requestProblem = GrpcObjectReader.read(grpcRequestProblem);
+    Problem requestProblem = Utils.Reader.read(grpcRequestProblem);
     Problem responseProblem = this.service.createProblem(requestProblem);
-    GrpcProblem grpcResponseProblem = GrpcObjectWriter.write(responseProblem);
+    GrpcProblem grpcResponseProblem = Utils.Writer.write(responseProblem);
     CreateProblemResponse response =
         CreateProblemResponse.newBuilder().setProblem(grpcResponseProblem).build();
     responseObserver.onNext(response);
@@ -81,11 +79,11 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
       UpdateProblemRequest request, StreamObserver<UpdateProblemResponse> responseObserver) {
     String identificationNumber = request.getIdentificationNumber();
     GrpcProblem grpcRequestProblem = request.getProblem();
-    Problem requestProblem = GrpcObjectReader.read(grpcRequestProblem);
-    GrpcObjectReader.read(grpcRequestProblem);
+    Problem requestProblem = Utils.Reader.read(grpcRequestProblem);
+    Utils.Reader.read(grpcRequestProblem);
     requestProblem.setIdentificationNumber(identificationNumber);
     Problem responseProblem = this.service.updateProblem(requestProblem);
-    GrpcProblem grpcResponseProblem = GrpcObjectWriter.write(responseProblem);
+    GrpcProblem grpcResponseProblem = Utils.Writer.write(responseProblem);
     UpdateProblemResponse response =
         UpdateProblemResponse.newBuilder().setProblem(grpcResponseProblem).build();
     responseObserver.onNext(response);
@@ -106,7 +104,7 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
   public void changeState(
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
     String identificationNumber = request.getIdentificationNumber();
-    Problem.State.Operation operation = GrpcObjectReader.read(request.getGrpcStateOperation());
+    Problem.State.Operation operation = Utils.Reader.read(request.getGrpcStateOperation());
     this.service.changeState(identificationNumber, operation);
     ChangeStateResponse response = ChangeStateResponse.newBuilder().build();
     responseObserver.onNext(response);

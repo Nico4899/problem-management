@@ -2,7 +2,8 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.InvalidStateChangeRequestException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidStateChangeRequestException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.Utils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,20 +28,6 @@ public class Problem {
   private String identificationNumber;
   private String referenceIdentificationNumber;
   private String notificationIdentificationNumber;
-
-  /**
-   * Extract {@link Notification} from this {@link Problem}.
-   *
-   * @return the extracted notification
-   */
-  public Notification extractNotification() {
-    Notification notification = new Notification();
-    notification.setTitle(title);
-    notification.setParentIdentificationNumber(referenceIdentificationNumber);
-    notification.setCreationTime(creationTime);
-    notification.setDescription(description);
-    return notification;
-  }
 
   /** The enum problem state. */
   public enum State {
@@ -258,7 +245,7 @@ public class Problem {
             ProblemConnector problemConnector) {
           problem.state = problem.state.accept();
           Notification notification =
-              buildingConnector.createNotification(problem.extractNotification());
+              buildingConnector.createNotification(Utils.Extractor.extract(problem));
           problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
           problemConnector.updateProblem(problem);
         }

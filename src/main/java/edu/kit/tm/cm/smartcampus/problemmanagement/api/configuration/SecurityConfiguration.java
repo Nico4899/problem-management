@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.api.security;
+package edu.kit.tm.cm.smartcampus.problemmanagement.api.configuration;
 
 import net.devh.boot.grpc.server.security.authentication.BearerAuthenticationReader;
 import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;

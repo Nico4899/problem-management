@@ -1,9 +1,9 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.service;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.configuration.Settings;
+import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.settings.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

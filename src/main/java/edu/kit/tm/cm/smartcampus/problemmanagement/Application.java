@@ -1,6 +1,6 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement;
 
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception.ClientExceptionInterceptor;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.ClientExceptionInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

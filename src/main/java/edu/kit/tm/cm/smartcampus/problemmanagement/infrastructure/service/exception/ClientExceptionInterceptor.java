@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.exception;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception;
 
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;

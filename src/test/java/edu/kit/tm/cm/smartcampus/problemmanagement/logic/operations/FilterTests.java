@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-class ProblemFilterTests {
+class FilterTests {
 
   public static final String OPEN = "open";
   public static final String CLOSED = "closed";
