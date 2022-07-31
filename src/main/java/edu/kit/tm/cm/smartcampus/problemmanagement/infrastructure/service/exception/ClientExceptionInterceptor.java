@@ -29,6 +29,6 @@ public class ClientExceptionInterceptor implements ResponseErrorHandler {
       case BAD_REQUEST -> throw new InvalidArgumentsException(response.getStatusText());
       case INTERNAL_SERVER_ERROR -> throw new InternalServerErrorException(response.getStatusText());
       default -> throw new IOException(response.getStatusText());
+      }
     }
   }
-}

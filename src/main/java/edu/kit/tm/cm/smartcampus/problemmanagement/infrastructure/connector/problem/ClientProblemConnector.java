@@ -6,6 +6,7 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Problem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -53,7 +54,7 @@ public class ClientProblemConnector implements ProblemConnector {
         .exchange(
             baseUrl + listProblemsUrl,
             HttpMethod.GET,
-            null,
+            HttpEntity.EMPTY,
             new ParameterizedTypeReference<Collection<Problem>>() {})
         .getBody();
   }
@@ -61,26 +62,44 @@ public class ClientProblemConnector implements ProblemConnector {
   @Override
   public Problem createProblem(ClientCreateProblemRequest clientCreateProblemRequest) {
     return restTemplate
-        .postForEntity(baseUrl + createProblemUrl, clientCreateProblemRequest, Problem.class)
+        .exchange(
+            baseUrl + createProblemUrl,
+            HttpMethod.POST,
+            new HttpEntity<>(clientCreateProblemRequest),
+            Problem.class)
         .getBody();
   }
 
   @Override
   public Problem getProblem(String identificationNumber) {
     return restTemplate
-        .getForEntity(baseUrl + getProblemUrl, Problem.class, identificationNumber)
+        .exchange(
+            baseUrl + getProblemUrl,
+            HttpMethod.GET,
+            HttpEntity.EMPTY,
+            Problem.class,
+            identificationNumber)
         .getBody();
   }
 
   @Override
   public Problem updateProblem(ClientUpdateProblemRequest clientUpdateProblemRequest) {
     return restTemplate
-        .postForEntity(baseUrl + updateProblemUrl, clientUpdateProblemRequest, Problem.class)
+        .exchange(
+            baseUrl + updateProblemUrl,
+            HttpMethod.PUT,
+            new HttpEntity<>(clientUpdateProblemRequest),
+            Problem.class)
         .getBody();
   }
 
   @Override
   public void removeProblem(String identificationNumber) {
-    restTemplate.delete(baseUrl + removeProblemUrl, identificationNumber);
+    restTemplate.exchange(
+        baseUrl + removeProblemUrl,
+        HttpMethod.DELETE,
+        HttpEntity.EMPTY,
+        Void.class,
+        identificationNumber);
   }
 }

@@ -70,15 +70,15 @@ class SorterTests {
                   testProblemsMap.get(OLDEST_PROBLEM_2),
                   testProblemsMap.get(OLDEST_PROBLEM_3),
                   testProblemsMap.get(OLDEST_PROBLEM_4)),
-              ProblemSorter.DESCENDING_TIME_STAMP_SORTER),
+              ProblemSorter.DESCENDING_TIME_STAMP_SORT_OPTION),
           Arguments.of(
               List.of(
                   testProblemsMap.get(OLDEST_PROBLEM_4),
                   testProblemsMap.get(OLDEST_PROBLEM_3),
                   testProblemsMap.get(OLDEST_PROBLEM_2),
                   testProblemsMap.get(OLDEST_PROBLEM_1)),
-              ProblemSorter.ASCENDING_TIME_STAMP_SORTER),
-          Arguments.of(new ArrayList<>(testProblemsMap.values()), ProblemSorter.DEFAULT_SORTER));
+              ProblemSorter.ASCENDING_TIME_STAMP_SORT_OPTION),
+          Arguments.of(new ArrayList<>(testProblemsMap.values()), ProblemSorter.DEFAULT_SORT_OPTION));
     }
   }
 }

@@ -5,6 +5,8 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.buil
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.model.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +18,7 @@ public class ClientBuildingConnector implements BuildingConnector {
   private final RestTemplate restTemplate;
 
   @Value("${notification.createNotificationUrl}")
-  private String createComponentNotificationUrl;
+  private String createNotificationUrl;
 
   @Value("${notification.updateNotificationUrl}")
   private String updateNotificationUrl;
@@ -41,22 +43,30 @@ public class ClientBuildingConnector implements BuildingConnector {
   public Notification createNotification(
       ClientCreateNotificationRequest clientCreateNotificationRequest) {
     return restTemplate
-        .postForEntity(
-            baseUrl + createComponentNotificationUrl,
-            clientCreateNotificationRequest,
+        .exchange(
+            baseUrl + createNotificationUrl,
+            HttpMethod.POST,
+            new HttpEntity<>(clientCreateNotificationRequest),
             Notification.class)
         .getBody();
   }
 
   @Override
   public void updateNotification(ClientUpdateNotificationRequest clientUpdateNotificationRequest) {
-    restTemplate.postForEntity(
-        baseUrl + updateNotificationUrl, clientUpdateNotificationRequest, Void.class);
+    restTemplate.exchange(
+        baseUrl + updateNotificationUrl,
+        HttpMethod.PUT,
+        new HttpEntity<>(clientUpdateNotificationRequest),
+        Void.class);
   }
 
   @Override
   public void removeNotification(String identificationNumber) {
-
-    restTemplate.delete(baseUrl + removeNotificationUrl, identificationNumber);
+    restTemplate.exchange(
+        baseUrl + removeNotificationUrl,
+        HttpMethod.DELETE,
+        HttpEntity.EMPTY,
+        Void.class,
+        identificationNumber);
   }
 }

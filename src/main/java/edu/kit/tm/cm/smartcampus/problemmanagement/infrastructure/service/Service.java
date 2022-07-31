@@ -85,9 +85,9 @@ public class Service {
   public void removeProblem(String identificationNumber) {
     Problem problem = this.problemConnector.getProblem(identificationNumber);
     this.problemConnector.removeProblem(identificationNumber);
-    if (!problem.getNotificationIdentificationNumber().isBlank()) {
+    if (problem.getNotificationIdentificationNumber() != null) {
       this.buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
-      problem.setNotificationIdentificationNumber(BLANK_STRING);
+      problem.setNotificationIdentificationNumber(null);
     }
   }
 

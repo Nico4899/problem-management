@@ -6,13 +6,13 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public enum ProblemSorter implements Sorter<Problem> {
-  DEFAULT_SORTER {
+  DEFAULT_SORT_OPTION {
     @Override
     public Collection<Problem> sort(Collection<Problem> collection) {
       return collection;
     }
   },
-  ASCENDING_TIME_STAMP_SORTER {
+  ASCENDING_TIME_STAMP_SORT_OPTION {
     @Override
     public Collection<Problem> sort(Collection<Problem> collection) {
       return collection.stream()
@@ -20,7 +20,7 @@ public enum ProblemSorter implements Sorter<Problem> {
           .toList();
     }
   },
-  DESCENDING_TIME_STAMP_SORTER {
+  DESCENDING_TIME_STAMP_SORT_OPTION {
     @Override
     public Collection<Problem> sort(Collection<Problem> collection) {
       return collection.stream().sorted(Comparator.comparing(Problem::getCreationTime)).toList();

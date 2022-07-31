@@ -7,6 +7,7 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.Data
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class Problem {
   private State state;

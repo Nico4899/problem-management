@@ -2,8 +2,10 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.ClientBuildingConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.dto.ClientCreateNotificationRequest;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ClientProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ProblemConnector;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.dto.ClientUpdateProblemRequest;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidStateChangeRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,9 +44,9 @@ class ProblemTests {
   @BeforeAll
   public static void BeforeAll() {
     initializeResources();
-    when(buildingConnector.createNotification(any(Notification.class)))
+    when(buildingConnector.createNotification(any(ClientCreateNotificationRequest.class)))
         .thenReturn(testNotification);
-    when(problemConnector.updateProblem(any(Problem.class))).thenReturn(testProblem);
+    when(problemConnector.updateProblem(any(ClientUpdateProblemRequest.class))).thenReturn(testProblem);
   }
 
   private static void initializeResources() {
@@ -59,7 +61,10 @@ class ProblemTests {
     testProblem.setNotificationIdentificationNumber("n-1");
 
     testNotification = new Notification();
-    testNotification = testProblem.extractNotification();
+    testNotification.setParentIdentificationNumber(testProblem.getReferenceIdentificationNumber());
+    testNotification.setCreationTime(testProblem.getCreationTime());
+    testNotification.setDescription(testProblem.getDescription());
+    testNotification.setTitle(testProblem.getTitle());
     testNotification.setIdentificationNumber("n-1");
 
     Problem problem1 = new Problem();
