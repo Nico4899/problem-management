@@ -17,13 +17,13 @@ public class ClientBuildingConnector implements BuildingConnector {
   private final String baseUrl;
   private final RestTemplate restTemplate;
 
-  @Value("${notification.createNotificationUrl}")
+  @Value("${building.createNotificationUrl}")
   private String createNotificationUrl;
 
-  @Value("${notification.updateNotificationUrl}")
+  @Value("${building.updateNotificationUrl}")
   private String updateNotificationUrl;
 
-  @Value("${notification.removeNotificationUrl}")
+  @Value("${building.removeNotificationUrl}")
   private String removeNotificationUrl;
 
   /**

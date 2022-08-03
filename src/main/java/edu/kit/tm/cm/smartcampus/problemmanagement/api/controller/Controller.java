@@ -15,7 +15,7 @@ import java.util.Collection;
  * management application microservice api.
  */
 @GrpcService
-public class ServerController extends ProblemManagementGrpc.ProblemManagementImplBase {
+public class Controller extends ProblemManagementGrpc.ProblemManagementImplBase {
 
   private final Service service;
 
@@ -25,7 +25,7 @@ public class ServerController extends ProblemManagementGrpc.ProblemManagementImp
    * @param service problem management service
    */
   @Autowired
-  public ServerController(Service service) {
+  public Controller(Service service) {
     this.service = service;
   }
 

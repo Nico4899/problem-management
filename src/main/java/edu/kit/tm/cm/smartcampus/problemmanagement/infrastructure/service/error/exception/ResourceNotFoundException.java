@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception;
 
 /**
  * This exception is thrown whenever a requested resource doesn't exist, it provides a proper error

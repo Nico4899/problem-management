@@ -6,7 +6,7 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.buil
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ClientProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ProblemConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.dto.ClientUpdateProblemRequest;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidStateChangeRequestException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidStateChangeRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtensionContext;

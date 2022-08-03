@@ -1,5 +1,8 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error;
 
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InternalServerErrorException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidArgumentsException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.ResourceNotFoundException;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;

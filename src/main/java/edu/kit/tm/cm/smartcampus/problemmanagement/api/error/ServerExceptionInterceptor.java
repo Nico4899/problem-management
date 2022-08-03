@@ -1,10 +1,10 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.api.configuration.error;
+package edu.kit.tm.cm.smartcampus.problemmanagement.api.error;
 
 import com.google.rpc.ErrorInfo;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InternalServerErrorException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidArgumentsException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidStateChangeRequestException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.ResourceNotFoundException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InternalServerErrorException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidArgumentsException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidStateChangeRequestException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.ResourceNotFoundException;
 import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;

@@ -1,0 +1,43 @@
+
+
+server:
+  port: 8082
+grpc:
+  server:
+    port: 9092
+spring:
+  application:
+    name: problem-management
+  security:
+    oauth2:
+      client:
+        provider:
+          cm-pse-22:
+            authorization-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/auth
+            token-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/token
+            user-info-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/userinfo
+            jwk-set-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/certs
+            issuer-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM
+
+# Domain Microservice Problem URLs
+
+problem:
+  baseUrl: http://localhost:8081
+  listProblemsUrl: /problems
+  createProblemUrl: /problems
+  getProblemUrl: /problems/{pin}
+  updateProblemUrl: /problems
+  removeProblemUrl: /problems/{pin}
+
+# Domain Microservice Building URLs
+
+building:
+  baseUrl: http://localhost:8083
+  createNotificationUrl: /notifications
+  updateNotificationUrl: /notifications
+  removeNotificationUrl: /notifications/{nin}
+
+# role authorities
+role:
+  admin: ROLE_TM-CM-MULESOFT
+  user: ROLE_TM-CM_JUNIORSTUDENT

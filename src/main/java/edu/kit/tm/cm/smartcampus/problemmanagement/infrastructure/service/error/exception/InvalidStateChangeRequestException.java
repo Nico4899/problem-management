@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception;
+package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception;
 
 /** Exception thrown whenever an invalid state change request is sent. */
 public class InvalidStateChangeRequestException extends RuntimeException {

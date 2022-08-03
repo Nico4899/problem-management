@@ -2,7 +2,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ProblemConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.exception.InvalidStateChangeRequestException;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidStateChangeRequestException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.DataTransferUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
