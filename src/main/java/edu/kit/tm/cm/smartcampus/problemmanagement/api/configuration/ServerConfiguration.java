@@ -161,7 +161,9 @@ public class ServerConfiguration {
           .set(ProblemManagementGrpc.getChangeStateMethod(), AccessPredicate.hasRole(admin))
           .set(ProblemManagementGrpc.getRemoveProblemMethod(), AccessPredicate.hasRole(admin))
           .set(ProblemManagementGrpc.getUpdateProblemMethod(), AccessPredicate.hasRole(admin))
-          .set(ProblemManagementGrpc.getCreateProblemMethod(), AccessPredicate.hasRole(user))
+          .set(
+              ProblemManagementGrpc.getCreateProblemMethod(),
+              AccessPredicate.hasAnyRole(user, admin))
           .setDefault(AccessPredicate.permitAll());
     }
 
