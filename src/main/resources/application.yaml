@@ -39,5 +39,5 @@ building:
 
 # role authorities
 role:
-  admin: ROLE_TM-CM-MULESOFT
-  user: ROLE_TM-CM-JUNIORSTUDENTS
+  admin: TM-CM-MULESOFT
+  user: TM-CM-JUNIORSTUDENTS

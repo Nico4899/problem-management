@@ -20,14 +20,13 @@ import java.util.stream.Collectors;
 public class KeyCloakGrantedAuthoritiesConverter
     implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-  private static final String SCOPE_AUTHORITY_PREFIX = "ROLE_";
   private static final String GROUPS = "groups";
   private static final Collection<String> WELL_KNOWN_SCOPE_ATTRIBUTE_NAMES = List.of(GROUPS);
 
   @Override
   public Collection<GrantedAuthority> convert(@NonNull Jwt jwt) {
     return getScopes(jwt).stream()
-        .map(authority -> SCOPE_AUTHORITY_PREFIX + authority.toUpperCase())
+        .map(String::toUpperCase)
         .map(SimpleGrantedAuthority::new)
         .collect(Collectors.toList());
   }
