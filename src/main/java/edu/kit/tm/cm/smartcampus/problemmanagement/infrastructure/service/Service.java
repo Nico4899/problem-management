@@ -72,9 +72,14 @@ public class Service {
    * @return updated problem
    */
   public Problem updateProblem(Problem problem) {
-    Problem updatedProblem = this.problemConnector.updateProblem(DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
+    Problem updatedProblem = this.problemConnector.getProblem(problem.getIdentificationNumber());
+    updatedProblem.setTitle(problem.getTitle());
+    updatedProblem.setReferenceIdentificationNumber(problem.getReferenceIdentificationNumber());
+    updatedProblem.setDescription(problem.getDescription());
+    updatedProblem.setNotificationIdentificationNumber(
+        problem.getNotificationIdentificationNumber());
     updateNotification(updatedProblem);
-    return updatedProblem;
+    return this.problemConnector.updateProblem(DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(updatedProblem));
   }
 
   /**
@@ -104,7 +109,7 @@ public class Service {
   }
 
   private void updateNotification(Problem problem) {
-    if (!problem.getNotificationIdentificationNumber().isBlank()) {
+    if (problem.getNotificationIdentificationNumber() != null) {
       this.buildingConnector.updateNotification(DataTransferUtils.ClientRequestWriter.writeUpdateNotificationRequest(problem));
     }
   }

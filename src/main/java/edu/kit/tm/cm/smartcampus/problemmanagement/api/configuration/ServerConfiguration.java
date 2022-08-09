@@ -2,7 +2,7 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.api.configuration;
 
 import edu.kit.tm.cm.proto.ProblemManagementGrpc;
 import edu.kit.tm.cm.smartcampus.problemmanagement.api.configuration.converter.KeyCloakGrantedAuthoritiesConverter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.ClientExceptionInterceptor;
+import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.error.ClientExceptionInterceptor;
 import net.devh.boot.grpc.server.security.authentication.BearerAuthenticationReader;
 import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
 import net.devh.boot.grpc.server.security.check.AccessPredicate;

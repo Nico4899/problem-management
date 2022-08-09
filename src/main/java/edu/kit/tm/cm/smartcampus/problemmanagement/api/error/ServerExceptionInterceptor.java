@@ -1,16 +1,14 @@
 package edu.kit.tm.cm.smartcampus.problemmanagement.api.error;
 
 import com.google.rpc.ErrorInfo;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InternalServerErrorException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidArgumentsException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidStateChangeRequestException;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.ResourceNotFoundException;
 import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.protobuf.ProtoUtils;
 import net.devh.boot.grpc.server.advice.GrpcAdvice;
 import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
+
+import java.util.NoSuchElementException;
 
 /**
  * This class represents a server exception interceptor, it intercepts on exceptions annotated with
@@ -22,64 +20,64 @@ import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
 public class ServerExceptionInterceptor {
 
   /**
-   * This method provides a proper response on {@link InvalidArgumentsException} thrown, it provides
+   * This method provides a proper response on {@link IllegalArgumentException} thrown, it provides
    * a {@link Status#INVALID_ARGUMENT} and the exception message.
    *
    * @param exception thrown exception
    * @return a proper {@link StatusRuntimeException}
    */
-  @GrpcExceptionHandler(InvalidArgumentsException.class)
-  public StatusRuntimeException onError(InvalidArgumentsException exception) {
+  @GrpcExceptionHandler(IllegalArgumentException.class)
+  public StatusRuntimeException onError(IllegalArgumentException exception) {
     Metadata trailers = new Metadata();
-    ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(exception.getMessage()).build();
+    ErrorInfo errorInfo = ErrorInfo.newBuilder().build();
     Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
     trailers.put(errorInfoTrailerKey, errorInfo);
     return Status.INVALID_ARGUMENT.withCause(exception).asRuntimeException(trailers);
   }
 
   /**
-   * This method provides a proper response on {@link ResourceNotFoundException} thrown, it provides
+   * This method provides a proper response on {@link NoSuchElementException} thrown, it provides
    * a {@link Status#NOT_FOUND} and the exception message.
    *
    * @param exception thrown exception
    * @return a proper {@link StatusRuntimeException}
    */
-  @GrpcExceptionHandler(ResourceNotFoundException.class)
-  public StatusRuntimeException onError(ResourceNotFoundException exception) {
+  @GrpcExceptionHandler(NoSuchElementException.class)
+  public StatusRuntimeException onError(NoSuchElementException exception) {
     Metadata trailers = new Metadata();
-    ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(exception.getMessage()).build();
+    ErrorInfo errorInfo = ErrorInfo.newBuilder().build();
     Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
     trailers.put(errorInfoTrailerKey, errorInfo);
     return Status.NOT_FOUND.withCause(exception).asRuntimeException(trailers);
   }
 
   /**
-   * This method provides a proper response on {@link InternalServerErrorException} thrown, it
+   * This method provides a proper response on {@link InternalError} thrown, it
    * provides a {@link Status#INTERNAL} and the exception message.
    *
    * @param exception thrown exception
    * @return a proper {@link StatusRuntimeException}
    */
-  @GrpcExceptionHandler(InternalServerErrorException.class)
-  public StatusRuntimeException onError(InternalServerErrorException exception) {
+  @GrpcExceptionHandler(InternalError.class)
+  public StatusRuntimeException onError(InternalError exception) {
     Metadata trailers = new Metadata();
-    ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(exception.getMessage()).build();
+    ErrorInfo errorInfo = ErrorInfo.newBuilder().build();
     Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
     trailers.put(errorInfoTrailerKey, errorInfo);
     return Status.INTERNAL.withCause(exception).asRuntimeException(trailers);
   }
 
   /**
-   * This method provides a proper response on {@link InvalidStateChangeRequestException} thrown, it
+   * This method provides a proper response on {@link IllegalStateException} thrown, it
    * provides a {@link Status#UNAVAILABLE} and the exception message.
    *
    * @param exception thrown exception
    * @return a proper {@link StatusRuntimeException}
    */
-  @GrpcExceptionHandler(InvalidStateChangeRequestException.class)
-  public StatusRuntimeException onError(InvalidStateChangeRequestException exception) {
+  @GrpcExceptionHandler(IllegalStateException.class)
+  public StatusRuntimeException onError(IllegalStateException exception) {
     Metadata trailers = new Metadata();
-    ErrorInfo errorInfo = ErrorInfo.newBuilder().setReason(exception.getMessage()).build();
+    ErrorInfo errorInfo = ErrorInfo.newBuilder().build();
     Metadata.Key<ErrorInfo> errorInfoTrailerKey = ProtoUtils.keyForProto(errorInfo);
     trailers.put(errorInfoTrailerKey, errorInfo);
     return Status.PERMISSION_DENIED.withCause(exception).asRuntimeException(trailers);

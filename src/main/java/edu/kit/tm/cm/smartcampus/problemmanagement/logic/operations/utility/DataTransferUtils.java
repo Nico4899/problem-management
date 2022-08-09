@@ -11,8 +11,6 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.Filte
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.filter.ProblemFilter;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.settings.ListSettings;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.settings.Settings;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.ProblemSorter;
-import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.sorter.Sorter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -111,7 +109,7 @@ public final class DataTransferUtils {
     public static Collection<Problem> readListProblemsRequest(
         ListProblemsRequest listProblemsRequest, Service service) {
       return service.listProblems(
-          readGrpcListProblemsSettings(listProblemsRequest.getListSettings()));
+          readGrpcFilterSelection(listProblemsRequest.getGrpcFilterValueSelection()));
     }
 
     public static Problem readGetProblemRequest(
@@ -139,7 +137,7 @@ public final class DataTransferUtils {
       problem.setReferenceIdentificationNumber(
           clientUpdateProblemRequest.getReferenceIdentificationNumber());
       problem.setIdentificationNumber(clientUpdateProblemRequest.getIdentificationNumber());
-      return service.createProblem(problem);
+      return service.updateProblem(problem);
     }
 
     public static void readRemoveProblemRequest(
@@ -154,28 +152,22 @@ public final class DataTransferUtils {
           readGrpcProblemStateOperation(changeStateRequest.getGrpcStateOperation()));
     }
 
-    private static Settings<Problem> readGrpcListProblemsSettings(
-        GrpcListSettings grpcListSettings) {
+    private static Settings<Problem> readGrpcFilterSelection(
+      GrpcFilterValueSelection grpcFilterValueSelection) {
       Map<Filter<Problem>, Collection<?>> filters = new HashMap<>();
-      if (grpcListSettings.getSelection().getStateFilterSelected()) {
+      if (!grpcFilterValueSelection.getStatesList().isEmpty()) {
         filters.put(
             ProblemFilter.STATE_FILTER,
-            grpcListSettings.getValues().getStatesList().stream()
+          grpcFilterValueSelection.getStatesList().stream()
                 .map(ServerRequestReader::readGrpcProblemState)
                 .toList());
       }
-      if (grpcListSettings.getSelection().getStateFilterSelected()) {
-        filters.put(ProblemFilter.REPORTER_FILTER, grpcListSettings.getValues().getReportersList());
+      if (!grpcFilterValueSelection.getReportersList().isEmpty()) {
+        filters.put(ProblemFilter.REPORTER_FILTER, grpcFilterValueSelection.getReportersList());
       }
       ListSettings<Problem> settings = new ListSettings<>();
       settings.setFilters(filters);
-      settings.setSorter(
-          readGrpcProblemSortOption(grpcListSettings.getSelection().getGrpcSortOption()));
       return settings;
-    }
-
-    private static Sorter<Problem> readGrpcProblemSortOption(GrpcSortOption grpcSortOption) {
-      return Enum.valueOf(ProblemSorter.class, grpcSortOption.name());
     }
 
     private static Problem.State readGrpcProblemState(GrpcProblemState grpcProblemState) {
@@ -215,6 +207,8 @@ public final class DataTransferUtils {
       clientCreateProblemRequest.setDescription(problem.getDescription());
       clientCreateProblemRequest.setReferenceIdentificationNumber(
           problem.getReferenceIdentificationNumber());
+      clientCreateProblemRequest.setNotificationIdentificationNumber(
+          problem.getNotificationIdentificationNumber());
       return clientCreateProblemRequest;
     }
 
@@ -228,6 +222,7 @@ public final class DataTransferUtils {
       clientUpdateProblemRequest.setNotificationIdentificationNumber(
           problem.getNotificationIdentificationNumber());
       clientUpdateProblemRequest.setState(problem.getState());
+      clientUpdateProblemRequest.setIdentificationNumber(problem.getIdentificationNumber());
       return clientUpdateProblemRequest;
     }
 

@@ -3,7 +3,9 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.pro
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,4 +14,5 @@ public class ClientCreateProblemRequest {
   private String description;
   private String reporter;
   private String referenceIdentificationNumber;
+  private String notificationIdentificationNumber;
 }

@@ -2,7 +2,6 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.logic.model;
 
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.building.BuildingConnector;
 import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.problem.ProblemConnector;
-import edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.service.error.exception.InvalidStateChangeRequestException;
 import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.DataTransferUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +41,7 @@ public class Problem {
 
       @Override
       public State accept() {
-        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
@@ -52,12 +51,12 @@ public class Problem {
 
       @Override
       public State close() {
-        throw new InvalidStateChangeRequestException(Operation.CLOSE.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
@@ -79,7 +78,7 @@ public class Problem {
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
@@ -89,12 +88,12 @@ public class Problem {
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State decline() {
-        throw new InvalidStateChangeRequestException(Operation.DECLINE.name(), this.name());
+        throw new IllegalStateException();
       }
     },
     /** In progress state. */
@@ -106,12 +105,12 @@ public class Problem {
 
       @Override
       public State accept() {
-        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
@@ -126,7 +125,7 @@ public class Problem {
 
       @Override
       public State decline() {
-        throw new InvalidStateChangeRequestException(Operation.DECLINE.name(), this.name());
+        throw new IllegalStateException();
       }
     },
     /** Open state. */
@@ -143,17 +142,17 @@ public class Problem {
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State close() {
-        throw new InvalidStateChangeRequestException(Operation.CLOSE.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
@@ -170,27 +169,27 @@ public class Problem {
 
       @Override
       public State accept() {
-        throw new InvalidStateChangeRequestException(Operation.ACCEPT.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State approach() {
-        throw new InvalidStateChangeRequestException(Operation.APPROACH.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State close() {
-        throw new InvalidStateChangeRequestException(Operation.CLOSE.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State hold() {
-        throw new InvalidStateChangeRequestException(Operation.HOLD.name(), this.name());
+        throw new IllegalStateException();
       }
 
       @Override
       public State decline() {
-        throw new InvalidStateChangeRequestException(Operation.DECLINE.name(), this.name());
+        throw new IllegalStateException();
       }
     };
 
@@ -287,8 +286,10 @@ public class Problem {
             BuildingConnector buildingConnector,
             ProblemConnector problemConnector) {
           problem.state = problem.state.close();
-          buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
-          problem.setNotificationIdentificationNumber(BLANK_STRING);
+          if (problem.getNotificationIdentificationNumber() != null) {
+            buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
+            problem.setNotificationIdentificationNumber(null);
+          }
           problemConnector.updateProblem(
               DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
         }
@@ -305,8 +306,6 @@ public class Problem {
               DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
         }
       };
-
-      private static final String BLANK_STRING = "";
 
       /**
        * Apply a state operation on a problem.

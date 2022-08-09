@@ -19,7 +19,7 @@ service ProblemManagement {
 // requests and responses
 
 message ListProblemsRequest{
-    GrpcListSettings list_settings = 1;
+  GrpcFilterValueSelection grpc_filter_value_selection = 1;
 }
 
 message ListProblemsResponse{
@@ -85,18 +85,7 @@ message GrpcProblem{
   string reference_identification_number = 7;
 }
 
-message GrpcListSettings{
-  Values values = 2;
-  Selection selection = 3;
-}
-
-message Selection{
-  GrpcSortOption grpc_sort_option = 1;
-  bool reporter_filter_selected = 2;
-  bool state_filter_selected = 3;
-}
-
-message Values{
+message GrpcFilterValueSelection{
   repeated string reporters = 1;
   repeated GrpcProblemState states = 2;
 }
@@ -117,11 +106,4 @@ enum GrpcStateOperation{
   DECLINE = 3;
   APPROACH = 4;
   HOLD = 5;
-}
-
-enum GrpcSortOption{
-  UNKNOWN_SORT_OPTION = 0;
-  DEFAULT_SORT_OPTION = 1;
-  DESCENDING_TIME_STAMP = 2;
-  ASCENDING_TIME_STAMP = 3;
 }
