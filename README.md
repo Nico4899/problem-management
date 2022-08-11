@@ -20,17 +20,17 @@ This microservice handles the ticket system to report problems and handle notifi
 
 ## Implementation and Tests
 
- [Local Installation](pages/installation.md)
+[Local Installation](pages/installation.md)
 
- [DevOps Template Configuration](pages/devops.md)
+[Repository Structure](pages/repository_structure.md)
 
- [Features](pages/features.md)
+[Features](pages/features.md)
 
- [Unit Tests](pages/unit_tests.md)
+[Unit Tests](pages/unit_tests.md)
 
- [Integration Tests](pages/integration_tests.md)
+[Integration Tests](pages/integration_tests.md)
 
- [End-to-End Tests](pages/end_to_end_tests.md) 
+[End-to-End Tests](pages/end_to_end_tests.md) 
 
 
 ## Organization
