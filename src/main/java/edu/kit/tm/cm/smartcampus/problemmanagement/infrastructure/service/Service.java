@@ -17,9 +17,6 @@ import java.util.Collection;
 @Component
 public class Service {
 
-  /** The constant BLANK_STRING. */
-  public static final String BLANK_STRING = "";
-
   private final BuildingConnector buildingConnector;
   private final ProblemConnector problemConnector;
 
@@ -78,7 +75,10 @@ public class Service {
     updatedProblem.setDescription(problem.getDescription());
     updatedProblem.setNotificationIdentificationNumber(
         problem.getNotificationIdentificationNumber());
-    updateNotification(updatedProblem);
+    if (problem.getNotificationIdentificationNumber() != null) {
+      this.buildingConnector.updateNotification(
+          DataTransferUtils.ClientRequestWriter.writeUpdateNotificationRequest(problem));
+    }
     return this.problemConnector.updateProblem(DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(updatedProblem));
   }
 
@@ -101,16 +101,10 @@ public class Service {
    *
    * @param identificationNumber problem identification number
    */
-  public void changeState(String identificationNumber, Problem.State.Operation operation) {
+  public void changeState(String identificationNumber, Problem.Operation operation) {
     operation.apply(
         this.problemConnector.getProblem(identificationNumber),
         this.buildingConnector,
         this.problemConnector);
-  }
-
-  private void updateNotification(Problem problem) {
-    if (problem.getNotificationIdentificationNumber() != null) {
-      this.buildingConnector.updateNotification(DataTransferUtils.ClientRequestWriter.writeUpdateNotificationRequest(problem));
-    }
   }
 }

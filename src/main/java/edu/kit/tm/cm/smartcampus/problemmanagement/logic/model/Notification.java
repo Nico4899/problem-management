@@ -15,5 +15,6 @@ public class Notification {
   private String title;
   private String description;
   private Timestamp creationTime;
+  private Timestamp lastModified;
   private String parentIdentificationNumber;
 }

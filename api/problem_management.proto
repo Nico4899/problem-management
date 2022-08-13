@@ -13,18 +13,13 @@ service ProblemManagement {
   rpc CreateProblem(CreateProblemRequest) returns (CreateProblemResponse);
   rpc UpdateProblem(UpdateProblemRequest) returns (UpdateProblemResponse);
   rpc RemoveProblem(RemoveProblemRequest) returns (RemoveProblemResponse);
-
-  rpc AcceptProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc HoldProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc ApproachProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc DeclineProblem(ChangeStateRequest) returns (ChangeStateResponse);
-  rpc CloseProblem(ChangeStateRequest) returns (ChangeStateResponse);
+  rpc ChangeState(ChangeStateRequest) returns (ChangeStateResponse);
 }
 
 // requests and responses
 
 message ListProblemsRequest{
-  ListProblemConfiguration list_problem_configuration = 1;
+  GrpcFilterValueSelection grpc_filter_value_selection = 1;
 }
 
 message ListProblemsResponse{
@@ -41,7 +36,10 @@ message GetProblemResponse{
 }
 
 message CreateProblemRequest{
-  GrpcProblem problem = 1;
+  string problem_title = 3;
+  string problem_description = 4;
+  string problem_reporter = 5;
+  string reference_identification_number = 7;
 }
 
 message CreateProblemResponse{
@@ -49,8 +47,11 @@ message CreateProblemResponse{
 }
 
 message UpdateProblemRequest{
-  GrpcProblem problem = 1;
   string identification_number = 2;
+  string problem_title = 3;
+  string problem_description = 4;
+  string problem_reporter = 5;
+  string reference_identification_number = 7;
 }
 
 message UpdateProblemResponse{
@@ -65,7 +66,8 @@ message RemoveProblemResponse{
 }
 
 message ChangeStateRequest{
-  string identification_number = 1;
+  GrpcStateOperation grpc_state_operation = 1;
+  string identification_number = 2;
 }
 
 message ChangeStateResponse{
@@ -83,29 +85,18 @@ message GrpcProblem{
   string reference_identification_number = 7;
 }
 
-message ListProblemConfiguration{
-  GrpcSortOption grpc_sort_option = 1;
-  ProblemStateFilterMapping problem_state_filter_mapping = 2;
-  ProblemReporterFilterMapping problem_reporter_filter_mapping = 3;
-}
-
-message ProblemStateFilterMapping{
-  bool selected = 1;
-  repeated GrpcProblemState problem_state = 2;
-}
-
-message ProblemReporterFilterMapping{
-  bool selected = 1;
-  string problem_reporter = 2;
+message GrpcFilterValueSelection{
+  repeated string reporters = 1;
+  repeated GrpcProblemState states = 2;
 }
 
 enum GrpcProblemState{
   UNKNOWN_PROBLEM_STATE = 0;
-  DECLINED = 1;
-  OPEN = 2;
-  CLOSED = 3;
-  IN_PROGRESS = 4;
-  ACCEPTED = 5;
+  ACCEPTED = 1;
+  DECLINED = 2;
+  IN_PROGRESS = 3;
+  OPEN = 4;
+  CLOSED = 5;
 }
 
 enum GrpcStateOperation{
@@ -115,10 +106,4 @@ enum GrpcStateOperation{
   DECLINE = 3;
   APPROACH = 4;
   HOLD = 5;
-}
-
-enum GrpcSortOption{
-  UNKNOWN_SORT_OPTION = 0;
-  DESCENDING_TIME_STAMP = 1;
-  ASCENDING_TIME_STAMP = 2;
 }

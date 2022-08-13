@@ -39,12 +39,24 @@ public final class DataTransferUtils {
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class ServerResponseWriter {
 
+    /**
+     * Write list problems response list problems response.
+     *
+     * @param problems the problems
+     * @return the list problems response
+     */
     public static ListProblemsResponse writeListProblemsResponse(Collection<Problem> problems) {
       return ListProblemsResponse.newBuilder()
           .addAllProblems(problems.stream().map(ServerResponseWriter::writeGrpcProblem).toList())
           .build();
     }
 
+    /**
+     * Write get problem response get problem response.
+     *
+     * @param problem the problem
+     * @return the get problem response
+     */
     public static GetProblemResponse writeGetProblemResponse(Problem problem) {
       return GetProblemResponse.newBuilder()
           .setProblem(writeGrpcProblem(problem))
@@ -55,18 +67,40 @@ public final class DataTransferUtils {
           .build();
     }
 
+    /**
+     * Write create problem response create problem response.
+     *
+     * @param problem the problem
+     * @return the create problem response
+     */
     public static CreateProblemResponse writeCreateProblemResponse(Problem problem) {
       return CreateProblemResponse.newBuilder().setProblem(writeGrpcProblem(problem)).build();
     }
 
+    /**
+     * Write update problem response update problem response.
+     *
+     * @param problem the problem
+     * @return the update problem response
+     */
     public static UpdateProblemResponse writeUpdateProblemResponse(Problem problem) {
       return UpdateProblemResponse.newBuilder().setProblem(writeGrpcProblem(problem)).build();
     }
 
+    /**
+     * Write remove problem response remove problem response.
+     *
+     * @return the remove problem response
+     */
     public static RemoveProblemResponse writeRemoveProblemResponse() {
       return RemoveProblemResponse.newBuilder().build();
     }
 
+    /**
+     * Write change state response change state response.
+     *
+     * @return the change state response
+     */
     public static ChangeStateResponse writeChangeStateResponse() {
       return ChangeStateResponse.newBuilder().build();
     }
@@ -86,8 +120,7 @@ public final class DataTransferUtils {
           .build();
     }
 
-    private static GrpcStateOperation writeGrpcStateOperation(
-        Problem.State.Operation stateOperation) {
+    private static GrpcStateOperation writeGrpcStateOperation(Problem.Operation stateOperation) {
       return Enum.valueOf(GrpcStateOperation.class, stateOperation.name());
     }
 
@@ -106,17 +139,38 @@ public final class DataTransferUtils {
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class ServerRequestReader {
 
+    /**
+     * Read list problems request collection.
+     *
+     * @param listProblemsRequest the list problems request
+     * @param service the service
+     * @return the collection
+     */
     public static Collection<Problem> readListProblemsRequest(
         ListProblemsRequest listProblemsRequest, Service service) {
       return service.listProblems(
           readGrpcFilterSelection(listProblemsRequest.getGrpcFilterValueSelection()));
     }
 
+    /**
+     * Read get problem request problem.
+     *
+     * @param getProblemRequest the get problem request
+     * @param service the service
+     * @return the problem
+     */
     public static Problem readGetProblemRequest(
         GetProblemRequest getProblemRequest, Service service) {
       return service.getProblem(getProblemRequest.getIdentificationNumber());
     }
 
+    /**
+     * Read create problem request problem.
+     *
+     * @param createProblemRequest the create problem request
+     * @param service the service
+     * @return the problem
+     */
     public static Problem readCreateProblemRequest(
         CreateProblemRequest createProblemRequest, Service service) {
       Problem problem = new Problem();
@@ -128,6 +182,13 @@ public final class DataTransferUtils {
       return service.createProblem(problem);
     }
 
+    /**
+     * Read update problem request problem.
+     *
+     * @param clientUpdateProblemRequest the client update problem request
+     * @param service the service
+     * @return the problem
+     */
     public static Problem readUpdateProblemRequest(
         UpdateProblemRequest clientUpdateProblemRequest, Service service) {
       Problem problem = new Problem();
@@ -140,11 +201,23 @@ public final class DataTransferUtils {
       return service.updateProblem(problem);
     }
 
+    /**
+     * Read remove problem request.
+     *
+     * @param removeProblemRequest the remove problem request
+     * @param service the service
+     */
     public static void readRemoveProblemRequest(
         RemoveProblemRequest removeProblemRequest, Service service) {
       service.removeProblem(removeProblemRequest.getIdentificationNumber());
     }
 
+    /**
+     * Read change state request.
+     *
+     * @param changeStateRequest the change state request
+     * @param service the service
+     */
     public static void readChangeStateRequest(
         ChangeStateRequest changeStateRequest, Service service) {
       service.changeState(
@@ -174,9 +247,9 @@ public final class DataTransferUtils {
       return Enum.valueOf(Problem.State.class, grpcProblemState.name());
     }
 
-    private static Problem.State.Operation readGrpcProblemStateOperation(
+    private static Problem.Operation readGrpcProblemStateOperation(
         GrpcStateOperation grpcStateOperation) {
-      return Enum.valueOf(Problem.State.Operation.class, grpcStateOperation.name());
+      return Enum.valueOf(Problem.Operation.class, grpcStateOperation.name());
     }
   }
 
@@ -190,6 +263,12 @@ public final class DataTransferUtils {
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class ClientRequestWriter {
 
+    /**
+     * Write create notification request client create notification request.
+     *
+     * @param problem the problem
+     * @return the client create notification request
+     */
     public static ClientCreateNotificationRequest writeCreateNotificationRequest(Problem problem) {
       ClientCreateNotificationRequest clientCreateNotificationRequest =
           new ClientCreateNotificationRequest();
@@ -200,6 +279,12 @@ public final class DataTransferUtils {
       return clientCreateNotificationRequest;
     }
 
+    /**
+     * Write create problem request client create problem request.
+     *
+     * @param problem the problem
+     * @return the client create problem request
+     */
     public static ClientCreateProblemRequest writeCreateProblemRequest(Problem problem) {
       ClientCreateProblemRequest clientCreateProblemRequest = new ClientCreateProblemRequest();
       clientCreateProblemRequest.setTitle(problem.getTitle());
@@ -212,6 +297,12 @@ public final class DataTransferUtils {
       return clientCreateProblemRequest;
     }
 
+    /**
+     * Write update problem request client update problem request.
+     *
+     * @param problem the problem
+     * @return the client update problem request
+     */
     public static ClientUpdateProblemRequest writeUpdateProblemRequest(Problem problem) {
       ClientUpdateProblemRequest clientUpdateProblemRequest = new ClientUpdateProblemRequest();
       clientUpdateProblemRequest.setTitle(problem.getTitle());
@@ -226,6 +317,12 @@ public final class DataTransferUtils {
       return clientUpdateProblemRequest;
     }
 
+    /**
+     * Write update notification request client update notification request.
+     *
+     * @param problem the problem
+     * @return the client update notification request
+     */
     public static ClientUpdateNotificationRequest writeUpdateNotificationRequest(Problem problem) {
       ClientUpdateNotificationRequest clientUpdateNotificationRequest =
           new ClientUpdateNotificationRequest();

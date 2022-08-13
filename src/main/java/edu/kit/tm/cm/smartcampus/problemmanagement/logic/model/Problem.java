@@ -6,31 +6,38 @@ import edu.kit.tm.cm.smartcampus.problemmanagement.logic.operations.utility.Data
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * This class represents a problem, connected to {@link Notification} and a reference, from the
- * building domain.
+ * This class represents a Problem, dependent on it's state it has a {@link Notification} belonging
+ * to it. The Enums {@link State} and {@link Operation} define a statemachine to alter the current
+ * problem state. For more information read their Documentation. This object should act as Data
+ * object, representing a SmartCampus problem. It's purpose is explained in the <a
+ * href="https://git.scc.kit.edu/cm-tm/cm-team/3.projectwork/pse/docsc/-/blob/master/pages/ubiquitous_language.md">Smart
+ * Campus UL</a>.
  */
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Problem {
   private State state;
   private String title;
   private String description;
   private Timestamp creationTime;
+  private Timestamp lastModified;
   private String reporter;
   private String identificationNumber;
   private String referenceIdentificationNumber;
   private String notificationIdentificationNumber;
 
-  /** The enum problem state. */
+  /**
+   * This enum describes a number of states a {@link Problem} can have. A statemachine is
+   * implemented, and to retrieve information about possible outgoing edges the method {@link
+   * State#possibleOperations()} provides the information asked for.
+   */
   public enum State {
     /** Accepted state. */
     ACCEPTED {
@@ -41,6 +48,7 @@ public class Problem {
 
       @Override
       public State accept() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
@@ -51,11 +59,13 @@ public class Problem {
 
       @Override
       public State close() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State hold() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
@@ -78,6 +88,7 @@ public class Problem {
 
       @Override
       public State approach() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
@@ -88,11 +99,13 @@ public class Problem {
 
       @Override
       public State hold() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State decline() {
+        // not a valid edge
         throw new IllegalStateException();
       }
     },
@@ -105,11 +118,13 @@ public class Problem {
 
       @Override
       public State accept() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State approach() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
@@ -125,6 +140,7 @@ public class Problem {
 
       @Override
       public State decline() {
+        // not a valid edge
         throw new IllegalStateException();
       }
     },
@@ -142,21 +158,25 @@ public class Problem {
 
       @Override
       public State approach() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State close() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State hold() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State decline() {
+        // not a valid edge
         return DECLINED;
       }
     },
@@ -169,32 +189,37 @@ public class Problem {
 
       @Override
       public State accept() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State approach() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State close() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State hold() {
+        // not a valid edge
         throw new IllegalStateException();
       }
 
       @Override
       public State decline() {
+        // not a valid edge
         throw new IllegalStateException();
       }
     };
 
     /**
-     * Gets possible operations.
+     * Gets possible operations from current state.
      *
      * @return the possible operations
      */
@@ -234,88 +259,105 @@ public class Problem {
      * @return the problem state
      */
     public abstract State decline();
+  }
 
-    /** The enum state operation. */
-    public enum Operation {
-      /** Accept state operation. */
-      ACCEPT {
-        @Override
-        public void apply(
-            Problem problem,
-            BuildingConnector buildingConnector,
-            ProblemConnector problemConnector) {
-          problem.state = problem.state.accept();
-          Notification notification =
-              buildingConnector.createNotification(
-                  DataTransferUtils.ClientRequestWriter.writeCreateNotificationRequest(problem));
-          problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-          problemConnector.updateProblem(
-              DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
-        }
-      },
-      /** Decline state operation. */
-      DECLINE {
-        @Override
-        public void apply(
-            Problem problem,
-            BuildingConnector buildingConnector,
-            ProblemConnector problemConnector) {
-          problem.state = problem.state.decline();
-          buildingConnector.removeNotification((problem.getNotificationIdentificationNumber()));
-          problemConnector.updateProblem(
-              DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
-        }
-      },
-      /** Approach state operation. */
-      APPROACH {
-        @Override
-        public void apply(
-            Problem problem,
-            BuildingConnector buildingConnector,
-            ProblemConnector problemConnector) {
-          problem.state = problem.state.approach();
-          problemConnector.updateProblem(
-              DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
-        }
-      },
-      /** Close state operation. */
-      CLOSE {
-        @Override
-        public void apply(
-            Problem problem,
-            BuildingConnector buildingConnector,
-            ProblemConnector problemConnector) {
-          problem.state = problem.state.close();
-          if (problem.getNotificationIdentificationNumber() != null) {
-            buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
-            problem.setNotificationIdentificationNumber(null);
-          }
-          problemConnector.updateProblem(
-              DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
-        }
-      },
-      /** Hold state operation. */
-      HOLD {
-        @Override
-        public void apply(
-            Problem problem,
-            BuildingConnector buildingConnector,
-            ProblemConnector problemConnector) {
-          problem.state = problem.state.hold();
-          problemConnector.updateProblem(
-              DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
-        }
-      };
+  /** The enum state operation. */
+  public enum Operation {
+    /** Accept state operation. */
+    ACCEPT {
+      @Override
+      public void apply(
+          Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
 
-      /**
-       * Apply a state operation on a problem.
-       *
-       * @param problem the problem
-       * @param buildingConnector the building connector
-       * @param problemConnector the problem connector
-       */
-      public abstract void apply(
-          Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector);
-    }
+        // first try to run command
+        // after create the belonging notification
+        // get the created notification id and set problem notification id to that value
+        // update the problem
+
+        problem.state = problem.state.accept();
+        Notification notification =
+            buildingConnector.createNotification(
+                DataTransferUtils.ClientRequestWriter.writeCreateNotificationRequest(problem));
+        problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
+        problemConnector.updateProblem(
+            DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
+      }
+    },
+    /** Decline state operation. */
+    DECLINE {
+      @Override
+      public void apply(
+          Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
+
+        // first try to run command
+        // if not already "null" set notification id "null" and remove the notification
+        // update the problem
+
+        problem.state = problem.state.decline();
+        if (problem.getNotificationIdentificationNumber() != null) {
+          buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
+          problem.setNotificationIdentificationNumber(null);
+        }
+        problemConnector.updateProblem(
+            DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
+      }
+    },
+    /** Approach state operation. */
+    APPROACH {
+      @Override
+      public void apply(
+          Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
+
+        // first try to run the command
+        // update the problem
+
+        problem.state = problem.state.approach();
+        problemConnector.updateProblem(
+            DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
+      }
+    },
+    /** Close state operation. */
+    CLOSE {
+      @Override
+      public void apply(
+          Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
+
+        // first try to run command
+        // if not already "null" set notification id "null" and remove the notification
+        // update the problem
+
+        problem.state = problem.state.close();
+        if (problem.getNotificationIdentificationNumber() != null) {
+          buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
+          problem.setNotificationIdentificationNumber(null);
+        }
+        problemConnector.updateProblem(
+            DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
+      }
+    },
+    /** Hold state operation. */
+    HOLD {
+      @Override
+      public void apply(
+          Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
+
+        // first try to run the command
+        // update the problem
+
+        problem.state = problem.state.hold();
+        problemConnector.updateProblem(
+            DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
+      }
+    };
+
+    /**
+     * Apply a state operation on a problem.
+     *
+     * @param problem the problem
+     * @param buildingConnector the building connector
+     * @param problemConnector the problem connector
+     */
+    public abstract void apply(
+        Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector);
   }
 }

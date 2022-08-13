@@ -3,9 +3,8 @@ package edu.kit.tm.cm.smartcampus.problemmanagement.infrastructure.connector.pro
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@ToString
+/** This class acts as DTO to consume the Building Domain REST API */
 @Getter
 @Setter
 @NoArgsConstructor
