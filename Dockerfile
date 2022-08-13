@@ -1,4 +1,6 @@
 FROM openjdk:latest
-EXPOSE 8081
-ADD target/problem-management.jar problem-management.jar
-ENTRYPOINT ["java","-jar","problem-management.jar"]
+ARG projectname
+ARG version
+COPY target/*.jar /usr/app/
+EXPOSE 81
+ENTRYPOINT ["/bin/sh", "-c", "java -jar /usr/app/*.jar"]
