@@ -1,8 +1,9 @@
 server:
-  port: 8082
+  port: 80
 grpc:
   server:
-    port: 9092
+    port: ${GRPC_PORT:9090}
+
 spring:
   application:
     name: problem-management
@@ -11,11 +12,11 @@ spring:
       client:
         provider:
           cm-pse-22:
-            authorization-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/auth
-            token-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/token
-            user-info-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/userinfo
-            jwk-set-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM/protocol/openid-connect/certs
-            issuer-uri: https://cm-keycloak.cloud.iai.kit.edu/auth/realms/CM
+            authorization-uri: https://cm-keycloak.cloud.iai.kit.edu/realms/CM/protocol/openid-connect/auth
+            token-uri: https://cm-keycloak.cloud.iai.kit.edu/realms/CM/protocol/openid-connect/token
+            user-info-uri: https://cm-keycloak.cloud.iai.kit.edu/realms/CM/protocol/openid-connect/userinfo
+            jwk-set-uri: https://cm-keycloak.cloud.iai.kit.edu/realms/CM/protocol/openid-connect/certs
+            issuer-uri: https://cm-keycloak.cloud.iai.kit.edu/realms/CM
 
 # Domain Microservice Problem URLs
 

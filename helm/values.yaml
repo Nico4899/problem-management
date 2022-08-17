@@ -67,14 +67,14 @@ base-chart:
       database: mongoDB
       # existingSecret: (keys: mongodb-password, mongodb-root-password, mongodb-replica-set-key)
 
-  # (beta) Enables a envoy proxy as sidecar get additional metrics, should not be enabled atm
-  monitoring:
-    enabled: false
 
-  nodeSelector: { }
+  grpcweb:
+    enabled: true
 
-  podSecurityContext: { }
-  # fsGroup: 2000
+    nodeSelector: { }
+
+    podSecurityContext: { }
+    # fsGroup: 2000
 
   # Subchart configuration for upstream postgres chart from bitnami
   postgresql:
@@ -110,10 +110,10 @@ base-chart:
 
   resources:
     limits:
-      cpu: 100m
+      cpu: 500m
       memory: 512Mi
     requests:
-      cpu: 100m
+      cpu: 250m
       memory: 256Mi
 
   securityContext: { }
