@@ -21,7 +21,7 @@ spring:
 # Domain Microservice Problem URLs
 
 problem:
-  baseUrl: http://localhost:8081
+  baseUrl: http://cm-1-problem-impl.cloud.iai.kit.edu
   listProblemsUrl: /problems
   createProblemUrl: /problems
   getProblemUrl: /problems/{pin}
@@ -31,7 +31,7 @@ problem:
 # Domain Microservice Building URLs
 
 building:
-  baseUrl: http://localhost:8083
+  baseUrl: http://cm-building-impl.cloud.iai.kit.edu
   createNotificationUrl: /notifications
   updateNotificationUrl: /notifications
   removeNotificationUrl: /notifications/{nin}
