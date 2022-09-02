@@ -94,7 +94,7 @@ class ProblemTests {
   @ParameterizedTest
   @ArgumentsSource(ProblemStateChangeValidArgumentProvider.class)
   void whenValidOperation_thenExecuteStateChange(
-      Problem problem, Problem.State.Operation operation, Problem.State expected) {
+      Problem problem, Problem.Operation operation, Problem.State expected) {
     reset();
     operation.apply(problem, buildingConnector, problemConnector);
     Assertions.assertEquals(expected, problem.getState());
@@ -103,7 +103,7 @@ class ProblemTests {
   @ParameterizedTest
   @ArgumentsSource(ProblemStateChangeInvalidArgumentProvider.class)
   void whenInvalidOperation_thenThrowsInvalidStateChangeRequestException(
-      Problem problem, Problem.State.Operation operation) {
+      Problem problem, Problem.Operation operation) {
     Assertions.assertThrows(
         IllegalStateException.class,
         () -> operation.apply(problem, buildingConnector, problemConnector));
@@ -112,7 +112,7 @@ class ProblemTests {
   @ParameterizedTest
   @ArgumentsSource(ProblemStateArgumentsProvider.class)
   void whenFilterRoomsByFilterValues_thenFilterRooms(
-      Collection<Problem.State.Operation> expected, Problem.State problemState) {
+      Collection<Problem.Operation> expected, Problem.State problemState) {
     Assertions.assertTrue(problemState.possibleOperations().containsAll(expected));
   }
 
@@ -121,23 +121,23 @@ class ProblemTests {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
       return Stream.of(
-          Arguments.of(testProblemsMap.get(ACCEPTED), Problem.State.Operation.ACCEPT),
-          Arguments.of(testProblemsMap.get(ACCEPTED), Problem.State.Operation.CLOSE),
-          Arguments.of(testProblemsMap.get(ACCEPTED), Problem.State.Operation.HOLD),
-          Arguments.of(testProblemsMap.get(DECLINED), Problem.State.Operation.APPROACH),
-          Arguments.of(testProblemsMap.get(DECLINED), Problem.State.Operation.HOLD),
-          Arguments.of(testProblemsMap.get(DECLINED), Problem.State.Operation.DECLINE),
-          Arguments.of(testProblemsMap.get(IN_PROGRESS), Problem.State.Operation.APPROACH),
-          Arguments.of(testProblemsMap.get(IN_PROGRESS), Problem.State.Operation.ACCEPT),
-          Arguments.of(testProblemsMap.get(IN_PROGRESS), Problem.State.Operation.DECLINE),
-          Arguments.of(testProblemsMap.get(OPEN), Problem.State.Operation.CLOSE),
-          Arguments.of(testProblemsMap.get(OPEN), Problem.State.Operation.APPROACH),
-          Arguments.of(testProblemsMap.get(OPEN), Problem.State.Operation.HOLD),
-          Arguments.of(testProblemsMap.get(CLOSED), Problem.State.Operation.ACCEPT),
-          Arguments.of(testProblemsMap.get(CLOSED), Problem.State.Operation.DECLINE),
-          Arguments.of(testProblemsMap.get(CLOSED), Problem.State.Operation.CLOSE),
-          Arguments.of(testProblemsMap.get(CLOSED), Problem.State.Operation.APPROACH),
-          Arguments.of(testProblemsMap.get(CLOSED), Problem.State.Operation.HOLD));
+          Arguments.of(testProblemsMap.get(ACCEPTED), Problem.Operation.ACCEPT),
+          Arguments.of(testProblemsMap.get(ACCEPTED), Problem.Operation.CLOSE),
+          Arguments.of(testProblemsMap.get(ACCEPTED), Problem.Operation.HOLD),
+          Arguments.of(testProblemsMap.get(DECLINED), Problem.Operation.APPROACH),
+          Arguments.of(testProblemsMap.get(DECLINED), Problem.Operation.HOLD),
+          Arguments.of(testProblemsMap.get(DECLINED), Problem.Operation.DECLINE),
+          Arguments.of(testProblemsMap.get(IN_PROGRESS), Problem.Operation.APPROACH),
+          Arguments.of(testProblemsMap.get(IN_PROGRESS), Problem.Operation.ACCEPT),
+          Arguments.of(testProblemsMap.get(IN_PROGRESS), Problem.Operation.DECLINE),
+          Arguments.of(testProblemsMap.get(OPEN), Problem.Operation.CLOSE),
+          Arguments.of(testProblemsMap.get(OPEN), Problem.Operation.APPROACH),
+          Arguments.of(testProblemsMap.get(OPEN), Problem.Operation.HOLD),
+          Arguments.of(testProblemsMap.get(CLOSED), Problem.Operation.ACCEPT),
+          Arguments.of(testProblemsMap.get(CLOSED), Problem.Operation.DECLINE),
+          Arguments.of(testProblemsMap.get(CLOSED), Problem.Operation.CLOSE),
+          Arguments.of(testProblemsMap.get(CLOSED), Problem.Operation.APPROACH),
+          Arguments.of(testProblemsMap.get(CLOSED), Problem.Operation.HOLD));
     }
   }
 
@@ -148,30 +148,30 @@ class ProblemTests {
       return Stream.of(
           Arguments.of(
               testProblemsMap.get(ACCEPTED),
-              Problem.State.Operation.DECLINE,
+              Problem.Operation.DECLINE,
               Problem.State.DECLINED),
           Arguments.of(
               testProblemsMap.get(ACCEPTED),
-              Problem.State.Operation.APPROACH,
+              Problem.Operation.APPROACH,
               Problem.State.IN_PROGRESS),
           Arguments.of(
               testProblemsMap.get(DECLINED),
-              Problem.State.Operation.ACCEPT,
+              Problem.Operation.ACCEPT,
               Problem.State.ACCEPTED),
           Arguments.of(
-              testProblemsMap.get(DECLINED), Problem.State.Operation.CLOSE, Problem.State.CLOSED),
+              testProblemsMap.get(DECLINED), Problem.Operation.CLOSE, Problem.State.CLOSED),
           Arguments.of(
               testProblemsMap.get(IN_PROGRESS),
-              Problem.State.Operation.HOLD,
+              Problem.Operation.HOLD,
               Problem.State.ACCEPTED),
           Arguments.of(
               testProblemsMap.get(IN_PROGRESS),
-              Problem.State.Operation.CLOSE,
+              Problem.Operation.CLOSE,
               Problem.State.CLOSED),
           Arguments.of(
-              testProblemsMap.get(OPEN), Problem.State.Operation.ACCEPT, Problem.State.ACCEPTED),
+              testProblemsMap.get(OPEN), Problem.Operation.ACCEPT, Problem.State.ACCEPTED),
           Arguments.of(
-              testProblemsMap.get(OPEN), Problem.State.Operation.DECLINE, Problem.State.DECLINED));
+              testProblemsMap.get(OPEN), Problem.Operation.DECLINE, Problem.State.DECLINED));
     }
   }
 
@@ -181,16 +181,16 @@ class ProblemTests {
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
       return Stream.of(
           Arguments.of(
-              List.of(Problem.State.Operation.DECLINE, Problem.State.Operation.ACCEPT),
+              List.of(Problem.Operation.DECLINE, Problem.Operation.ACCEPT),
               Problem.State.OPEN),
           Arguments.of(
-              List.of(Problem.State.Operation.DECLINE, Problem.State.Operation.APPROACH),
+              List.of(Problem.Operation.DECLINE, Problem.Operation.APPROACH),
               Problem.State.ACCEPTED),
           Arguments.of(
-              List.of(Problem.State.Operation.CLOSE, Problem.State.Operation.ACCEPT),
+              List.of(Problem.Operation.CLOSE, Problem.Operation.ACCEPT),
               Problem.State.DECLINED),
           Arguments.of(
-              List.of(Problem.State.Operation.CLOSE, Problem.State.Operation.HOLD),
+              List.of(Problem.Operation.CLOSE, Problem.Operation.HOLD),
               Problem.State.IN_PROGRESS),
           Arguments.of(List.of(), Problem.State.CLOSED));
     }
