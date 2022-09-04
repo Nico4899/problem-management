@@ -9,6 +9,7 @@ import "google/protobuf/timestamp.proto";
 
 service ProblemManagement {
   rpc ListProblems(ListProblemsRequest) returns (ListProblemsResponse);
+  rpc ListProblemsForUser(ListProblemsForUserRequest) returns (ListProblemsResponse);
   rpc GetProblem(GetProblemRequest) returns (GetProblemResponse);
   rpc CreateProblem(CreateProblemRequest) returns (CreateProblemResponse);
   rpc UpdateProblem(UpdateProblemRequest) returns (UpdateProblemResponse);
@@ -17,6 +18,11 @@ service ProblemManagement {
 }
 
 // requests and responses
+
+message ListProblemsForUserRequest {
+  GrpcFilterValueSelection grpc_filter_value_selection = 1;
+  string reporter = 2;
+}
 
 message ListProblemsRequest{
   GrpcFilterValueSelection grpc_filter_value_selection = 1;
@@ -86,7 +92,6 @@ message GrpcProblem{
 }
 
 message GrpcFilterValueSelection{
-  repeated string reporters = 1;
   repeated GrpcProblemState states = 2;
 }
 
