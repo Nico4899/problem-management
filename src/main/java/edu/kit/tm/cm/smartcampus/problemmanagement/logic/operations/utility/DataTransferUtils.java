@@ -153,6 +153,20 @@ public final class DataTransferUtils {
     }
 
     /**
+     * Read list problems for user request collection.
+     *
+     * @param listProblemsRequest the list problems request
+     * @param service the service
+     * @return the collection
+     */
+    public static Collection<Problem> readListProblemsForUserRequest(
+        ListProblemsForUserRequest listProblemsRequest, Service service) {
+      return service.listProblemsForUser(
+          readGrpcFilterSelection(listProblemsRequest.getGrpcFilterValueSelection()),
+          listProblemsRequest.getReporter());
+    }
+
+    /**
      * Read get problem request problem.
      *
      * @param getProblemRequest the get problem request
@@ -226,17 +240,14 @@ public final class DataTransferUtils {
     }
 
     private static Settings<Problem> readGrpcFilterSelection(
-      GrpcFilterValueSelection grpcFilterValueSelection) {
+        GrpcFilterValueSelection grpcFilterValueSelection) {
       Map<Filter<Problem>, Collection<?>> filters = new HashMap<>();
       if (!grpcFilterValueSelection.getStatesList().isEmpty()) {
         filters.put(
             ProblemFilter.STATE_FILTER,
-          grpcFilterValueSelection.getStatesList().stream()
+            grpcFilterValueSelection.getStatesList().stream()
                 .map(ServerRequestReader::readGrpcProblemState)
                 .toList());
-      }
-      if (!grpcFilterValueSelection.getReportersList().isEmpty()) {
-        filters.put(ProblemFilter.REPORTER_FILTER, grpcFilterValueSelection.getReportersList());
       }
       ListSettings<Problem> settings = new ListSettings<>();
       settings.setFilters(filters);

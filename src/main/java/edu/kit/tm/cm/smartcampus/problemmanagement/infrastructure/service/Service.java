@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * This class represents the core of this microservice. It contains of all logic, operations and
@@ -40,6 +41,16 @@ public class Service {
    */
   public Collection<Problem> listProblems(Settings<Problem> configuration) {
     return configuration.apply(this.problemConnector.listProblems());
+  }
+
+  /**
+   * List all problems for one user and filter them by provided filter options.
+   *
+   * @param configuration configuration for listing
+   * @return filtered/ sorted problems
+   */
+  public Collection<Problem> listProblemsForUser(Settings<Problem> configuration, String reporter) {
+    return configuration.apply(this.problemConnector.listProblems()).stream().filter(x -> Objects.equals(x.getReporter(), reporter)).toList();
   }
 
   /**

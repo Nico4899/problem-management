@@ -40,6 +40,16 @@ public class Controller extends ProblemManagementGrpc.ProblemManagementImplBase 
   }
 
   @Override
+  public void listProblemsForUser(
+    ListProblemsForUserRequest request, StreamObserver<ListProblemsResponse> responseObserver) {
+    Collection<Problem> problems =
+      DataTransferUtils.ServerRequestReader.readListProblemsForUserRequest(request, service);
+    ListProblemsResponse response = DataTransferUtils.ServerResponseWriter.writeListProblemsResponse(problems);
+    responseObserver.onNext(response);
+    responseObserver.onCompleted();
+  }
+
+  @Override
   public void getProblem(
       GetProblemRequest request, StreamObserver<GetProblemResponse> responseObserver) {
     Problem problem = DataTransferUtils.ServerRequestReader.readGetProblemRequest(request, service);
