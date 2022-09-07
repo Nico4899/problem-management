@@ -89,6 +89,7 @@ message GrpcProblem{
   string problem_reporter = 5;
   google.protobuf.Timestamp creation_time = 6;
   string reference_identification_number = 7;
+  google.protobuf.Timestamp last_modified = 8;
 }
 
 message GrpcFilterValueSelection{
