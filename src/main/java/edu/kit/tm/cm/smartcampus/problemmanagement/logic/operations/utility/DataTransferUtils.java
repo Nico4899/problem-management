@@ -58,13 +58,7 @@ public final class DataTransferUtils {
      * @return the get problem response
      */
     public static GetProblemResponse writeGetProblemResponse(Problem problem) {
-      return GetProblemResponse.newBuilder()
-          .setProblem(writeGrpcProblem(problem))
-          .addAllPossibleStateOperations(
-              problem.getState().possibleOperations().stream()
-                  .map(ServerResponseWriter::writeGrpcStateOperation)
-                  .toList())
-          .build();
+      return GetProblemResponse.newBuilder().setProblem(writeGrpcProblem(problem)).build();
     }
 
     /**
@@ -121,6 +115,10 @@ public final class DataTransferUtils {
           .setReferenceIdentificationNumber(problem.getReferenceIdentificationNumber())
           .setProblemState(writeGrpcProblemState(problem.getState()))
           .setIdentificationNumber(problem.getIdentificationNumber())
+          .addAllPossibleStateOperations(
+              problem.getState().possibleOperations().stream()
+                  .map(ServerResponseWriter::writeGrpcStateOperation)
+                  .toList())
           .build();
     }
 
