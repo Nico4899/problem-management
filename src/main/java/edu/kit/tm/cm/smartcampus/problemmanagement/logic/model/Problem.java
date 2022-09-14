@@ -27,7 +27,7 @@ public class Problem {
   private String title;
   private String description;
   private Timestamp creationTime;
-  private Timestamp lastModified;
+  private Timestamp lastModifiedTime;
   private String reporter;
   private String identificationNumber;
   private String referenceIdentificationNumber;

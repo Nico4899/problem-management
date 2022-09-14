@@ -107,7 +107,7 @@ public final class DataTransferUtils {
                   .build())
           .setLastModified(
               com.google.protobuf.Timestamp.newBuilder()
-                  .setNanos(problem.getLastModified().getNanos())
+                  .setNanos(problem.getLastModifiedTime().getNanos())
                   .build())
           .setProblemDescription(problem.getDescription())
           .setProblemReporter(problem.getReporter())
