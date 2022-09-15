@@ -101,11 +101,11 @@ public final class DataTransferUtils {
 
     private static GrpcProblem writeGrpcProblem(Problem problem) {
       return GrpcProblem.newBuilder()
-          .setCreationTime(
+          .setCreatedOn(
               com.google.protobuf.Timestamp.newBuilder()
                   .setNanos(problem.getCreationTime().getNanos())
                   .build())
-          .setLastModified(
+          .setLastModifiedOn(
               com.google.protobuf.Timestamp.newBuilder()
                   .setNanos(problem.getLastModifiedTime().getNanos())
                   .build())

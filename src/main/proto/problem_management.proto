@@ -86,9 +86,9 @@ message GrpcProblem{
   string problem_title = 3;
   string problem_description = 4;
   string problem_reporter = 5;
-  google.protobuf.Timestamp creation_time = 6;
+  google.protobuf.Timestamp created_on = 6;
   string reference_identification_number = 7;
-  google.protobuf.Timestamp last_modified = 8;
+  google.protobuf.Timestamp last_modified_on = 8;
   repeated GrpcStateOperation possible_state_operations = 9;
 }
 
