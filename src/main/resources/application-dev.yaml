@@ -9,10 +9,6 @@ grpc:
 # application properties
 
 spring:
-  autoconfigure:
-    exclude[0]: net.devh.boot.grpc.server.autoconfigure.GrpcServerSecurityAutoConfiguration
-    exclude[1]: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-    exclude[2]: org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration
   application:
     name: problem-management
 
