@@ -111,7 +111,7 @@ class ProblemTests {
 
   @ParameterizedTest
   @ArgumentsSource(ProblemStateArgumentsProvider.class)
-  void whenFilterRoomsByFilterValues_thenFilterRooms(
+  void whenFilterProblemsByFilterValues_thenFilterRooms(
       Collection<Problem.Operation> expected, Problem.State problemState) {
     Assertions.assertTrue(problemState.possibleOperations().containsAll(expected));
   }
