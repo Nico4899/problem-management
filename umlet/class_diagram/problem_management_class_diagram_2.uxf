@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>376</x>
+      <y>504</y>
+      <w>248</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>Problem
+--
+- identificationNumber: String
+- problemTitle: String
+- problemDescription: String
+- creationTime: Date
+- referenceIdentificationNumber: String
+- notificationIdentificationNumber: String
+- problemReporter: String
+- problemState: ProblemState
+--
++ accept(): void
++ decline(): void
++ close(): void
++ hold(): void 
++ approach(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>632</x>
+      <y>504</y>
+      <w>304</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+ProblemState
+--
+ACCEPTED,
+DECLINED,
+IN_PROGRESS.
+OPEN,
+CLOSED
+--
+/+ getPossibleOperations(): Collection&lt;PossibleOperation&gt;/
+/+ accept(): ProblemState/
+/+ decline(): ProblemState/
+/+ close(): ProblemState/
+/+ hold(): ProblemState/
+/+ approach(): ProblemState/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>376</x>
+      <y>744</y>
+      <w>248</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Notification
+--
+- identificationNumber: String
+- notificationTitle: String
+- notificationDescription: String
+- creationTime: Date
+- parentIdentificationNumber: String
+--
+_+ fromProblem(problem: Problem): Notification_
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>696</y>
+      <w>72</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+reffered to</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>648</x>
+      <y>744</y>
+      <w>112</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+StateOperation
+--
+ACCEPT
+DECLINE
+APPROACH
+CLOSE
+HOLD
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>696</x>
+      <y>680</y>
+      <w>48</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+uses</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLObject</id>
+    <coordinates>
+      <x>360</x>
+      <y>472</y>
+      <w>592</w>
+      <h>392</h>
+    </coordinates>
+    <panel_attributes>ProblemManagement Model
+valign=top
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>984</x>
+      <y>504</y>
+      <w>320</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+Filter&lt;T, S&gt;
+--
++ filter(collectionToFilter: Collection&lt;T&gt;): Collection&lt;T&gt;
++ setFilterValues(filterValues: Collection&lt;S&gt;): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>984</x>
+      <y>592</y>
+      <w>240</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>PSFilter&lt;Problem, ProblemState&gt;
+--
+- filterValues: Collection&lt;RoomType&gt;
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1216</x>
+      <y>560</y>
+      <w>56</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>50.0;10.0;50.0;70.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLObject</id>
+    <coordinates>
+      <x>968</x>
+      <y>472</y>
+      <w>352</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>ProblemManagement Operations
+valign=top
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>984</x>
+      <y>648</y>
+      <w>160</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>FilterOption&lt;T&gt;
+--
+- selected: bool
+- filterValues: Collection&lt;T&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1152</x>
+      <y>648</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>FilterOptions
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1032</x>
+      <y>680</y>
+      <w>240</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;
+m2=0..n</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;60.0;260.0;60.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLObject</id>
+    <coordinates>
+      <x>344</x>
+      <y>224</y>
+      <w>336</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>ProblemManagement API
+valign=top
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>256</y>
+      <w>304</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>BuildingManagementController
+--
+- buildingManagementService: BuildingManagementService
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1000</x>
+      <y>312</y>
+      <w>208</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>BuildingManagementService
+--
+- buildingConnector: BuildingConnector
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>888</x>
+      <y>200</y>
+      <w>208</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+BuildingConnector
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>888</x>
+      <y>136</y>
+      <w>208</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>RestTemplateBuildingConnector
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>984</x>
+      <y>168</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1096</x>
+      <y>248</y>
+      <w>136</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;40.0;150.0;40.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLObject</id>
+    <coordinates>
+      <x>760</x>
+      <y>104</y>
+      <w>576</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>BuildingManagement Infrastructure
+valign=top
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>672</x>
+      <y>264</y>
+      <w>104</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+uses</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>776</x>
+      <y>312</y>
+      <w>168</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+FavoriteRepository
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>936</x>
+      <y>328</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1112</x>
+      <y>200</y>
+      <w>208</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+ProblemConnector
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1208</x>
+      <y>168</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1112</x>
+      <y>136</y>
+      <w>208</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>RestTemplateProblemConnector
+--
+...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>984</x>
+      <y>248</y>
+      <w>136</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;150.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLObject</id>
+    <coordinates>
+      <x>344</x>
+      <y>440</y>
+      <w>992</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes>ProblemManagement Logic
+valign=top
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1016</x>
+      <y>376</y>
+      <w>48</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+uses</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLObject</id>
+    <coordinates>
+      <x>328</x>
+      <y>72</y>
+      <w>1024</w>
+      <h>824</h>
+    </coordinates>
+    <panel_attributes>ProblemManagement Microservice
+valign=top
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
