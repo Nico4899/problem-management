@@ -88,8 +88,8 @@ public class Controller extends ProblemManagementGrpc.ProblemManagementImplBase 
   @Override
   public void changeState(
       ChangeStateRequest request, StreamObserver<ChangeStateResponse> responseObserver) {
-    DataTransferUtils.ServerRequestReader.readChangeStateRequest(request, service);
-    ChangeStateResponse response = DataTransferUtils.ServerResponseWriter.writeChangeStateResponse();
+    Problem problem = DataTransferUtils.ServerRequestReader.readChangeStateRequest(request, service);
+    ChangeStateResponse response = DataTransferUtils.ServerResponseWriter.writeChangeStateResponse(problem);
     responseObserver.onNext(response);
     responseObserver.onCompleted();
   }

@@ -74,6 +74,7 @@ message ChangeStateRequest{
 }
 
 message ChangeStateResponse{
+  GrpcProblem grpc_problem = 1;
 }
 
 // single message constructions

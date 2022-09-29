@@ -266,7 +266,7 @@ public class Problem {
     /** Accept state operation. */
     ACCEPT {
       @Override
-      public void apply(
+      public Problem apply(
           Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
 
         // first try to run command
@@ -279,14 +279,14 @@ public class Problem {
             buildingConnector.createNotification(
                 DataTransferUtils.ClientRequestWriter.writeCreateNotificationRequest(problem));
         problem.setNotificationIdentificationNumber(notification.getIdentificationNumber());
-        problemConnector.updateProblem(
+        return problemConnector.updateProblem(
             DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
       }
     },
     /** Decline state operation. */
     DECLINE {
       @Override
-      public void apply(
+      public Problem apply(
           Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
 
         // first try to run command
@@ -298,28 +298,28 @@ public class Problem {
           buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
           problem.setNotificationIdentificationNumber(null);
         }
-        problemConnector.updateProblem(
+        return problemConnector.updateProblem(
             DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
       }
     },
     /** Approach state operation. */
     APPROACH {
       @Override
-      public void apply(
+      public Problem apply(
           Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
 
         // first try to run the command
         // update the problem
 
         problem.state = problem.state.approach();
-        problemConnector.updateProblem(
+        return problemConnector.updateProblem(
             DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
       }
     },
     /** Close state operation. */
     CLOSE {
       @Override
-      public void apply(
+      public Problem apply(
           Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
 
         // first try to run command
@@ -331,21 +331,21 @@ public class Problem {
           buildingConnector.removeNotification(problem.getNotificationIdentificationNumber());
           problem.setNotificationIdentificationNumber(null);
         }
-        problemConnector.updateProblem(
+        return problemConnector.updateProblem(
             DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
       }
     },
     /** Hold state operation. */
     HOLD {
       @Override
-      public void apply(
+      public Problem apply(
           Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector) {
 
         // first try to run the command
         // update the problem
 
         problem.state = problem.state.hold();
-        problemConnector.updateProblem(
+        return problemConnector.updateProblem(
             DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(problem));
       }
     };
@@ -357,7 +357,7 @@ public class Problem {
      * @param buildingConnector the building connector
      * @param problemConnector the problem connector
      */
-    public abstract void apply(
+    public abstract Problem apply(
         Problem problem, BuildingConnector buildingConnector, ProblemConnector problemConnector);
   }
 }

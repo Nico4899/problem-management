@@ -95,8 +95,8 @@ public final class DataTransferUtils {
      *
      * @return the change state response
      */
-    public static ChangeStateResponse writeChangeStateResponse() {
-      return ChangeStateResponse.newBuilder().build();
+    public static ChangeStateResponse writeChangeStateResponse(Problem problem) {
+      return ChangeStateResponse.newBuilder().setGrpcProblem(writeGrpcProblem(problem)).build();
     }
 
     private static GrpcProblem writeGrpcProblem(Problem problem) {
@@ -228,9 +228,9 @@ public final class DataTransferUtils {
      * @param changeStateRequest the change state request
      * @param service the service
      */
-    public static void readChangeStateRequest(
+    public static Problem readChangeStateRequest(
         ChangeStateRequest changeStateRequest, Service service) {
-      service.changeState(
+      return service.changeState(
           changeStateRequest.getIdentificationNumber(),
           readGrpcProblemStateOperation(changeStateRequest.getGrpcStateOperation()));
     }

@@ -50,7 +50,9 @@ public class Service {
    * @return filtered/ sorted problems
    */
   public Collection<Problem> listProblemsForUser(Settings<Problem> configuration, String reporter) {
-    return configuration.apply(this.problemConnector.listProblems()).stream().filter(x -> Objects.equals(x.getReporter(), reporter)).toList();
+    return configuration.apply(this.problemConnector.listProblems()).stream()
+        .filter(x -> Objects.equals(x.getReporter(), reporter))
+        .toList();
   }
 
   /**
@@ -70,7 +72,8 @@ public class Service {
    * @return created problem
    */
   public Problem createProblem(Problem problem) {
-    return this.problemConnector.createProblem(DataTransferUtils.ClientRequestWriter.writeCreateProblemRequest(problem));
+    return this.problemConnector.createProblem(
+        DataTransferUtils.ClientRequestWriter.writeCreateProblemRequest(problem));
   }
 
   /**
@@ -90,7 +93,8 @@ public class Service {
       this.buildingConnector.updateNotification(
           DataTransferUtils.ClientRequestWriter.writeUpdateNotificationRequest(problem));
     }
-    return this.problemConnector.updateProblem(DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(updatedProblem));
+    return this.problemConnector.updateProblem(
+        DataTransferUtils.ClientRequestWriter.writeUpdateProblemRequest(updatedProblem));
   }
 
   /**
@@ -112,8 +116,8 @@ public class Service {
    *
    * @param identificationNumber problem identification number
    */
-  public void changeState(String identificationNumber, Problem.Operation operation) {
-    operation.apply(
+  public Problem changeState(String identificationNumber, Problem.Operation operation) {
+    return operation.apply(
         this.problemConnector.getProblem(identificationNumber),
         this.buildingConnector,
         this.problemConnector);
