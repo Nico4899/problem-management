@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package edu.kit.tm.cm.proto;
+
+option java_multiple_files = true;
+option java_package = "edu.kit.tm.cm.proto";
+
+service ProblemManagement {
+  rpc ListProblems(ListProblemsRequest) returns (ListProblemsResponse);
+  rpc ListProblemsForUser(ListProblemsForUserRequest) returns (ListProblemsResponse);
+  rpc GetProblem(GetProblemRequest) returns (GetProblemResponse);
+  rpc CreateProblem(CreateProblemRequest) returns (CreateProblemResponse);
+  rpc UpdateProblem(UpdateProblemRequest) returns (UpdateProblemResponse);
+  rpc RemoveProblem(RemoveProblemRequest) returns (RemoveProblemResponse);
+  rpc ChangeState(ChangeStateRequest) returns (ChangeStateResponse);
+}
+
+// requests and responses
+
+message ListProblemsForUserRequest {
+  GrpcFilterValueSelection grpc_filter_value_selection = 1;
+  string reporter = 2;
+}
+
+message ListProblemsRequest{
+  GrpcFilterValueSelection grpc_filter_value_selection = 1;
+}
+
+message ListProblemsResponse{
+  repeated GrpcProblem problems = 1;
+}
+
+message GetProblemRequest{
+  string identification_number = 1;
+}
+
+message GetProblemResponse{
+  GrpcProblem problem = 1;
+}
+
+message CreateProblemRequest{
+  string problem_title = 3;
+  string problem_description = 4;
+  string problem_reporter = 5;
+  string reference_identification_number = 7;
+}
+
+message CreateProblemResponse{
+  GrpcProblem problem = 1;
+}
+
+message UpdateProblemRequest{
+  string identification_number = 2;
+  string problem_title = 3;
+  string problem_description = 4;
+  string problem_reporter = 5;
+  string reference_identification_number = 7;
+}
+
+message UpdateProblemResponse{
+  GrpcProblem problem = 1;
+}
+
+message RemoveProblemRequest{
+  string identification_number = 1;
+}
+
+message RemoveProblemResponse{
+}
+
+message ChangeStateRequest{
+  GrpcStateOperation grpc_state_operation = 1;
+  string identification_number = 2;
+}
+
+message ChangeStateResponse{
+  GrpcProblem grpc_problem = 1;
+}
+
+// single message constructions
+
+message GrpcProblem{
+  GrpcProblemState problem_state = 1;
+  string identification_number = 2;
+  string problem_title = 3;
+  string problem_description = 4;
+  string problem_reporter = 5;
+  int64 created_on = 6;
+  string reference_identification_number = 7;
+  int64 last_modified_on = 8;
+  repeated GrpcStateOperation possible_state_operations = 9;
+}
+
+message GrpcFilterValueSelection{
+  repeated GrpcProblemState states = 2;
+}
+
+enum GrpcProblemState{
+  UNKNOWN_PROBLEM_STATE = 0;
+  ACCEPTED = 1;
+  DECLINED = 2;
+  IN_PROGRESS = 3;
+  OPEN = 4;
+  CLOSED = 5;
+}
+
+enum GrpcStateOperation{
+  UNKNOWN_STATE_OPERATION = 0;
+  ACCEPT = 1;
+  CLOSE = 2;
+  DECLINE = 3;
+  APPROACH = 4;
+  HOLD = 5;
+}

@@ -14,25 +14,25 @@
 
 ### Report a Problem
 
-![Report a Problem](../figures/task_process/report_a_problem_2.3.png)
+![Report a Problem](../figures/task_process/report_a_problem.png)
 
 ### View a Problem
 
-![View a Problem](../figures/task_process/view_a_problem_2.3.png)
+![View a Problem](../figures/task_process/view_a_problem.png)
 
 
 ### Validate/Decline a Problem
 
-![Validate/Cancel a Problem](../figures/task_process/validate_decline_a_problem_2.3.png)
+![Validate/Cancel a Problem](../figures/task_process/accept_decline_a_problem.png)
 
 
 ### Update a Problem
 
-![Update a Problem](../figures/task_process/update_a_problem_2.4.png)
+![Update a Problem](../figures/task_process/update_a_problem.png)
 
 
 ### Edit a Problem
 
-![Edit a Problem](../figures/task_process/edit_a_problem_2.3.png)
+![Edit a Problem](../figures/task_process/edit_a_problem.png)
 
 

@@ -1,0 +1,8 @@
+# select profile (choose between: "dev", "prod")
+# "dev": development settings, do not use in production!
+# "prod": production settings.
+
+spring:
+  profiles:
+    active: prod
+
